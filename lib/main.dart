@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: ScreenUtilInit(
-        designSize: const Size(375, 812), // iPhone 13 design size
+        designSize: const Size(402, 844), // Figma Design Size
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {

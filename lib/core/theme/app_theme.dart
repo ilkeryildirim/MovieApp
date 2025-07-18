@@ -22,6 +22,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       brightness: Brightness.light,
+      fontFamily: 'Euclid',
       
       // AppBar Theme
       appBarTheme: AppBarTheme(
@@ -115,6 +116,7 @@ class AppTheme {
       colorScheme: colorScheme,
       brightness: Brightness.dark,
       scaffoldBackgroundColor: _surfaceColor,
+      fontFamily: 'Euclid',
       
       // AppBar Theme
       appBarTheme: AppBarTheme(

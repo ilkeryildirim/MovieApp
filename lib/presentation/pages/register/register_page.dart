@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_colors.dart';
 import '../../../core/extensions/context_extensions.dart';
 import '../../../core/extensions/string_extensions.dart';
-import '../../../core/widgets/lottie_widget.dart';
+import '../../../core/utils/svg_helper.dart';
+import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/safe_click_widget.dart';
+import '../../../core/mixins/form_validation_mixin.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../router/app_router.dart';
+import '../../widgets/custom_input_field.dart';
+import '../../widgets/social_login_button.dart';
+import '../../widgets/terms_bottom_sheet.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,14 +24,72 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
+class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
+  bool _isTermsAccepted = false;
+
+  late final Map<String, ValidationConfig> _validationConfigs;
+
+  @override
+  void initState() {
+    super.initState();
+    _setupValidation();
+  }
+
+  void _setupValidation() {
+    _validationConfigs = {
+      'name': ValidationConfig(
+        controller: _nameController,
+        rules: ValidationRules.nameRules,
+      ),
+      'email': ValidationConfig(
+        controller: _emailController,
+        rules: ValidationRules.emailRules,
+      ),
+      'password': ValidationConfig(
+        controller: _passwordController,
+        rules: ValidationRules.passwordRules,
+      ),
+      'confirmPassword': ValidationConfig(
+        controller: _confirmPasswordController,
+        rules: [], // Will be validated dynamically
+      ),
+    };
+
+    // Listen to field changes
+    _nameController.addListener(() {
+      if (isFieldTouched('name')) {
+        validateField('name', _nameController.text, ValidationRules.nameRules);
+      }
+    });
+
+    _emailController.addListener(() {
+      if (isFieldTouched('email')) {
+        validateField('email', _emailController.text, ValidationRules.emailRules);
+      }
+    });
+
+    _passwordController.addListener(() {
+      if (isFieldTouched('password')) {
+        validateField('password', _passwordController.text, ValidationRules.passwordRules);
+      }
+      // Also validate confirm password when password changes
+      if (isFieldTouched('confirmPassword')) {
+        validateField('confirmPassword', _confirmPasswordController.text, 
+            ValidationRules.confirmPasswordRules(_passwordController.text));
+      }
+    });
+
+    _confirmPasswordController.addListener(() {
+      if (isFieldTouched('confirmPassword')) {
+        validateField('confirmPassword', _confirmPasswordController.text, 
+            ValidationRules.confirmPasswordRules(_passwordController.text));
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -36,21 +101,49 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _register() {
-    if (_formKey.currentState?.validate() ?? false) {
-      context.unfocus();
+    // Manually validate all fields
+    touchField('name');
+    touchField('email');
+    touchField('password');
+    touchField('confirmPassword');
+    
+    validateField('name', _nameController.text, ValidationRules.nameRules);
+    validateField('email', _emailController.text, ValidationRules.emailRules);
+    validateField('password', _passwordController.text, ValidationRules.passwordRules);
+    validateField('confirmPassword', _confirmPasswordController.text, 
+        ValidationRules.confirmPasswordRules(_passwordController.text));
+    
+    if (isFormValid && _isTermsAccepted) {
       context.read<AuthBloc>().add(
-        AuthEvent.register(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          name: _nameController.text.trim(),
-        ),
-      );
+            AuthEvent.register(
+              name: _nameController.text.trim(),
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            ),
+          );
     }
+  }
+
+  void _showTermsBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => TermsBottomSheet(
+        onAccepted: () {
+          setState(() {
+            _isTermsAccepted = true;
+          });
+        },
+        cooldownDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.darkBackground,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           state.maybeWhen(
@@ -60,184 +153,209 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         },
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(24.w),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _buildHeader(context),
-                    SizedBox(height: 48.h),
-                    _buildFormFields(),
-                    SizedBox(height: 24.h),
-                    _buildRegisterButton(),
-                    SizedBox(height: 16.h),
-                    _buildBottomLinks(context),
-                  ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      _buildHeader(),
+                      SizedBox(height: 40.h),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 40.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            _buildNameField(),
+                            SizedBox(height: 14.h),
+                            _buildEmailField(),
+                            SizedBox(height: 14.h),
+                            _buildPasswordField(),
+                            SizedBox(height: 14.h),
+                            _buildConfirmPasswordField(),
+                            SizedBox(height: 16.h),
+                            _buildTermsAndConditions(),
+                            SizedBox(height: 24.h),
+                            _buildRegisterButton(),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 36.h),
+                      _buildSocialButtons(),
+                      SizedBox(height: 32.h),
+                      _buildSignInLink(),
+                      SizedBox(height: 40.h),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader(BuildContext context) {
-    return Column(
-      children: [
-        Icon(
-          Icons.person_add,
-          size: 80.sp,
-          color: context.colorScheme.primary,
-        ),
-        SizedBox(height: 16.h),
-        Text(
-                      AppStrings.createAccount,
-          style: context.textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
+  Widget _buildHeader() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 82.w),
+      child: Column(
+        children: [
+          Text(
+            AppStrings.welcomeRegister,
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+              color: AppColors.whiteText,
+              height: 1.0,
+              letterSpacing: 0,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 8.h),
-        Text(
-                      AppStrings.signUpToGetStarted,
-          style: context.textTheme.bodyLarge?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
-            fontSize: 16.sp,
+          SizedBox(height: 8.h),
+          Text(
+            AppStrings.registerSubtitle,
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.w400,
+              color: AppColors.grayText,
+              height: 1.0,
+              letterSpacing: 0,
+            ),
+            textAlign: TextAlign.center,
           ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFormFields() {
-    return Column(
-      children: [
-        _buildNameField(),
-        SizedBox(height: 16.h),
-        _buildEmailField(),
-        SizedBox(height: 16.h),
-        _buildPasswordField(),
-        SizedBox(height: 16.h),
-        _buildConfirmPasswordField(),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildNameField() {
-    return TextFormField(
+    return CustomInputField(
       controller: _nameController,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-                    labelText: AppStrings.name,
-            hintText: AppStrings.enterYourName,
-        prefixIcon: const Icon(Icons.person_outline),
+      hintText: AppStrings.nameHint,
+      type: InputFieldType.name,
+      prefixIcon: AppAssets.addUserIcon.toSvgIcon(
+        size: 20,
+        color: AppColors.grayText,
       ),
-      validator: (value) {
-        if (value.isNullOrEmpty) {
-          return AppStrings.pleaseEnterYourName;
-        }
-        if (value!.length < 2) {
-          return AppStrings.nameMustBeAtLeast2Characters;
-        }
-        return null;
+      errorText: getError('name'),
+      onChanged: (value) {
+        touchField('name');
+        validateField('name', value, ValidationRules.nameRules);
       },
     );
   }
 
   Widget _buildEmailField() {
-    return TextFormField(
+    return CustomInputField(
       controller: _emailController,
-      keyboardType: TextInputType.emailAddress,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-                    labelText: AppStrings.email,
-            hintText: AppStrings.enterYourEmail,
-        prefixIcon: const Icon(Icons.email_outlined),
+      hintText: AppStrings.emailHint,
+      type: InputFieldType.email,
+      prefixIcon: AppAssets.mailIcon.toSvgIcon(
+        size: 20,
+        color: AppColors.grayText,
       ),
-      validator: (value) {
-        if (value.isNullOrEmpty) {
-          return AppStrings.pleaseEnterYourEmail;
-        }
-        if (!value.isEmail) {
-          return AppStrings.pleaseEnterValidEmail;
-        }
-        return null;
+      errorText: getError('email'),
+      onChanged: (value) {
+        touchField('email');
+        validateField('email', value, ValidationRules.emailRules);
       },
     );
   }
 
   Widget _buildPasswordField() {
-    return TextFormField(
+    return CustomInputField(
       controller: _passwordController,
-      obscureText: !_isPasswordVisible,
-      textInputAction: TextInputAction.next,
-      decoration: InputDecoration(
-                    labelText: AppStrings.password,
-            hintText: AppStrings.enterYourPassword,
-        prefixIcon: const Icon(Icons.lock_outline),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isPasswordVisible
-                ? Icons.visibility_off
-                : Icons.visibility,
-          ),
-          onPressed: () {
-            setState(() {
-              _isPasswordVisible = !_isPasswordVisible;
-            });
-          },
-        ),
+      hintText: AppStrings.passwordHint,
+      type: InputFieldType.password,
+      showPasswordToggle: true,
+      prefixIcon: AppAssets.lockUnlockedIcon.toSvgIcon(
+        size: 20,
+        color: AppColors.grayText,
       ),
-      validator: (value) {
-        if (value.isNullOrEmpty) {
-          return AppStrings.pleaseEnterYourPassword;
-        }
-        if (value!.length < 6) {
-          return AppStrings.passwordMustBeAtLeast6Characters;
-        }
-        return null;
+      errorText: getError('password'),
+      onChanged: (value) {
+        touchField('password');
+        validateField('password', value, ValidationRules.passwordRules);
       },
     );
   }
 
   Widget _buildConfirmPasswordField() {
-    return TextFormField(
+    return CustomInputField(
       controller: _confirmPasswordController,
-      obscureText: !_isConfirmPasswordVisible,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => _register(),
-      decoration: InputDecoration(
-                    labelText: AppStrings.confirmPassword,
-            hintText: AppStrings.confirmYourPassword,
-        prefixIcon: const Icon(Icons.lock_outline),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isConfirmPasswordVisible
-                ? Icons.visibility_off
-                : Icons.visibility,
-          ),
-          onPressed: () {
-            setState(() {
-              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-            });
-          },
-        ),
+      hintText: AppStrings.passwordConfirmHint,
+      type: InputFieldType.password,
+      showPasswordToggle: true,
+      prefixIcon: AppAssets.lockUnlockedIcon.toSvgIcon(
+        size: 20,
+        color: AppColors.grayText,
       ),
-      validator: (value) {
-        if (value.isNullOrEmpty) {
-          return AppStrings.pleaseConfirmYourPassword;
-        }
-        if (value != _passwordController.text) {
-          return AppStrings.passwordsDoNotMatch;
-        }
-        return null;
+      errorText: getError('confirmPassword'),
+      onChanged: (value) {
+        touchField('confirmPassword');
+        validateField('confirmPassword', value, ValidationRules.confirmPasswordRules(_passwordController.text));
       },
+    );
+  }
+
+  Widget _buildTermsAndConditions() {
+    return Column(
+      children: [
+        Text(
+          AppStrings.termsAndConditions,
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.5),
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            height: 1.5,
+            letterSpacing: 0,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        SizedBox(height: 12.h),
+        SafeClickWidget(
+          onTap: _showTermsBottomSheet,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              border: Border.all(
+                color: _isTermsAccepted ? AppColors.primaryRed : Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  _isTermsAccepted ? Icons.check_circle : Icons.radio_button_unchecked,
+                  color: _isTermsAccepted ? AppColors.primaryRed : Colors.white.withOpacity(0.5),
+                  size: 16.sp,
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  AppStrings.iHaveReadAndAccept,
+                  style: TextStyle(
+                    color: _isTermsAccepted ? AppColors.primaryRed : Colors.white.withOpacity(0.8),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                    height: 1.5,
+                    letterSpacing: 0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -248,31 +366,116 @@ class _RegisterPageState extends State<RegisterPage> {
           loading: () => true,
           orElse: () => false,
         );
-        return SafeButton.elevated(
-          onPressed: isLoading ? null : _register,
-          child: isLoading
-              ? const LoadingLottie(size: 24)
-              : Text(AppStrings.register),
+        
+        final hasContent = _nameController.text.isNotEmpty &&
+                          _emailController.text.isNotEmpty &&
+                          _passwordController.text.isNotEmpty &&
+                          _confirmPasswordController.text.isNotEmpty;
+        final isEnabled = hasContent && isFormValid && _isTermsAccepted && !isLoading;
+        
+        return SafeClickWidget(
+          onTap: isEnabled ? _register : null,
+          cooldownDuration: const Duration(milliseconds: 500),
+          child: Container(
+            height: 52.h,
+            decoration: BoxDecoration(
+              color: isEnabled ? AppColors.primaryRed : AppColors.primaryRed.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(18.r),
+            ),
+            child: Center(
+              child: isLoading
+                  ? SizedBox(
+                      height: 24.h,
+                      width: 24.w,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : Text(
+                      AppStrings.registerButton,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+            ),
+          ),
         );
       },
     );
   }
 
-  Widget _buildBottomLinks(BuildContext context) {
-    return Column(
+  Widget _buildSocialButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              AppStrings.alreadyHaveAnAccount,
-              style: context.textTheme.bodyMedium,
+        SocialLoginButton(
+          icon: AppAssets.googleIcon.toSvgIcon(
+            size: 24,
+            color: AppColors.whiteText,
+          ),
+          onPressed: () {
+            // Google login
+          },
+        ),
+        SizedBox(width: 8.w),
+        SocialLoginButton(
+          icon: AppAssets.appleIcon.toSvgIcon(
+            size: 24,
+            color: AppColors.whiteText,
+          ),
+          onPressed: () {
+            // Apple login
+          },
+        ),
+        SizedBox(width: 8.w),
+        SocialLoginButton(
+          icon: AppAssets.facebookIcon.toSvgIcon(
+            size: 24,
+            color: AppColors.whiteText,
+          ),
+          onPressed: () {
+            // Facebook login
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignInLink() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          AppStrings.alreadyHaveAccount,
+          style: TextStyle(
+            color: AppColors.grayText,
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w400,
+            height: 1.5,
+            letterSpacing: 0,
+          ),
+        ),
+        SizedBox(width: 8.w),
+        TextButton(
+          onPressed: () => context.go(AppRoutes.login),
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.zero,
+            minimumSize: Size.zero,
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          ),
+          child: Text(
+            AppStrings.signInLink,
+            style: TextStyle(
+              color: AppColors.whiteText,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w400,
+              height: 1.5,
+              letterSpacing: 0,
             ),
-            TextButton(
-              onPressed: () => context.go(AppRoutes.login),
-              child: Text(AppStrings.login),
-            ),
-          ],
+          ),
         ),
       ],
     );

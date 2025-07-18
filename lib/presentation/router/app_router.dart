@@ -23,38 +23,59 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.login,
           name: AppRoutes.login,
-          builder: (context, state) => const LoginPage(),
+          pageBuilder: (context, state) => _buildLoginPage(context, state),
         ),
         GoRoute(
           path: AppRoutes.register,
           name: AppRoutes.register,
-          builder: (context, state) => const RegisterPage(),
+          pageBuilder: (context, state) => _buildRegisterPage(context, state),
         ),
         GoRoute(
           path: AppRoutes.home,
           name: AppRoutes.home,
           builder: (context, state) => const HomePage(),
-          routes: [
-            // Add nested routes here
-          ],
         ),
       ],
       errorBuilder: (context, state) => ErrorPage(error: state.error),
       redirect: (context, state) {
-        // Add authentication logic here
-        // Example:
-        // final isAuthenticated = authService.isAuthenticated;
-        // final isLoggingIn = state.matchedLocation == AppRoutes.login;
-        // 
-        // if (!isAuthenticated && !isLoggingIn) {
-        //   return AppRoutes.login;
-        // }
-        // 
-        // if (isAuthenticated && isLoggingIn) {
-        //   return AppRoutes.home;
-        // }
-        
         return null;
+      },
+    );
+  }
+
+  // Helper methods for page transitions
+  Page<void> _buildLoginPage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: const LoginPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: animation.drive(
+            Tween(
+              begin: const Offset(-1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeInOut)),
+          ),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Page<void> _buildRegisterPage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: const RegisterPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: animation.drive(
+            Tween(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeInOut)),
+          ),
+          child: child,
+        );
       },
     );
   }

@@ -74,6 +74,38 @@ class AppStrings {
   static String get badRequest => _translates.badRequest;
   static String get validationFailed => _translates.validationFailed;
   
+  // Auth Page Strings
+  static String get hello => _translates.hello;
+  static String get welcomeSubtitle => _translates.welcomeSubtitle;
+  static String get emailHint => _translates.emailHint;
+  static String get passwordHint => _translates.passwordHint;
+  static String get forgotPasswordLink => _translates.forgotPasswordLink;
+  static String get loginButton => _translates.loginButton;
+  static String get dontHaveAccount => _translates.dontHaveAccount;
+  static String get signUpLink => _translates.signUpLink;
+  static String get welcomeRegister => _translates.welcomeRegister;
+  static String get registerSubtitle => _translates.registerSubtitle;
+  static String get nameHint => _translates.nameHint;
+  static String get passwordConfirmHint => _translates.passwordConfirmHint;
+  static String get termsAndConditions => _translates.termsAndConditions;
+  static String get registerButton => _translates.registerButton;
+  static String get alreadyHaveAccount => _translates.alreadyHaveAccount;
+  static String get signInLink => _translates.signInLink;
+  static String get continueWithGoogle => _translates.continueWithGoogle;
+  static String get continueWithApple => _translates.continueWithApple;
+  static String get continueWithFacebook => _translates.continueWithFacebook;
+  static String get continueWithTwitter => _translates.continueWithTwitter;
+  
+  // Terms and Conditions
+  static String get iHaveReadAndAccept => _translates.iHaveReadAndAccept;
+  static String get userAgreement => _translates.userAgreement;
+  static String get privacyPolicy => _translates.privacyPolicy;
+  static String get termsOfService => _translates.termsOfService;
+  static String get close => _translates.close;
+  static String get iUnderstand => _translates.iUnderstand;
+  static String get scrollToBottomToConfirm => _translates.scrollToBottomToConfirm;
+  static String get userAgreementContent => _translates.userAgreementContent;
+  
   // Parameterized strings
   static String welcomeUser(String name) => _translates.welcomeUser(name);
 }
@@ -145,6 +177,38 @@ class _Keys {
   static const String networkError = 'network_error';
   static const String badRequest = 'bad_request';
   static const String validationFailed = 'validation_failed';
+  
+  // Auth Page Strings
+  static const String hello = 'hello';
+  static const String welcomeSubtitle = 'welcome_subtitle';
+  static const String emailHint = 'email_hint';
+  static const String passwordHint = 'password_hint';
+  static const String forgotPasswordLink = 'forgot_password_link';
+  static const String loginButton = 'login_button';
+  static const String dontHaveAccount = 'dont_have_account';
+  static const String signUpLink = 'sign_up_link';
+  static const String welcomeRegister = 'welcome_register';
+  static const String registerSubtitle = 'register_subtitle';
+  static const String nameHint = 'name_hint';
+  static const String passwordConfirmHint = 'password_confirm_hint';
+  static const String termsAndConditions = 'terms_and_conditions';
+  static const String registerButton = 'register_button';
+  static const String alreadyHaveAccount = 'already_have_account';
+  static const String signInLink = 'sign_in_link';
+  static const String continueWithGoogle = 'continue_with_google';
+  static const String continueWithApple = 'continue_with_apple';
+  static const String continueWithFacebook = 'continue_with_facebook';
+  static const String continueWithTwitter = 'continue_with_twitter';
+  
+  // Terms and Conditions
+  static const String iHaveReadAndAccept = 'i_have_read_and_accept';
+  static const String userAgreement = 'user_agreement';
+  static const String privacyPolicy = 'privacy_policy';
+  static const String termsOfService = 'terms_of_service';
+  static const String close = 'close';
+  static const String iUnderstand = 'i_understand';
+  static const String scrollToBottomToConfirm = 'scroll_to_bottom_to_confirm';
+  static const String userAgreementContent = 'user_agreement_content';
 }
 
 class _Translates {
@@ -213,6 +277,38 @@ class _Translates {
   String get networkError => _Keys.networkError.tr();
   String get badRequest => _Keys.badRequest.tr();
   String get validationFailed => _Keys.validationFailed.tr();
+  
+  // Auth Page Strings
+  String get hello => _Keys.hello.tr();
+  String get welcomeSubtitle => _Keys.welcomeSubtitle.tr();
+  String get emailHint => _Keys.emailHint.tr();
+  String get passwordHint => _Keys.passwordHint.tr();
+  String get forgotPasswordLink => _Keys.forgotPasswordLink.tr();
+  String get loginButton => _Keys.loginButton.tr();
+  String get dontHaveAccount => _Keys.dontHaveAccount.tr();
+  String get signUpLink => _Keys.signUpLink.tr();
+  String get welcomeRegister => _Keys.welcomeRegister.tr();
+  String get registerSubtitle => _Keys.registerSubtitle.tr();
+  String get nameHint => _Keys.nameHint.tr();
+  String get passwordConfirmHint => _Keys.passwordConfirmHint.tr();
+  String get termsAndConditions => _Keys.termsAndConditions.tr();
+  String get registerButton => _Keys.registerButton.tr();
+  String get alreadyHaveAccount => _Keys.alreadyHaveAccount.tr();
+  String get signInLink => _Keys.signInLink.tr();
+  String get continueWithGoogle => _Keys.continueWithGoogle.tr();
+  String get continueWithApple => _Keys.continueWithApple.tr();
+  String get continueWithFacebook => _Keys.continueWithFacebook.tr();
+  String get continueWithTwitter => _Keys.continueWithTwitter.tr();
+  
+  // Terms and Conditions
+  String get iHaveReadAndAccept => _Keys.iHaveReadAndAccept.tr();
+  String get userAgreement => _Keys.userAgreement.tr();
+  String get privacyPolicy => _Keys.privacyPolicy.tr();
+  String get termsOfService => _Keys.termsOfService.tr();
+  String get close => _Keys.close.tr();
+  String get iUnderstand => _Keys.iUnderstand.tr();
+  String get scrollToBottomToConfirm => _Keys.scrollToBottomToConfirm.tr();
+  String get userAgreementContent => _Keys.userAgreementContent.tr();
   
   // Parameterized strings
   String welcomeUser(String name) => _Keys.welcomeUser.tr(namedArgs: {'name': name});
