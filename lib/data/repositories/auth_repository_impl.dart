@@ -14,12 +14,10 @@ import '../models/user_model.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final AuthLocalDataSource localDataSource;
-  final AppLogger logger;
   
   const AuthRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
-    required this.logger,
   });
   
   @override
@@ -33,7 +31,7 @@ class AuthRepositoryImpl implements AuthRepository {
         'password': password,
       });
       
-      logger.info('Login successful for: $email');
+      AppLogger.info('Login successful for: $email');
       
       final userModel = UserModel(
         id: authResponse.data.id,
@@ -47,7 +45,7 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return Right(userModel.toEntity());
     } on DioException catch (e) {
-      logger.error('Dio error during login', error: e);
+      AppLogger.error('Dio error during login', error: e);
       
       // Handle specific HTTP errors
       if (e.response != null) {
@@ -66,13 +64,13 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return Left(NetworkFailure(e.message ?? 'Network error'));
     } on ServerException catch (e) {
-      logger.error('Login failed', error: e);
+              AppLogger.error('Login failed', error: e);
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
-      logger.error('Network error during login', error: e);
+              AppLogger.error('Network error during login', error: e);
       return Left(NetworkFailure(e.message));
     } catch (e) {
-      logger.error('Unexpected error during login', error: e);
+      AppLogger.error('Unexpected error during login', error: e);
       return const Left(UnknownFailure());
     }
   }
@@ -90,7 +88,7 @@ class AuthRepositoryImpl implements AuthRepository {
         'name': name,
       });
       
-      logger.info('Registration successful for: $email');
+      AppLogger.info('Registration successful for: $email');
       
       final userModel = UserModel(
         id: authResponse.data.id,
@@ -105,7 +103,7 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return Right(userModel.toEntity());
     } on DioException catch (e) {
-      logger.error('Dio error during registration', error: e);
+      AppLogger.error('Dio error during registration', error: e);
       
       // Handle specific HTTP errors
       if (e.response != null) {
@@ -124,13 +122,13 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return Left(NetworkFailure(e.message ?? 'Network error'));
     } on ServerException catch (e) {
-      logger.error('Registration failed', error: e);
+      AppLogger.error('Registration failed', error: e);
       return Left(ServerFailure(e.message));
     } on NetworkException catch (e) {
-      logger.error('Network error during registration', error: e);
+      AppLogger.error('Network error during registration', error: e);
       return Left(NetworkFailure(e.message));
     } catch (e) {
-      logger.error('Unexpected error during registration', error: e);
+      AppLogger.error('Unexpected error during registration', error: e);
       return const Left(UnknownFailure());
     }
   }
@@ -139,10 +137,10 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> logout() async {
     try {
       await localDataSource.clearUser();
-      logger.info('User logged out successfully');
+      AppLogger.info('User logged out successfully');
       return const Right(null);
     } catch (e) {
-      logger.error('Unexpected error during logout', error: e);
+      AppLogger.error('Unexpected error during logout', error: e);
       return const Left(UnknownFailure());
     }
   }
@@ -162,13 +160,13 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return Right(userModel.toEntity());
     } on ServerException catch (e) {
-      logger.error('Failed to get current user', error: e);
+      AppLogger.error('Failed to get current user', error: e);
       return Left(ServerFailure(e.message));
     } on CacheException catch (e) {
-      logger.error('Cache error', error: e);
+      AppLogger.error('Cache error', error: e);
       return Left(CacheFailure(e.message));
     } catch (e) {
-      logger.error('Unexpected error getting current user', error: e);
+      AppLogger.error('Unexpected error getting current user', error: e);
       return const Left(UnknownFailure());
     }
   }
@@ -179,7 +177,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final token = await localDataSource.getToken();
       return Right(token != null);
     } catch (e) {
-      logger.error('Error checking authentication status', error: e);
+      AppLogger.error('Error checking authentication status', error: e);
       return const Right(false);
     }
   }
@@ -199,10 +197,10 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return const Right(null);
     } on ServerException catch (e) {
-      logger.error('Profile update failed', error: e);
+      AppLogger.error('Profile update failed', error: e);
       return Left(ServerFailure(e.message));
     } catch (e) {
-      logger.error('Unexpected error updating profile', error: e);
+      AppLogger.error('Unexpected error updating profile', error: e);
       return const Left(UnknownFailure());
     }
   }
@@ -220,10 +218,10 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return const Right(null);
     } on ServerException catch (e) {
-      logger.error('Password change failed', error: e);
+      AppLogger.error('Password change failed', error: e);
       return Left(ServerFailure(e.message));
     } catch (e) {
-      logger.error('Unexpected error changing password', error: e);
+      AppLogger.error('Unexpected error changing password', error: e);
       return const Left(UnknownFailure());
     }
   }
@@ -239,10 +237,10 @@ class AuthRepositoryImpl implements AuthRepository {
       
       return const Right(null);
     } on ServerException catch (e) {
-      logger.error('Forgot password request failed', error: e);
+      AppLogger.error('Forgot password request failed', error: e);
       return Left(ServerFailure(e.message));
     } catch (e) {
-      logger.error('Unexpected error in forgot password', error: e);
+      AppLogger.error('Unexpected error in forgot password', error: e);
       return const Left(UnknownFailure());
     }
   }
