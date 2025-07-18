@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import '../../../domain/entities/user.dart';
 import '../../../domain/usecases/auth/login_usecase.dart';
+import '../../../domain/usecases/auth/register_usecase.dart';
 import '../../../domain/repositories/auth_repository.dart';
 
 part 'auth_event.dart';
@@ -12,16 +13,19 @@ part 'auth_bloc.freezed.dart';
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
+  final RegisterUseCase registerUseCase;
   final AuthRepository authRepository;
   
   AuthBloc({
     required this.loginUseCase,
+    required this.registerUseCase,
     required this.authRepository,
   }) : super(const AuthState.initial()) {
     on<AuthEvent>((event, emit) async {
       await event.when(
         checkAuthStatus: () => _onCheckAuthStatus(emit),
         login: (email, password) => _onLogin(emit, email, password),
+        register: (email, password, name) => _onRegister(emit, email, password, name),
         logout: () => _onLogout(emit),
         updateUser: (user) => _onUpdateUser(emit, user),
       );
@@ -58,6 +62,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     
     final result = await loginUseCase(
       LoginParams(email: email, password: password),
+    );
+    
+    result.fold(
+      (failure) => emit(AuthState.error(failure.message)),
+      (user) => emit(AuthState.authenticated(user)),
+    );
+  }
+  
+  Future<void> _onRegister(
+    Emitter<AuthState> emit,
+    String email,
+    String password,
+    String name,
+  ) async {
+    emit(const AuthState.loading());
+    
+    final result = await registerUseCase(
+      RegisterParams(email: email, password: password, name: name),
     );
     
     result.fold(

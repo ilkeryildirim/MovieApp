@@ -4,6 +4,7 @@ import 'package:injectable/injectable.dart';
 import '../pages/splash/splash_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/login/login_page.dart';
+import '../pages/register/register_page.dart';
 
 @lazySingleton
 class AppRouter {
@@ -23,6 +24,11 @@ class AppRouter {
           path: AppRoutes.login,
           name: AppRoutes.login,
           builder: (context, state) => const LoginPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.register,
+          name: AppRoutes.register,
+          builder: (context, state) => const RegisterPage(),
         ),
         GoRoute(
           path: AppRoutes.home,
@@ -57,6 +63,7 @@ class AppRouter {
 class AppRoutes {
   static const String splash = '/';
   static const String login = '/login';
+  static const String register = '/register';
   static const String home = '/home';
   static const String profile = '/profile';
   static const String settings = '/settings';

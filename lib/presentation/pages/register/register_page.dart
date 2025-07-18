@@ -10,33 +10,39 @@ import '../../../core/widgets/safe_click_widget.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../router/app_router.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _login() {
+  void _register() {
     if (_formKey.currentState?.validate() ?? false) {
       context.unfocus();
       context.read<AuthBloc>().add(
-        AuthEvent.login(
+        AuthEvent.register(
           email: _emailController.text.trim(),
           password: _passwordController.text,
+          name: _nameController.text.trim(),
         ),
       );
     }
@@ -67,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 48.h),
                     _buildFormFields(),
                     SizedBox(height: 24.h),
-                    _buildLoginButton(),
+                    _buildRegisterButton(),
                     SizedBox(height: 16.h),
                     _buildBottomLinks(context),
                   ],
@@ -84,13 +90,13 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         Icon(
-          Icons.flutter_dash,
+          Icons.person_add,
           size: 80.sp,
           color: context.colorScheme.primary,
         ),
         SizedBox(height: 16.h),
         Text(
-                      AppStrings.welcomeBack,
+                      AppStrings.createAccount,
           style: context.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -98,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         SizedBox(height: 8.h),
         Text(
-                      AppStrings.signInToContinue,
+                      AppStrings.signUpToGetStarted,
           style: context.textTheme.bodyLarge?.copyWith(
             color: context.colorScheme.onSurfaceVariant,
             fontSize: 16.sp,
@@ -112,10 +118,35 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildFormFields() {
     return Column(
       children: [
+        _buildNameField(),
+        SizedBox(height: 16.h),
         _buildEmailField(),
         SizedBox(height: 16.h),
         _buildPasswordField(),
+        SizedBox(height: 16.h),
+        _buildConfirmPasswordField(),
       ],
+    );
+  }
+
+  Widget _buildNameField() {
+    return TextFormField(
+      controller: _nameController,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+                    labelText: AppStrings.name,
+            hintText: AppStrings.enterYourName,
+        prefixIcon: const Icon(Icons.person_outline),
+      ),
+      validator: (value) {
+        if (value.isNullOrEmpty) {
+          return AppStrings.pleaseEnterYourName;
+        }
+        if (value!.length < 2) {
+          return AppStrings.nameMustBeAtLeast2Characters;
+        }
+        return null;
+      },
     );
   }
 
@@ -145,10 +176,9 @@ class _LoginPageState extends State<LoginPage> {
     return TextFormField(
       controller: _passwordController,
       obscureText: !_isPasswordVisible,
-      textInputAction: TextInputAction.done,
-      onFieldSubmitted: (_) => _login(),
-              decoration: InputDecoration(
-                      labelText: AppStrings.password,
+      textInputAction: TextInputAction.next,
+      decoration: InputDecoration(
+                    labelText: AppStrings.password,
             hintText: AppStrings.enterYourPassword,
         prefixIcon: const Icon(Icons.lock_outline),
         suffixIcon: IconButton(
@@ -176,7 +206,42 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildConfirmPasswordField() {
+    return TextFormField(
+      controller: _confirmPasswordController,
+      obscureText: !_isConfirmPasswordVisible,
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (_) => _register(),
+      decoration: InputDecoration(
+                    labelText: AppStrings.confirmPassword,
+            hintText: AppStrings.confirmYourPassword,
+        prefixIcon: const Icon(Icons.lock_outline),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isConfirmPasswordVisible
+                ? Icons.visibility_off
+                : Icons.visibility,
+          ),
+          onPressed: () {
+            setState(() {
+              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+            });
+          },
+        ),
+      ),
+      validator: (value) {
+        if (value.isNullOrEmpty) {
+          return AppStrings.pleaseConfirmYourPassword;
+        }
+        if (value != _passwordController.text) {
+          return AppStrings.passwordsDoNotMatch;
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildRegisterButton() {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         final isLoading = state.maybeWhen(
@@ -184,10 +249,10 @@ class _LoginPageState extends State<LoginPage> {
           orElse: () => false,
         );
         return SafeButton.elevated(
-          onPressed: isLoading ? null : _login,
+          onPressed: isLoading ? null : _register,
           child: isLoading
               ? const LoadingLottie(size: 24)
-              : Text(AppStrings.login),
+              : Text(AppStrings.register),
         );
       },
     );
@@ -199,21 +264,15 @@ class _LoginPageState extends State<LoginPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-                      Text(
-            AppStrings.dontHaveAnAccount,
-            style: context.textTheme.bodyMedium,
-          ),
-          TextButton(
-            onPressed: () => context.go(AppRoutes.register),
-            child: Text(AppStrings.signUp),
-          ),
+            Text(
+              AppStrings.alreadyHaveAnAccount,
+              style: context.textTheme.bodyMedium,
+            ),
+            TextButton(
+              onPressed: () => context.go(AppRoutes.login),
+              child: Text(AppStrings.login),
+            ),
           ],
-        ),
-        TextButton(
-          onPressed: () {
-            // Navigate to forgot password
-          },
-                      child: Text(AppStrings.forgotPassword),
         ),
       ],
     );

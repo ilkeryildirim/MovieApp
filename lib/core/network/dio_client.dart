@@ -11,7 +11,7 @@ class DioClient {
   DioClient() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.example.com', // TODO: Move to environment config
+        baseUrl: 'https://caseapi.servicelabs.tech/', // ServiceLabs API base URL
         connectTimeout: const Duration(seconds: 30),
         receiveTimeout: const Duration(seconds: 30),
         headers: {

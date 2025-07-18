@@ -1,6 +1,6 @@
 class AppConstants {
   // API
-  static const String baseUrl = 'https://api.example.com';
+  static const String baseUrl = 'https://caseapi.servicelabs.tech/';
   static const Duration connectionTimeout = Duration(seconds: 30);
   static const Duration receiveTimeout = Duration(seconds: 30);
   

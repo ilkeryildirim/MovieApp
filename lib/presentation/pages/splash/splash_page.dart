@@ -103,7 +103,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
                         const LoadingLottie(size: 150),
                         const SizedBox(height: 32),
                         Text(
-                          AppStrings.translates.appTitle,
+                          AppStrings.appTitle,
                           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                             color: Theme.of(context).colorScheme.onPrimary,
                             fontWeight: FontWeight.bold,

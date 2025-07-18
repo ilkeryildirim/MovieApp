@@ -7,6 +7,11 @@ class AuthEvent with _$AuthEvent {
     required String email,
     required String password,
   }) = _Login;
+  const factory AuthEvent.register({
+    required String email,
+    required String password,
+    required String name,
+  }) = _Register;
   const factory AuthEvent.logout() = _Logout;
   const factory AuthEvent.updateUser(User user) = _UpdateUser;
 } 

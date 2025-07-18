@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppStrings.translates.home),
+          title: Text(AppStrings.home),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),
@@ -102,7 +102,7 @@ class HomePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppStrings.translates.welcomeBackComma,
+            AppStrings.welcomeBackComma,
             style: context.textTheme.bodyMedium?.copyWith(
               color: context.colorScheme.onSurfaceVariant,
             ),
@@ -120,7 +120,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildQuickActionsTitle(BuildContext context) {
     return Text(
-      AppStrings.translates.quickActions,
+                AppStrings.quickActions,
       style: context.textTheme.titleLarge?.copyWith(
         fontWeight: FontWeight.bold,
       ),
@@ -149,7 +149,7 @@ class HomePage extends StatelessWidget {
               _buildActionCard(
                 context,
                 icon: Icons.person,
-                title: AppStrings.translates.profile,
+                title: AppStrings.profile,
                 onTap: () {
                   // Navigate to profile
                 },
@@ -157,7 +157,7 @@ class HomePage extends StatelessWidget {
               _buildActionCard(
                 context,
                 icon: Icons.notifications,
-                title: AppStrings.translates.notifications,
+                title: AppStrings.notifications,
                 onTap: () {
                   // Navigate to notifications
                 },
@@ -165,7 +165,7 @@ class HomePage extends StatelessWidget {
               _buildActionCard(
                 context,
                 icon: Icons.security,
-                title: AppStrings.translates.security,
+                title: AppStrings.security,
                 onTap: () {
                   // Navigate to security settings
                 },
@@ -173,7 +173,7 @@ class HomePage extends StatelessWidget {
               _buildActionCard(
                 context,
                 icon: Icons.help,
-                title: AppStrings.translates.help,
+                title: AppStrings.help,
                 onTap: () {
                   // Navigate to help
                 },
@@ -423,19 +423,19 @@ class HomePage extends StatelessWidget {
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text(AppStrings.translates.logout),
-          content: Text(AppStrings.translates.areYouSureYouWantToLogout),
+                  title: Text(AppStrings.logout),
+        content: Text(AppStrings.areYouSureYouWantToLogout),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(AppStrings.translates.cancel),
+              child: Text(AppStrings.cancel),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
                 context.read<AuthBloc>().add(const AuthEvent.logout());
               },
-              child: Text(AppStrings.translates.logout),
+              child: Text(AppStrings.logout),
             ),
           ],
         );

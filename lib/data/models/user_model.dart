@@ -10,9 +10,9 @@ class UserModel with _$UserModel {
     required String id,
     required String email,
     required String name,
-    String? avatarUrl,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    @JsonKey(name: 'photoUrl') String? avatarUrl,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) = _UserModel;
   
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
@@ -33,7 +33,7 @@ extension UserModelX on UserModel {
     email: email,
     name: name,
     avatarUrl: avatarUrl,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
+    createdAt: createdAt ?? DateTime.now(),
+    updatedAt: updatedAt ?? DateTime.now(),
   );
 } 
