@@ -23,27 +23,43 @@ mixin _$UserModel {
   String get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  @JsonKey(name: 'photoUrl')
   String? get avatarUrl => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
-  DateTime get updatedAt => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String email, String name, String? avatarUrl,
-            DateTime createdAt, DateTime updatedAt)
+    TResult Function(
+            String id,
+            String email,
+            String name,
+            @JsonKey(name: 'photoUrl') String? avatarUrl,
+            DateTime? createdAt,
+            DateTime? updatedAt)
         $default,
   ) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String email, String name, String? avatarUrl,
-            DateTime createdAt, DateTime updatedAt)?
+    TResult? Function(
+            String id,
+            String email,
+            String name,
+            @JsonKey(name: 'photoUrl') String? avatarUrl,
+            DateTime? createdAt,
+            DateTime? updatedAt)?
         $default,
   ) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String email, String name, String? avatarUrl,
-            DateTime createdAt, DateTime updatedAt)?
+    TResult Function(
+            String id,
+            String email,
+            String name,
+            @JsonKey(name: 'photoUrl') String? avatarUrl,
+            DateTime? createdAt,
+            DateTime? updatedAt)?
         $default, {
     required TResult orElse(),
   }) =>
@@ -84,9 +100,9 @@ abstract class $UserModelCopyWith<$Res> {
       {String id,
       String email,
       String name,
-      String? avatarUrl,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'photoUrl') String? avatarUrl,
+      DateTime? createdAt,
+      DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -108,8 +124,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? email = null,
     Object? name = null,
     Object? avatarUrl = freezed,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -128,14 +144,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      createdAt: null == createdAt
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
+              as DateTime?,
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -152,9 +168,9 @@ abstract class _$$UserModelImplCopyWith<$Res>
       {String id,
       String email,
       String name,
-      String? avatarUrl,
-      DateTime createdAt,
-      DateTime updatedAt});
+      @JsonKey(name: 'photoUrl') String? avatarUrl,
+      DateTime? createdAt,
+      DateTime? updatedAt});
 }
 
 /// @nodoc
@@ -174,8 +190,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? email = null,
     Object? name = null,
     Object? avatarUrl = freezed,
-    Object? createdAt = null,
-    Object? updatedAt = null,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -194,14 +210,14 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      createdAt: null == createdAt
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
+              as DateTime?,
+      updatedAt: freezed == updatedAt
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
     ));
   }
 }
@@ -213,9 +229,9 @@ class _$UserModelImpl implements _UserModel {
       {required this.id,
       required this.email,
       required this.name,
-      this.avatarUrl,
-      required this.createdAt,
-      required this.updatedAt});
+      @JsonKey(name: 'photoUrl') this.avatarUrl,
+      this.createdAt,
+      this.updatedAt});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -227,11 +243,12 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String name;
   @override
+  @JsonKey(name: 'photoUrl')
   final String? avatarUrl;
   @override
-  final DateTime createdAt;
+  final DateTime? createdAt;
   @override
-  final DateTime updatedAt;
+  final DateTime? updatedAt;
 
   @override
   String toString() {
@@ -270,8 +287,13 @@ class _$UserModelImpl implements _UserModel {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(String id, String email, String name, String? avatarUrl,
-            DateTime createdAt, DateTime updatedAt)
+    TResult Function(
+            String id,
+            String email,
+            String name,
+            @JsonKey(name: 'photoUrl') String? avatarUrl,
+            DateTime? createdAt,
+            DateTime? updatedAt)
         $default,
   ) {
     return $default(id, email, name, avatarUrl, createdAt, updatedAt);
@@ -280,8 +302,13 @@ class _$UserModelImpl implements _UserModel {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String id, String email, String name, String? avatarUrl,
-            DateTime createdAt, DateTime updatedAt)?
+    TResult? Function(
+            String id,
+            String email,
+            String name,
+            @JsonKey(name: 'photoUrl') String? avatarUrl,
+            DateTime? createdAt,
+            DateTime? updatedAt)?
         $default,
   ) {
     return $default?.call(id, email, name, avatarUrl, createdAt, updatedAt);
@@ -290,8 +317,13 @@ class _$UserModelImpl implements _UserModel {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String id, String email, String name, String? avatarUrl,
-            DateTime createdAt, DateTime updatedAt)?
+    TResult Function(
+            String id,
+            String email,
+            String name,
+            @JsonKey(name: 'photoUrl') String? avatarUrl,
+            DateTime? createdAt,
+            DateTime? updatedAt)?
         $default, {
     required TResult orElse(),
   }) {
@@ -342,9 +374,9 @@ abstract class _UserModel implements UserModel {
       {required final String id,
       required final String email,
       required final String name,
-      final String? avatarUrl,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserModelImpl;
+      @JsonKey(name: 'photoUrl') final String? avatarUrl,
+      final DateTime? createdAt,
+      final DateTime? updatedAt}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -356,11 +388,12 @@ abstract class _UserModel implements UserModel {
   @override
   String get name;
   @override
+  @JsonKey(name: 'photoUrl')
   String? get avatarUrl;
   @override
-  DateTime get createdAt;
+  DateTime? get createdAt;
   @override
-  DateTime get updatedAt;
+  DateTime? get updatedAt;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

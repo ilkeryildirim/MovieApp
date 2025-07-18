@@ -54,7 +54,10 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   @override
   Future<void> clearUser() async {
     try {
-      await sharedPreferences.remove(AppConstants.userKey);
+      await Future.wait([
+        sharedPreferences.remove(AppConstants.userKey),
+        sharedPreferences.remove(AppConstants.authTokenKey),
+      ]);
     } catch (e) {
       throw const CacheException('Failed to clear user');
     }

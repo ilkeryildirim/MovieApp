@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'core/constants/app_strings.dart';
 import 'core/di/injection.dart';
@@ -19,11 +18,7 @@ void main() async {
   // Initialize Hive
   await Hive.initFlutter();
   
-  // Initialize SharedPreferences
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerSingleton<SharedPreferences>(sharedPreferences);
-  
-  // Configure dependencies
+  // Configure dependencies (includes SharedPreferences)
   await configureDependencies();
   
   runApp(
@@ -54,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: ScreenUtilInit(
-        designSize: const Size(375, 812), // iPhone 13 design size
+        designSize: const Size(402, 844), // Figma Design Size
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
@@ -63,7 +58,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: ThemeMode.system,
+            themeMode: ThemeMode.dark, // Figma design is dark themed
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,

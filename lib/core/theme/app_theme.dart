@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppTheme {
-  static const _primaryColor = Color(0xFF2196F3);
+  // Figma Design Colors
+  static const _primaryColor = Color(0xFFE53E3E); // Kırmızı button
   static const _secondaryColor = Color(0xFF03DAC6);
-  static const _errorColor = Color(0xFFB00020);
+  static const _errorColor = Color(0xFFE53E3E);
+  static const _surfaceColor = Color(0xFF1A1A1A); // Dark background
+  static const _onSurfaceColor = Color(0xFFFFFFFF); // White text
+  static const _inputFillColor = Color(0xFF2D2D2D); // Dark input background
   
   // Light Theme
   static ThemeData get lightTheme {
@@ -18,6 +22,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       brightness: Brightness.light,
+      fontFamily: 'Euclid',
       
       // AppBar Theme
       appBarTheme: AppBarTheme(
@@ -95,40 +100,47 @@ class AppTheme {
     );
   }
   
-  // Dark Theme
+  // Dark Theme - Figma Design
   static ThemeData get darkTheme {
     final ColorScheme colorScheme = const ColorScheme.dark().copyWith(
       primary: _primaryColor,
       secondary: _secondaryColor,
       error: _errorColor,
+      surface: _surfaceColor,
+      onSurface: _onSurfaceColor,
+      surfaceContainerHighest: _inputFillColor,
     );
     
     return ThemeData(
       useMaterial3: true,
       colorScheme: colorScheme,
       brightness: Brightness.dark,
+      scaffoldBackgroundColor: _surfaceColor,
+      fontFamily: 'Euclid',
       
       // AppBar Theme
       appBarTheme: AppBarTheme(
         centerTitle: true,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        backgroundColor: colorScheme.surface,
-        foregroundColor: colorScheme.onSurface,
+        backgroundColor: _surfaceColor,
+        foregroundColor: _onSurfaceColor,
       ),
       
       // Card Theme
       cardTheme: const CardThemeData(
         elevation: 2,
+        color: _inputFillColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
       
-      // Input Decoration Theme
+      // Input Decoration Theme - Figma Style
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        fillColor: _inputFillColor,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -151,13 +163,20 @@ class AppTheme {
         ),
       ),
       
-      // Elevated Button Theme
+      // Elevated Button Theme - Figma Style
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          backgroundColor: _primaryColor,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          minimumSize: const Size(double.infinity, 56),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio/dio.dart';
 import '../../core/error/exceptions.dart';
 import '../../core/error/failures.dart';
 import '../../core/utils/logger.dart';
@@ -27,37 +28,43 @@ class AuthRepositoryImpl implements AuthRepository {
     required String password,
   }) async {
     try {
-      // MOCK LOGIN - Remove this in production!
-      // For development purposes, allow these test credentials:
-      if (_isValidTestCredentials(email, password)) {
-        final now = DateTime.now();
-        final mockUser = UserModel(
-          id: '1',
-          name: _getMockUserName(email),
-          email: email,
-          avatarUrl: null,
-          createdAt: now,
-          updatedAt: now,
-        );
-        
-        // Save mock user and token locally
-        await localDataSource.saveUser(mockUser);
-        await localDataSource.saveToken('mock_token_${DateTime.now().millisecondsSinceEpoch}');
-        
-        logger.info('Mock login successful for: $email');
-        return Right(mockUser.toEntity());
-      }
-      
-      // If not mock credentials, try real API
-      final userModel = await remoteDataSource.login({
+      final authResponse = await remoteDataSource.login({
         'email': email,
         'password': password,
       });
       
-      // Save user and token locally
+      logger.info('Login successful for: $email');
+      
+      final userModel = UserModel(
+        id: authResponse.data.id,
+        email: authResponse.data.email,
+        name: authResponse.data.name,
+        avatarUrl: authResponse.data.photoUrl,
+      );
+      
       await localDataSource.saveUser(userModel);
+      await localDataSource.saveToken(authResponse.data.token);
       
       return Right(userModel.toEntity());
+    } on DioException catch (e) {
+      logger.error('Dio error during login', error: e);
+      
+      // Handle specific HTTP errors
+      if (e.response != null) {
+        final statusCode = e.response?.statusCode;
+        final responseData = e.response?.data;
+        
+        if (statusCode == 404) {
+          return const Left(ServerFailure('API endpoint not found'));
+        }
+        
+        if (responseData is Map<String, dynamic>) {
+          final message = responseData['message'] as String?;
+          return Left(ServerFailure(message ?? 'Login failed'));
+        }
+      }
+      
+      return Left(NetworkFailure(e.message ?? 'Network error'));
     } on ServerException catch (e) {
       logger.error('Login failed', error: e);
       return Left(ServerFailure(e.message));
@@ -70,29 +77,6 @@ class AuthRepositoryImpl implements AuthRepository {
     }
   }
   
-  // MOCK LOGIN HELPERS - Remove in production!
-  bool _isValidTestCredentials(String email, String password) {
-    const validCredentials = {
-      'admin@test.com': 'admin123',
-      'user@test.com': 'user123',
-      'demo@demo.com': 'demo123',
-      'test@example.com': 'test123',
-    };
-    
-    return validCredentials[email.toLowerCase()] == password;
-  }
-  
-  String _getMockUserName(String email) {
-    const userNames = {
-      'admin@test.com': 'Admin User',
-      'user@test.com': 'Test User',
-      'demo@demo.com': 'Demo User',
-      'test@example.com': 'Example User',
-    };
-    
-    return userNames[email.toLowerCase()] ?? 'Test User';
-  }
-  
   @override
   Future<Either<Failure, User>> register({
     required String email,
@@ -100,16 +84,45 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
   }) async {
     try {
-      final userModel = await remoteDataSource.register({
+      final authResponse = await remoteDataSource.register({
         'email': email,
         'password': password,
         'name': name,
       });
       
-      // Save user locally
+      logger.info('Registration successful for: $email');
+      
+      final userModel = UserModel(
+        id: authResponse.data.id,
+        email: authResponse.data.email,
+        name: authResponse.data.name,
+        avatarUrl: authResponse.data.photoUrl,
+      );
+      
+      // Save user and token locally
       await localDataSource.saveUser(userModel);
+      await localDataSource.saveToken(authResponse.data.token);
       
       return Right(userModel.toEntity());
+    } on DioException catch (e) {
+      logger.error('Dio error during registration', error: e);
+      
+      // Handle specific HTTP errors
+      if (e.response != null) {
+        final statusCode = e.response?.statusCode;
+        final responseData = e.response?.data;
+        
+        if (statusCode == 404) {
+          return const Left(ServerFailure('API endpoint not found'));
+        }
+        
+        if (responseData is Map<String, dynamic>) {
+          final message = responseData['message'] as String?;
+          return Left(ServerFailure(message ?? 'Registration failed'));
+        }
+      }
+      
+      return Left(NetworkFailure(e.message ?? 'Network error'));
     } on ServerException catch (e) {
       logger.error('Registration failed', error: e);
       return Left(ServerFailure(e.message));
@@ -125,12 +138,9 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, void>> logout() async {
     try {
-      await remoteDataSource.logout();
       await localDataSource.clearUser();
+      logger.info('User logged out successfully');
       return const Right(null);
-    } on ServerException catch (e) {
-      logger.error('Logout failed', error: e);
-      return Left(ServerFailure(e.message));
     } catch (e) {
       logger.error('Unexpected error during logout', error: e);
       return const Left(UnknownFailure());
