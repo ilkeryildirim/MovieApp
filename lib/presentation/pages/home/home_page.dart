@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/di/injection_container.dart';
 import '../../blocs/movie/movie_bloc.dart';
 import '../../widgets/movie_snap_scroll.dart';
+import '../../widgets/movie_shimmer_loading.dart';
+import '../../widgets/error_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -54,6 +55,10 @@ class _HomeViewState extends State<HomeView> {
       bloc.add(const MovieEvent.loadMoreMovies(limit: 5));
     }
   }
+  
+  void _refreshMovies() {
+    context.read<MovieBloc>().add(const MovieEvent.loadMovies(limit: 5));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,69 +75,29 @@ class _HomeViewState extends State<HomeView> {
           },
           builder: (context, state) {
             return state.when(
-              initial: () => const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryRed,
+                initial: () => const MovieShimmerLoading(),
+                loading: () => const MovieShimmerLoading(),
+                loaded: (movies, currentPage, totalPages, hasNextPage, isLoadingMore) {
+                  return AnimatedOpacity(
+                    duration: const Duration(milliseconds: 600),
+                    opacity: 1.0,
+                    curve: Curves.easeInOut,
+                    child: MovieSnapScroll(
+                      movies: movies,
+                      scrollController: _scrollController,
+                      isLoadingMore: isLoadingMore,
+                      onLoadMore: _loadMoreMovies,
+                      onRefresh: _refreshMovies,
+                    ),
+                  );
+                },
+                error: (message) => AppErrorWidget(
+                  message: message,
+                  onRetry: () {
+                    context.read<MovieBloc>().add(const MovieEvent.loadMovies(limit: 5));
+                  },
                 ),
-              ),
-              loading: () => const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryRed,
-                ),
-              ),
-              loaded: (movies, currentPage, totalPages, hasNextPage, isLoadingMore) {
-                return MovieSnapScroll(
-                  movies: movies,
-                  scrollController: _scrollController,
-                  isLoadingMore: isLoadingMore,
-                  onLoadMore: _loadMoreMovies,
                 );
-              },
-              error: (message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 64.sp,
-                      color: AppColors.primaryRed,
-                    ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'Bir hata oluştu',
-                      style: TextStyle(
-                        color: AppColors.whiteText,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      message,
-                      style: TextStyle(
-                        color: AppColors.grayText,
-                        fontSize: 14.sp,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 24.h),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<MovieBloc>().add(const MovieEvent.loadMovies(limit: 5));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryRed,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                      ),
-                      child: const Text('Tekrar Dene'),
-                    ),
-                  ],
-                ),
-              ),
-            );
           },
         ),
       ),
