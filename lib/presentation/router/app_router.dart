@@ -5,6 +5,7 @@ import '../pages/splash/splash_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/login/login_page.dart';
 import '../pages/register/register_page.dart';
+import '../pages/main/main_page.dart';
 
 @lazySingleton
 class AppRouter {
@@ -33,7 +34,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.home,
           name: AppRoutes.home,
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) => const MainPage(),
         ),
       ],
       errorBuilder: (context, state) => ErrorPage(error: state.error),
@@ -43,7 +44,6 @@ class AppRouter {
     );
   }
 
-  // Helper methods for page transitions
   Page<void> _buildLoginPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage<void>(
       key: state.pageKey,

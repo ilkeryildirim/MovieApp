@@ -14,6 +14,13 @@ class AppAssets {
   static const String lockUnlockedIcon = '$_iconsPath/lock_unlocked.svg';
   static const String addUserIcon = '$_iconsPath/add_user.svg';
   
+  // Navigation Icons
+  static const String homeIcon = '$_iconsPath/home.svg';
+  static const String profileIcon = '$_iconsPath/profile.svg';
+  
+  // Other Icons
+  static const String moviePlaceholderIcon = '$_iconsPath/ic_movie_placeholder.svg';
+  
   // Fonts
   static const String euclidFontFamily = 'Euclid';
 } 

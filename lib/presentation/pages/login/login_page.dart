@@ -13,8 +13,8 @@ import '../../../core/widgets/safe_click_widget.dart';
 import '../../../core/mixins/form_validation_mixin.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../router/app_router.dart';
-import '../../widgets/custom_input_field.dart';
-import '../../widgets/social_login_button.dart';
+import '../../widgets/auth/custom_input_field.dart';
+import '../../widgets/auth/social_login_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -69,7 +69,6 @@ class _LoginPageState extends State<LoginPage> with FormValidationMixin {
   }
 
   void _login() {
-    // Manually validate all fields
     touchField('email');
     touchField('password');
     

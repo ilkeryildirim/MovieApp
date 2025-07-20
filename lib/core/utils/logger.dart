@@ -1,44 +1,39 @@
-import 'package:logger/logger.dart';
-import 'package:injectable/injectable.dart';
+import 'package:flutter/foundation.dart';
 
-@lazySingleton
 class AppLogger {
-  late final Logger _logger;
-  
-  AppLogger() {
-    _logger = Logger(
-      printer: PrettyPrinter(
-        methodCount: 2,
-        errorMethodCount: 8,
-        lineLength: 120,
-        colors: true,
-        printEmojis: true,
-        dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
-      ),
-    );
+  static void info(String message, {Object? error}) {
+    if (kDebugMode) {
+      print('🔵 INFO: $message');
+      if (error != null) {
+        print('Error: $error');
+      }
+    }
   }
-  
-  void debug(dynamic message, {dynamic error, StackTrace? stackTrace}) {
-    _logger.d(message, time: DateTime.now(), error: error, stackTrace: stackTrace);
+
+  static void error(String message, {Object? error}) {
+    if (kDebugMode) {
+      print('🔴 ERROR: $message');
+      if (error != null) {
+        print('Error: $error');
+      }
+    }
   }
-  
-  void info(dynamic message, {dynamic error, StackTrace? stackTrace}) {
-    _logger.i(message, time: DateTime.now(), error: error, stackTrace: stackTrace);
+
+  static void warning(String message, {Object? error}) {
+    if (kDebugMode) {
+      print('🟡 WARNING: $message');
+      if (error != null) {
+        print('Error: $error');
+      }
+    }
   }
-  
-  void warning(dynamic message, {dynamic error, StackTrace? stackTrace}) {
-    _logger.w(message, time: DateTime.now(), error: error, stackTrace: stackTrace);
-  }
-  
-  void error(dynamic message, {dynamic error, StackTrace? stackTrace}) {
-    _logger.e(message, time: DateTime.now(), error: error, stackTrace: stackTrace);
-  }
-  
-  void verbose(dynamic message, {dynamic error, StackTrace? stackTrace}) {
-    _logger.t(message, time: DateTime.now(), error: error, stackTrace: stackTrace);
-  }
-  
-  void wtf(dynamic message, {dynamic error, StackTrace? stackTrace}) {
-    _logger.f(message, time: DateTime.now(), error: error, stackTrace: stackTrace);
+
+  static void debug(String message, {Object? error}) {
+    if (kDebugMode) {
+      print('⚪ DEBUG: $message');
+      if (error != null) {
+        print('Error: $error');
+      }
+    }
   }
 } 

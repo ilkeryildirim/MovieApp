@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/widgets/safe_click_widget.dart';
-import '../../core/constants/app_colors.dart';
+import '../../../core/widgets/safe_click_widget.dart';
+import '../../../core/constants/app_colors.dart';
 
 class SocialLoginButton extends StatelessWidget {
   final Widget icon;

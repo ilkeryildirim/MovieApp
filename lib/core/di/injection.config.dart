@@ -16,13 +16,16 @@ import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import '../../data/datasources/local/auth_local_datasource.dart' as _i17;
 import '../../data/datasources/remote/auth_remote_datasource.dart' as _i1057;
 import '../../data/repositories/auth_repository_impl.dart' as _i895;
+import '../../data/repositories/movie_repository_impl.dart' as _i606;
+import '../../data/services/movie_service.dart' as _i904;
 import '../../domain/repositories/auth_repository.dart' as _i1073;
+import '../../domain/repositories/movie_repository.dart' as _i110;
 import '../../domain/usecases/auth/login_usecase.dart' as _i461;
 import '../../domain/usecases/auth/register_usecase.dart' as _i659;
 import '../../presentation/blocs/auth/auth_bloc.dart' as _i141;
+import '../../presentation/blocs/movie/movie_bloc.dart' as _i1058;
 import '../../presentation/router/app_router.dart' as _i127;
 import '../network/dio_client.dart' as _i667;
-import '../utils/logger.dart' as _i221;
 import 'injection_module.dart' as _i212;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -42,7 +45,6 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.lazySingleton<_i667.DioClient>(() => _i667.DioClient());
-    gh.lazySingleton<_i221.AppLogger>(() => _i221.AppLogger());
     gh.lazySingleton<_i127.AppRouter>(() => _i127.AppRouter());
     gh.factory<_i17.AuthLocalDataSource>(() => _i17.AuthLocalDataSourceImpl(
         sharedPreferences: gh<_i460.SharedPreferences>()));
@@ -50,10 +52,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => injectionModule.dio(gh<_i667.DioClient>()));
     gh.factory<_i1057.AuthRemoteDataSource>(
         () => _i1057.AuthRemoteDataSource(gh<_i361.Dio>()));
+    gh.lazySingleton<_i904.MovieService>(
+        () => _i904.MovieService(gh<_i361.Dio>()));
+    gh.lazySingleton<_i110.MovieRepository>(
+        () => _i606.MovieRepositoryImpl(gh<_i904.MovieService>()));
+    gh.factory<_i1058.MovieBloc>(
+        () => _i1058.MovieBloc(gh<_i110.MovieRepository>()));
     gh.factory<_i1073.AuthRepository>(() => _i895.AuthRepositoryImpl(
           remoteDataSource: gh<_i1057.AuthRemoteDataSource>(),
           localDataSource: gh<_i17.AuthLocalDataSource>(),
-          logger: gh<_i221.AppLogger>(),
         ));
     gh.factory<_i461.LoginUseCase>(
         () => _i461.LoginUseCase(gh<_i1073.AuthRepository>()));

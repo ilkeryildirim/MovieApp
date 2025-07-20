@@ -3,10 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 class AppStrings {
   // Private constructor to prevent instantiation
   const AppStrings._();
-  
-  // String keys - for reference and debugging (private)
-  // static const _Keys _keys = _Keys._(); // Removed unused field
-  
+
   // Translated strings - ready to use
   static const _Translates _translates = _Translates._();
   
@@ -105,6 +102,20 @@ class AppStrings {
   static String get iUnderstand => _translates.iUnderstand;
   static String get scrollToBottomToConfirm => _translates.scrollToBottomToConfirm;
   static String get userAgreementContent => _translates.userAgreementContent;
+  
+  // Movie
+  static String get showMore => _translates.showMore;
+  static String get showLess => _translates.showLess;
+  static String get posterLoadError => _translates.posterLoadError;
+  static String get goToFirst => _translates.goToFirst;
+  static String get pullUpToGoFirst => _translates.pullUpToGoFirst;
+  static String get refresh => _translates.refresh;
+  static String get releaseToRefresh => _translates.releaseToRefresh;
+  static String get releaseToGoFirst => _translates.releaseToGoFirst;
+  
+  // Error
+  static String get errorOccurred => _translates.errorOccurred;
+  static String get retry => _translates.retry;
   
   // Parameterized strings
   static String welcomeUser(String name) => _translates.welcomeUser(name);
@@ -209,6 +220,20 @@ class _Keys {
   static const String iUnderstand = 'i_understand';
   static const String scrollToBottomToConfirm = 'scroll_to_bottom_to_confirm';
   static const String userAgreementContent = 'user_agreement_content';
+  
+  // Movie
+  static const String showMore = 'show_more';
+  static const String showLess = 'show_less';
+  static const String posterLoadError = 'poster_load_error';
+  static const String goToFirst = 'go_to_first';
+  static const String pullUpToGoFirst = 'pull_up_to_go_first';
+  static const String refresh = 'refresh';
+  static const String releaseToRefresh = 'release_to_refresh';
+  static const String releaseToGoFirst = 'release_to_go_first';
+  
+  // Error
+  static const String errorOccurred = 'error_occurred';
+  static const String retry = 'retry';
 }
 
 class _Translates {
@@ -309,6 +334,20 @@ class _Translates {
   String get iUnderstand => _Keys.iUnderstand.tr();
   String get scrollToBottomToConfirm => _Keys.scrollToBottomToConfirm.tr();
   String get userAgreementContent => _Keys.userAgreementContent.tr();
+  
+  // Movie
+  String get showMore => _Keys.showMore.tr();
+  String get showLess => _Keys.showLess.tr();
+  String get posterLoadError => _Keys.posterLoadError.tr();
+  String get goToFirst => _Keys.goToFirst.tr();
+  String get pullUpToGoFirst => _Keys.pullUpToGoFirst.tr();
+  String get refresh => _Keys.refresh.tr();
+  String get releaseToRefresh => _Keys.releaseToRefresh.tr();
+  String get releaseToGoFirst => _Keys.releaseToGoFirst.tr();
+  
+  // Error
+  String get errorOccurred => _Keys.errorOccurred.tr();
+  String get retry => _Keys.retry.tr();
   
   // Parameterized strings
   String welcomeUser(String name) => _Keys.welcomeUser.tr(namedArgs: {'name': name});

@@ -13,9 +13,9 @@ import '../../../core/widgets/safe_click_widget.dart';
 import '../../../core/mixins/form_validation_mixin.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../router/app_router.dart';
-import '../../widgets/custom_input_field.dart';
-import '../../widgets/social_login_button.dart';
-import '../../widgets/terms_bottom_sheet.dart';
+import '../../widgets/auth/custom_input_field.dart';
+import '../../widgets/auth/social_login_button.dart';
+import '../../widgets/auth/terms_bottom_sheet.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -101,7 +101,6 @@ class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
   }
 
   void _register() {
-    // Manually validate all fields
     touchField('name');
     touchField('email');
     touchField('password');
