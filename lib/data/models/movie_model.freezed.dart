@@ -26,14 +26,16 @@ mixin _$MovieModel {
   @JsonKey(name: 'Plot')
   String get description => throw _privateConstructorUsedError;
   @JsonKey(name: 'Poster')
-  String get posterUrl => throw _privateConstructorUsedError;
+  String? get poster => throw _privateConstructorUsedError;
+  bool get isFavorite => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
     TResult Function(
             String id,
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
-            @JsonKey(name: 'Poster') String posterUrl)
+            @JsonKey(name: 'Poster') String? poster,
+            bool isFavorite)
         $default,
   ) =>
       throw _privateConstructorUsedError;
@@ -43,7 +45,8 @@ mixin _$MovieModel {
             String id,
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
-            @JsonKey(name: 'Poster') String posterUrl)?
+            @JsonKey(name: 'Poster') String? poster,
+            bool isFavorite)?
         $default,
   ) =>
       throw _privateConstructorUsedError;
@@ -53,7 +56,8 @@ mixin _$MovieModel {
             String id,
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
-            @JsonKey(name: 'Poster') String posterUrl)?
+            @JsonKey(name: 'Poster') String? poster,
+            bool isFavorite)?
         $default, {
     required TResult orElse(),
   }) =>
@@ -95,7 +99,8 @@ abstract class $MovieModelCopyWith<$Res> {
       {String id,
       @JsonKey(name: 'Title') String title,
       @JsonKey(name: 'Plot') String description,
-      @JsonKey(name: 'Poster') String posterUrl});
+      @JsonKey(name: 'Poster') String? poster,
+      bool isFavorite});
 }
 
 /// @nodoc
@@ -116,7 +121,8 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
     Object? id = null,
     Object? title = null,
     Object? description = null,
-    Object? posterUrl = null,
+    Object? poster = freezed,
+    Object? isFavorite = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -131,10 +137,14 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      posterUrl: null == posterUrl
-          ? _value.posterUrl
-          : posterUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+      poster: freezed == poster
+          ? _value.poster
+          : poster // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isFavorite: null == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -151,7 +161,8 @@ abstract class _$$MovieModelImplCopyWith<$Res>
       {String id,
       @JsonKey(name: 'Title') String title,
       @JsonKey(name: 'Plot') String description,
-      @JsonKey(name: 'Poster') String posterUrl});
+      @JsonKey(name: 'Poster') String? poster,
+      bool isFavorite});
 }
 
 /// @nodoc
@@ -170,7 +181,8 @@ class __$$MovieModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? title = null,
     Object? description = null,
-    Object? posterUrl = null,
+    Object? poster = freezed,
+    Object? isFavorite = null,
   }) {
     return _then(_$MovieModelImpl(
       id: null == id
@@ -185,10 +197,14 @@ class __$$MovieModelImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      posterUrl: null == posterUrl
-          ? _value.posterUrl
-          : posterUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+      poster: freezed == poster
+          ? _value.poster
+          : poster // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isFavorite: null == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -200,7 +216,8 @@ class _$MovieModelImpl implements _MovieModel {
       {required this.id,
       @JsonKey(name: 'Title') required this.title,
       @JsonKey(name: 'Plot') required this.description,
-      @JsonKey(name: 'Poster') required this.posterUrl});
+      @JsonKey(name: 'Poster') this.poster,
+      this.isFavorite = false});
 
   factory _$MovieModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MovieModelImplFromJson(json);
@@ -215,11 +232,14 @@ class _$MovieModelImpl implements _MovieModel {
   final String description;
   @override
   @JsonKey(name: 'Poster')
-  final String posterUrl;
+  final String? poster;
+  @override
+  @JsonKey()
+  final bool isFavorite;
 
   @override
   String toString() {
-    return 'MovieModel(id: $id, title: $title, description: $description, posterUrl: $posterUrl)';
+    return 'MovieModel(id: $id, title: $title, description: $description, poster: $poster, isFavorite: $isFavorite)';
   }
 
   @override
@@ -231,14 +251,15 @@ class _$MovieModelImpl implements _MovieModel {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.posterUrl, posterUrl) ||
-                other.posterUrl == posterUrl));
+            (identical(other.poster, poster) || other.poster == poster) &&
+            (identical(other.isFavorite, isFavorite) ||
+                other.isFavorite == isFavorite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, title, description, posterUrl);
+      Object.hash(runtimeType, id, title, description, poster, isFavorite);
 
   /// Create a copy of MovieModel
   /// with the given fields replaced by the non-null parameter values.
@@ -255,10 +276,11 @@ class _$MovieModelImpl implements _MovieModel {
             String id,
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
-            @JsonKey(name: 'Poster') String posterUrl)
+            @JsonKey(name: 'Poster') String? poster,
+            bool isFavorite)
         $default,
   ) {
-    return $default(id, title, description, posterUrl);
+    return $default(id, title, description, poster, isFavorite);
   }
 
   @override
@@ -268,10 +290,11 @@ class _$MovieModelImpl implements _MovieModel {
             String id,
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
-            @JsonKey(name: 'Poster') String posterUrl)?
+            @JsonKey(name: 'Poster') String? poster,
+            bool isFavorite)?
         $default,
   ) {
-    return $default?.call(id, title, description, posterUrl);
+    return $default?.call(id, title, description, poster, isFavorite);
   }
 
   @override
@@ -281,12 +304,13 @@ class _$MovieModelImpl implements _MovieModel {
             String id,
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
-            @JsonKey(name: 'Poster') String posterUrl)?
+            @JsonKey(name: 'Poster') String? poster,
+            bool isFavorite)?
         $default, {
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(id, title, description, posterUrl);
+      return $default(id, title, description, poster, isFavorite);
     }
     return orElse();
   }
@@ -329,11 +353,11 @@ class _$MovieModelImpl implements _MovieModel {
 
 abstract class _MovieModel implements MovieModel {
   const factory _MovieModel(
-          {required final String id,
-          @JsonKey(name: 'Title') required final String title,
-          @JsonKey(name: 'Plot') required final String description,
-          @JsonKey(name: 'Poster') required final String posterUrl}) =
-      _$MovieModelImpl;
+      {required final String id,
+      @JsonKey(name: 'Title') required final String title,
+      @JsonKey(name: 'Plot') required final String description,
+      @JsonKey(name: 'Poster') final String? poster,
+      final bool isFavorite}) = _$MovieModelImpl;
 
   factory _MovieModel.fromJson(Map<String, dynamic> json) =
       _$MovieModelImpl.fromJson;
@@ -348,7 +372,9 @@ abstract class _MovieModel implements MovieModel {
   String get description;
   @override
   @JsonKey(name: 'Poster')
-  String get posterUrl;
+  String? get poster;
+  @override
+  bool get isFavorite;
 
   /// Create a copy of MovieModel
   /// with the given fields replaced by the non-null parameter values.

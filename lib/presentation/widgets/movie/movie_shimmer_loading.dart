@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:ui';
-import '../../core/constants/app_colors.dart';
-import '../../core/constants/app_assets.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_assets.dart';
 
 class MovieShimmerLoading extends StatelessWidget {
   const MovieShimmerLoading({super.key});

@@ -95,5 +95,7 @@
   "pull_up_to_go_first": "Pull up to go to first movie",
   "refresh": "Refresh",
   "release_to_refresh": "Release to refresh",
-  "release_to_go_first": "Release to go first"
+  "release_to_go_first": "Release to go first",
+  "error_occurred": "An error occurred",
+  "retry": "Retry"
 } 

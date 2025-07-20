@@ -113,6 +113,10 @@ class AppStrings {
   static String get releaseToRefresh => _translates.releaseToRefresh;
   static String get releaseToGoFirst => _translates.releaseToGoFirst;
   
+  // Error
+  static String get errorOccurred => _translates.errorOccurred;
+  static String get retry => _translates.retry;
+  
   // Parameterized strings
   static String welcomeUser(String name) => _translates.welcomeUser(name);
 }
@@ -226,6 +230,10 @@ class _Keys {
   static const String refresh = 'refresh';
   static const String releaseToRefresh = 'release_to_refresh';
   static const String releaseToGoFirst = 'release_to_go_first';
+  
+  // Error
+  static const String errorOccurred = 'error_occurred';
+  static const String retry = 'retry';
 }
 
 class _Translates {
@@ -336,6 +344,10 @@ class _Translates {
   String get refresh => _Keys.refresh.tr();
   String get releaseToRefresh => _Keys.releaseToRefresh.tr();
   String get releaseToGoFirst => _Keys.releaseToGoFirst.tr();
+  
+  // Error
+  String get errorOccurred => _Keys.errorOccurred.tr();
+  String get retry => _Keys.retry.tr();
   
   // Parameterized strings
   String welcomeUser(String name) => _Keys.welcomeUser.tr(namedArgs: {'name': name});

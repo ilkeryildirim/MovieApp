@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/widgets/safe_click_widget.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_text_styles.dart';
+import '../../../core/widgets/safe_click_widget.dart';
 
 enum InputFieldType {
   text,
@@ -63,7 +64,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   TextInputType _getKeyboardType() {
     if (widget.keyboardType != null) return widget.keyboardType!;
-    
+
     switch (widget.type) {
       case InputFieldType.email:
         return TextInputType.emailAddress;
@@ -79,18 +80,20 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   Widget? _getSuffixIcon() {
     if (widget.suffixIcon != null) return widget.suffixIcon;
-    
+
     if (widget.showPasswordToggle) {
       return SafeClickWidget(
         onTap: _togglePasswordVisibility,
         child: Icon(
-          _isObscured ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+          _isObscured
+              ? Icons.visibility_outlined
+              : Icons.visibility_off_outlined,
           color: AppColors.grayText,
           size: 20.sp,
         ),
       );
     }
-    
+
     return null;
   }
 
@@ -105,8 +108,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
             color: AppColors.inputBackground,
             borderRadius: BorderRadius.circular(18.r),
             border: Border.all(
-              color: widget.errorText != null 
-                  ? Colors.red.withOpacity(0.5) 
+              color: widget.errorText != null
+                  ? Colors.red.withOpacity(0.5)
                   : Colors.white.withOpacity(0.2),
               width: 1,
             ),
@@ -117,10 +120,7 @@ class _CustomInputFieldState extends State<CustomInputField> {
             keyboardType: _getKeyboardType(),
             enabled: widget.enabled,
             maxLines: widget.maxLines,
-            style: TextStyle(
-              color: AppColors.whiteText,
-              fontSize: 16.sp,
-            ),
+            style: AppTextStyles.inputText,
             decoration: InputDecoration(
               filled: true,
               fillColor: Colors.transparent,
@@ -174,4 +174,4 @@ class _CustomInputFieldState extends State<CustomInputField> {
       ],
     );
   }
-} 
+}

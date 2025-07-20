@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/di/injection_container.dart';
 import '../../blocs/movie/movie_bloc.dart';
-import '../../widgets/movie_snap_scroll.dart';
-import '../../widgets/movie_shimmer_loading.dart';
-import '../../widgets/error_widget.dart';
+import '../../widgets/movie/movie_snap_scroll.dart';
+import '../../widgets/movie/movie_shimmer_loading.dart';
+import '../../../core/widgets/error_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

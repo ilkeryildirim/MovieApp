@@ -11,7 +11,8 @@ _$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       title: json['Title'] as String,
       description: json['Plot'] as String,
-      posterUrl: json['Poster'] as String,
+      poster: json['Poster'] as String?,
+      isFavorite: json['is_favorite'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$MovieModelImplToJson(_$MovieModelImpl instance) =>
@@ -19,7 +20,8 @@ Map<String, dynamic> _$$MovieModelImplToJson(_$MovieModelImpl instance) =>
       'id': instance.id,
       'Title': instance.title,
       'Plot': instance.description,
-      'Poster': instance.posterUrl,
+      if (instance.poster case final value?) 'Poster': value,
+      'is_favorite': instance.isFavorite,
     };
 
 _$MovieListParamsImpl _$$MovieListParamsImplFromJson(

@@ -44,7 +44,6 @@ class AppRouter {
     );
   }
 
-  // Helper methods for page transitions
   Page<void> _buildLoginPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage<void>(
       key: state.pageKey,

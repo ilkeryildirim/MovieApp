@@ -4,36 +4,40 @@ import 'dart:ui';
 
 class ActionButton extends StatelessWidget {
   final IconData icon;
-  final VoidCallback onTap;
+  final VoidCallback onPressed;
+  final Color? backgroundColor;
+  final Color? iconColor;
 
   const ActionButton({
     super.key,
     required this.icon,
-    required this.onTap,
+    required this.onPressed,
+    this.backgroundColor,
+    this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onPressed,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24.5.r),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
           child: Container(
             width: 49.w,
             height: 70.h,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: backgroundColor ?? Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(24.5.r),
               border: Border.all(
-                color: Colors.white.withOpacity(0.2),
+                color: Colors.white.withValues(alpha: .2),
                 width: 1,
               ),
             ),
             child: Icon(
               icon,
-              color: Colors.white,
+              color: iconColor ?? Colors.white,
               size: 24.sp,
             ),
           ),

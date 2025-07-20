@@ -9,7 +9,8 @@ class MovieModel with _$MovieModel {
     required String id,
     @JsonKey(name: 'Title') required String title,
     @JsonKey(name: 'Plot') required String description,
-    @JsonKey(name: 'Poster') required String posterUrl,
+    @JsonKey(name: 'Poster') String? poster,
+    @Default(false) bool isFavorite,
   }) = _MovieModel;
 
   factory MovieModel.fromJson(Map<String, dynamic> json) => _$MovieModelFromJson(json);

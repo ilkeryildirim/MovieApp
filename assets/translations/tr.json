@@ -95,5 +95,7 @@
   "pull_up_to_go_first": "Yukarı çekerek ilk filme dön",
   "refresh": "Yenile",
   "release_to_refresh": "Bırak ve yenile",
-  "release_to_go_first": "Bırak ve başa dön"
+  "release_to_go_first": "Bırak ve başa dön",
+  "error_occurred": "Bir hata oluştu",
+  "retry": "Tekrar Dene"
 } 

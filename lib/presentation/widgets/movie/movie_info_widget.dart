@@ -2,76 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../data/models/movie_model.dart';
-import '../../core/constants/app_assets.dart';
-import '../../core/constants/app_colors.dart';
-import '../../core/constants/app_strings.dart';
+import '../../../data/models/movie_model.dart';
+import '../../../core/constants/app_assets.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_strings.dart';
+import '../../../core/constants/app_text_styles.dart';
 
 class MovieInfoWidget extends StatelessWidget {
   final MovieModel movie;
-  final bool isDescriptionExpanded;
-  final VoidCallback onDescriptionToggle;
+  final bool isExpanded;
+  final VoidCallback onToggleExpanded;
 
   const MovieInfoWidget({
     super.key,
     required this.movie,
-    required this.isDescriptionExpanded,
-    required this.onDescriptionToggle,
+    required this.isExpanded,
+    required this.onToggleExpanded,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            Colors.black.withOpacity(0.6),
-            Colors.black.withOpacity(0.8),
-          ],
-          stops: const [0.0, 0.3, 1.0],
-        ),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              _buildProfileCircle(),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      movie.title,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: AppAssets.euclidFontFamily,
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    _buildExpandableDescription(),
-                  ],
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfileCircle(),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    movie.title,
+                    style: AppTextStyles.heading4,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4.h),
+                  _buildExpandableDescription(),
+                ],
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _buildProfileCircle() {
     return Container(
-      width: 50.w,
-      height: 50.w,
+      width: 40.w,
+      height: 40.w,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: AppColors.inputBackground,
@@ -92,15 +76,12 @@ class MovieInfoWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isDescriptionExpanded) ...[
+          if (!isExpanded) ...[
             LayoutBuilder(
               builder: (context, constraints) {
-                final textStyle = TextStyle(
+                final textStyle = AppTextStyles.bodySmall.copyWith(
                   color: Colors.white.withOpacity(0.8),
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
                   height: 1.4,
-                  fontFamily: AppAssets.euclidFontFamily,
                 );
                 
                 final textSpan = TextSpan(
@@ -116,7 +97,7 @@ class MovieInfoWidget extends StatelessWidget {
                 
                 if (textPainter.didExceedMaxLines) {
                   return GestureDetector(
-                    onTap: onDescriptionToggle,
+                    onTap: onToggleExpanded,
                     child: RichText(
                       maxLines: 2,
                       overflow: TextOverflow.clip,
@@ -125,7 +106,7 @@ class MovieInfoWidget extends StatelessWidget {
                         children: [
                           TextSpan(text: movie.description.substring(0, movie.description.length > 60 ? 60 : movie.description.length)),
                           TextSpan(
-                            text: '... ' + AppStrings.showMore,
+                            text: ' ${AppStrings.showMore}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 13.sp,
@@ -147,27 +128,22 @@ class MovieInfoWidget extends StatelessWidget {
             ),
           ],
           
-          if (isDescriptionExpanded) ...[
+          if (isExpanded) ...[
             Text(
               movie.description,
-              style: TextStyle(
+              style: AppTextStyles.bodySmall.copyWith(
                 color: Colors.white.withOpacity(0.8),
-                fontSize: 13.sp,
-                fontWeight: FontWeight.w400,
                 height: 1.4,
-                fontFamily: AppAssets.euclidFontFamily,
               ),
-            ),
+                          ),
             SizedBox(height: 8.h),
             GestureDetector(
-              onTap: onDescriptionToggle,
+              onTap: onToggleExpanded,
               child: Text(
                 AppStrings.showLess,
-                style: TextStyle(
+                style: AppTextStyles.bodySmall.copyWith(
                   color: Colors.white,
-                  fontSize: 13.sp,
                   fontWeight: FontWeight.w700,
-                  fontFamily: AppAssets.euclidFontFamily,
                 ),
               ),
             ),
