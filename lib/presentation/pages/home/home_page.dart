@@ -88,6 +88,9 @@ class _HomeViewState extends State<HomeView> {
                       isLoadingMore: isLoadingMore,
                       onLoadMore: _loadMoreMovies,
                       onRefresh: _refreshMovies,
+                      onFavoritePressed: (movieId) {
+                        context.read<MovieBloc>().add(MovieEvent.toggleFavorite(movieId: movieId));
+                      },
                     ),
                   );
                 },

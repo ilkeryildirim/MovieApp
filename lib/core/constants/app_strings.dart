@@ -117,6 +117,16 @@ class AppStrings {
   static String get errorOccurred => _translates.errorOccurred;
   static String get retry => _translates.retry;
   
+  // Profile
+  static String get profileDetail => _translates.profileDetail;
+  static String get limitedOffer => _translates.limitedOffer;
+  static String get defaultUser => _translates.defaultUser;
+  static String get addPhoto => _translates.addPhoto;
+  static String get favoriteMovies => _translates.favoriteMovies;
+  static String get noFavoriteMoviesYet => _translates.noFavoriteMoviesYet;
+  static String get movieTitle => _translates.movieTitle;
+  static String get defaultDirector => _translates.defaultDirector;
+  
   // Parameterized strings
   static String welcomeUser(String name) => _translates.welcomeUser(name);
 }
@@ -234,6 +244,16 @@ class _Keys {
   // Error
   static const String errorOccurred = 'error_occurred';
   static const String retry = 'retry';
+  
+  // Profile
+  static const String profileDetail = 'profile_detail';
+  static const String limitedOffer = 'limited_offer';
+  static const String defaultUser = 'default_user';
+  static const String addPhoto = 'add_photo';
+  static const String favoriteMovies = 'favorite_movies';
+  static const String noFavoriteMoviesYet = 'no_favorite_movies_yet';
+  static const String movieTitle = 'movie_title';
+  static const String defaultDirector = 'default_director';
 }
 
 class _Translates {
@@ -348,6 +368,16 @@ class _Translates {
   // Error
   String get errorOccurred => _Keys.errorOccurred.tr();
   String get retry => _Keys.retry.tr();
+  
+  // Profile
+  String get profileDetail => _Keys.profileDetail.tr();
+  String get limitedOffer => _Keys.limitedOffer.tr();
+  String get defaultUser => _Keys.defaultUser.tr();
+  String get addPhoto => _Keys.addPhoto.tr();
+  String get favoriteMovies => _Keys.favoriteMovies.tr();
+  String get noFavoriteMoviesYet => _Keys.noFavoriteMoviesYet.tr();
+  String get movieTitle => _Keys.movieTitle.tr();
+  String get defaultDirector => _Keys.defaultDirector.tr();
   
   // Parameterized strings
   String welcomeUser(String name) => _Keys.welcomeUser.tr(namedArgs: {'name': name});

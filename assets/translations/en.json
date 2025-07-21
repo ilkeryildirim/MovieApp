@@ -97,5 +97,13 @@
   "release_to_refresh": "Release to refresh",
   "release_to_go_first": "Release to go first",
   "error_occurred": "An error occurred",
-  "retry": "Retry"
+  "retry": "Retry",
+  "profile_detail": "Profile Detail",
+  "limited_offer": "Limited Offer",
+  "default_user": "User",
+  "add_photo": "Add Photo",
+  "favorite_movies": "Favorite Movies",
+  "no_favorite_movies_yet": "No favorite movies yet",
+  "movie_title": "Movie Title",
+  "default_director": "James Cameron"
 } 

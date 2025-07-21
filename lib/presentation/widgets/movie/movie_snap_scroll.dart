@@ -14,6 +14,7 @@ class MovieSnapScroll extends StatefulWidget {
   final bool isLoadingMore;
   final VoidCallback? onLoadMore;
   final VoidCallback? onRefresh;
+  final Function(String movieId)? onFavoritePressed;
 
   const MovieSnapScroll({
     super.key,
@@ -22,6 +23,7 @@ class MovieSnapScroll extends StatefulWidget {
     this.isLoadingMore = false,
     this.onLoadMore,
     this.onRefresh,
+    this.onFavoritePressed,
   });
 
   @override
@@ -233,6 +235,9 @@ class _MovieSnapScrollState extends State<MovieSnapScroll> {
                       _isDescriptionExpanded = !_isDescriptionExpanded;
                     });
                   },
+                  onFavoritePressed: widget.onFavoritePressed != null
+                      ? () => widget.onFavoritePressed!(movie.id)
+                      : null,
                 );
               },
             ),

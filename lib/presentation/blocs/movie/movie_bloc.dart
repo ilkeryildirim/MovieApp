@@ -3,7 +3,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import '../../../data/models/movie_model.dart';
 import '../../../domain/repositories/movie_repository.dart';
+import '../../../data/datasources/local/favorite_local_datasource.dart';
 import '../../../core/utils/logger.dart';
+import '../../../core/di/injection_container.dart';
+import '../favorite/favorite_bloc.dart';
 
 part 'movie_bloc.freezed.dart';
 
@@ -12,6 +15,7 @@ class MovieEvent with _$MovieEvent {
   const factory MovieEvent.loadMovies({@Default(20) int limit}) = _LoadMovies;
   const factory MovieEvent.loadMoreMovies({@Default(20) int limit}) = _LoadMoreMovies;
   const factory MovieEvent.refreshMovies({@Default(20) int limit}) = _RefreshMovies;
+  const factory MovieEvent.toggleFavorite({required String movieId}) = _ToggleFavorite;
 }
 
 @freezed
@@ -31,11 +35,13 @@ class MovieState with _$MovieState {
 @injectable
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository _movieRepository;
+  final FavoriteLocalDataSource _favoriteLocalDataSource;
   
-  MovieBloc(this._movieRepository) : super(const MovieState.initial()) {
+  MovieBloc(this._movieRepository, this._favoriteLocalDataSource) : super(const MovieState.initial()) {
     on<_LoadMovies>(_onLoadMovies);
     on<_LoadMoreMovies>(_onLoadMoreMovies);
     on<_RefreshMovies>(_onRefreshMovies);
+    on<_ToggleFavorite>(_onToggleFavorite);
   }
 
   Future<void> _onLoadMovies(_LoadMovies event, Emitter<MovieState> emit) async {
@@ -107,6 +113,92 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     } catch (e) {
       AppLogger.error('Error refreshing movies', error: e);
       emit(MovieState.error(e.toString()));
+    }
+  }
+
+  Future<void> _onToggleFavorite(_ToggleFavorite event, Emitter<MovieState> emit) async {
+    final currentState = state;
+    if (currentState is! Loaded) return;
+
+    final movieToToggle = currentState.movies.firstWhere((movie) => movie.id == event.movieId);
+    final newFavoriteStatus = !movieToToggle.isFavorite;
+    
+    final optimisticUpdatedMovies = currentState.movies.map((movie) {
+      if (movie.id == event.movieId) {
+        return movie.copyWith(isFavorite: newFavoriteStatus);
+      }
+      return movie;
+    }).toList();
+
+    emit(currentState.copyWith(movies: optimisticUpdatedMovies));
+
+    try {
+      if (newFavoriteStatus) {
+        await _favoriteLocalDataSource.addFavorite(movieToToggle.copyWith(isFavorite: true));
+      } else {
+        await _favoriteLocalDataSource.removeFavorite(event.movieId);
+      }
+
+      getIt<FavoriteBloc>().add(FavoriteEvent.movieFavoriteChanged(
+        movieId: event.movieId,
+        isFavorite: newFavoriteStatus,
+        movie: movieToToggle.copyWith(isFavorite: newFavoriteStatus),
+      ));
+
+      final favoriteResponse = await _movieRepository.toggleFavorite(event.movieId);
+      
+      final isFavoriteFromAction = favoriteResponse.action == 'favorited';
+      
+      final finalUpdatedMovies = currentState.movies.map((movie) {
+        if (movie.id == event.movieId) {
+          return favoriteResponse.movie.copyWith(isFavorite: isFavoriteFromAction);
+        }
+        return movie;
+      }).toList();
+
+      emit(currentState.copyWith(movies: finalUpdatedMovies));
+      
+      if (isFavoriteFromAction != newFavoriteStatus) {
+        if (isFavoriteFromAction) {
+          await _favoriteLocalDataSource.addFavorite(favoriteResponse.movie.copyWith(isFavorite: true));
+        } else {
+          await _favoriteLocalDataSource.removeFavorite(event.movieId);
+        }
+        
+        getIt<FavoriteBloc>().add(FavoriteEvent.movieFavoriteChanged(
+          movieId: event.movieId,
+          isFavorite: isFavoriteFromAction,
+          movie: favoriteResponse.movie.copyWith(isFavorite: isFavoriteFromAction),
+        ));
+      }
+      
+      AppLogger.info('Favorite toggle completed successfully for movie: ${event.movieId}, action: ${favoriteResponse.action}');
+    } catch (e) {
+      AppLogger.error('Error toggling favorite', error: e);
+      
+      final revertedMovies = currentState.movies.map((movie) {
+        if (movie.id == event.movieId) {
+          return movie.copyWith(isFavorite: !newFavoriteStatus);
+        }
+        return movie;
+      }).toList();
+      emit(currentState.copyWith(movies: revertedMovies));
+
+      try {
+        if (!newFavoriteStatus) {
+          await _favoriteLocalDataSource.addFavorite(movieToToggle);
+        } else {
+          await _favoriteLocalDataSource.removeFavorite(event.movieId);
+        }
+        
+        getIt<FavoriteBloc>().add(FavoriteEvent.movieFavoriteChanged(
+          movieId: event.movieId,
+          isFavorite: !newFavoriteStatus,
+          movie: movieToToggle,
+        ));
+      } catch (localError) {
+        AppLogger.error('Error reverting local favorite state', error: localError);
+      }
     }
   }
 } 

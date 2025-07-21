@@ -10,6 +10,8 @@ class ApiConstants {
   
   // Movie endpoints
   static const String movieList = '/movie/list';
+  static const String movieFavorite = '/movie/favorite';
+  static const String movieFavorites = '/movie/favorites';
   
   // Headers
   static const String contentType = 'Content-Type';

@@ -14,6 +14,7 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import '../../data/datasources/local/auth_local_datasource.dart' as _i17;
+import '../../data/datasources/local/favorite_local_datasource.dart' as _i720;
 import '../../data/datasources/remote/auth_remote_datasource.dart' as _i1057;
 import '../../data/repositories/auth_repository_impl.dart' as _i895;
 import '../../data/repositories/movie_repository_impl.dart' as _i606;
@@ -23,6 +24,7 @@ import '../../domain/repositories/movie_repository.dart' as _i110;
 import '../../domain/usecases/auth/login_usecase.dart' as _i461;
 import '../../domain/usecases/auth/register_usecase.dart' as _i659;
 import '../../presentation/blocs/auth/auth_bloc.dart' as _i141;
+import '../../presentation/blocs/favorite/favorite_bloc.dart' as _i903;
 import '../../presentation/blocs/movie/movie_bloc.dart' as _i1058;
 import '../../presentation/router/app_router.dart' as _i127;
 import '../network/dio_client.dart' as _i667;
@@ -48,16 +50,27 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i127.AppRouter>(() => _i127.AppRouter());
     gh.factory<_i17.AuthLocalDataSource>(() => _i17.AuthLocalDataSourceImpl(
         sharedPreferences: gh<_i460.SharedPreferences>()));
+    gh.factory<_i720.FavoriteLocalDataSource>(() =>
+        _i720.FavoriteLocalDataSourceImpl(
+            sharedPreferences: gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i361.Dio>(
         () => injectionModule.dio(gh<_i667.DioClient>()));
     gh.factory<_i1057.AuthRemoteDataSource>(
         () => _i1057.AuthRemoteDataSource(gh<_i361.Dio>()));
     gh.lazySingleton<_i904.MovieService>(
         () => _i904.MovieService(gh<_i361.Dio>()));
-    gh.lazySingleton<_i110.MovieRepository>(
-        () => _i606.MovieRepositoryImpl(gh<_i904.MovieService>()));
-    gh.factory<_i1058.MovieBloc>(
-        () => _i1058.MovieBloc(gh<_i110.MovieRepository>()));
+    gh.lazySingleton<_i110.MovieRepository>(() => _i606.MovieRepositoryImpl(
+          gh<_i904.MovieService>(),
+          gh<_i720.FavoriteLocalDataSource>(),
+        ));
+    gh.lazySingleton<_i903.FavoriteBloc>(() => _i903.FavoriteBloc(
+          gh<_i110.MovieRepository>(),
+          gh<_i720.FavoriteLocalDataSource>(),
+        ));
+    gh.factory<_i1058.MovieBloc>(() => _i1058.MovieBloc(
+          gh<_i110.MovieRepository>(),
+          gh<_i720.FavoriteLocalDataSource>(),
+        ));
     gh.factory<_i1073.AuthRepository>(() => _i895.AuthRepositoryImpl(
           remoteDataSource: gh<_i1057.AuthRemoteDataSource>(),
           localDataSource: gh<_i17.AuthLocalDataSource>(),

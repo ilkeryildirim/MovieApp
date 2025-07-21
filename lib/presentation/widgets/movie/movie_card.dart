@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_strings.dart';
@@ -65,18 +66,28 @@ class MovieCard extends StatelessWidget {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache',
         },
-        placeholder: (context, url) => Container(
-          color: AppColors.cardColor,
-          child: Center(
-            child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
-              strokeWidth: 2.w,
-            ),
-          ),
-        ),
+        placeholder: (context, url) => _buildMoviePosterShimmer(),
         errorWidget: (context, url, error) => AppErrorWidget(
           message: AppStrings.posterLoadError,
           showRetryButton: false,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMoviePosterShimmer() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.black,
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.withOpacity(0.2),
+        highlightColor: Colors.grey.withOpacity(0.4),
+        period: const Duration(milliseconds: 1500),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.grey.withOpacity(0.3),
         ),
       ),
     );
