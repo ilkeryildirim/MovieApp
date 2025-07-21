@@ -30,7 +30,7 @@ class ProfileUserSection extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _buildProfilePhoto(),
+          _buildProfilePhoto(context),
           SizedBox(width: ProfileConstants.photoToNameSpacing.w),
           Expanded(
             child: _buildUserInfo(),
@@ -41,8 +41,12 @@ class ProfileUserSection extends StatelessWidget {
     );
   }
 
-  Widget _buildProfilePhoto() {
-    return Container(
+  Widget _buildProfilePhoto(BuildContext context) {
+    return Hero(
+      tag: 'profile_photo_hero_$userId',
+      child: GestureDetector(
+        onTap: () => _showPhotoViewer(context),
+        child: Container(
       width: ProfileConstants.profilePhotoSize.w,
       height: ProfileConstants.profilePhotoSize.w,
       decoration: BoxDecoration(
@@ -60,10 +64,32 @@ class ProfileUserSection extends StatelessWidget {
                 placeholder: (context, url) => _buildUserInitial(),
                 errorWidget: (context, url, error) => _buildUserInitial(),
               )
-            : _buildUserInitial(),
+            : GestureDetector(
+                onTap: () => _showPhotoViewer(context),
+                child: _buildUserInitial(),
+              ),
       ),
-    );
+        ), // Container
+      ), // GestureDetector
+    ); // Hero
   }
+
+  void _showPhotoViewer(BuildContext context) {
+    if (photoUrl != null && photoUrl!.isNotEmpty) {
+      Navigator.of(context).push(
+        PageRouteBuilder(
+          opaque: false, // Transparent background
+          pageBuilder: (context, animation, secondaryAnimation) => _PhotoViewer(
+            photoUrl: photoUrl!,
+            heroTag: 'profile_photo_hero_$userId',
+          ),
+          transitionDuration: const Duration(milliseconds: 300),
+        ),
+          );
+  }
+}
+
+
 
   Widget _buildUserInfo() {
     return Column(
@@ -140,4 +166,75 @@ class ProfileUserSection extends StatelessWidget {
       ),
     );
   }
-} 
+}
+
+class _PhotoViewer extends StatelessWidget {
+  final String photoUrl;
+  final String heroTag;
+
+  const _PhotoViewer({
+    required this.photoUrl,
+    required this.heroTag,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black.withValues(alpha: 0.9),
+      body: GestureDetector(
+        onTap: () => Navigator.of(context).pop(),
+        child: Center(
+          child: Hero(
+            tag: heroTag,
+            child: Container(
+              margin: EdgeInsets.all(20.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.r),
+                child: CachedNetworkImage(
+                  imageUrl: photoUrl,
+                  fit: BoxFit.contain,
+                  placeholder: (context, url) => Container(
+                    width: 200.w,
+                    height: 200.w,
+                    decoration: const BoxDecoration(
+                      color: AppColors.inputBackground,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    width: 200.w,
+                    height: 200.w,
+                    decoration: const BoxDecoration(
+                      color: AppColors.inputBackground,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.error_outline,
+                      color: Colors.white.withValues(alpha: 0.5),
+                      size: 50.sp,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

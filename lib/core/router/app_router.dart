@@ -6,6 +6,7 @@ import '../../features/splash/presentation/pages/splash_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/main/presentation/pages/main_page.dart';
+import '../../features/photo_upload/presentation/pages/photo_upload_page.dart';
 
 @lazySingleton
 class AppRouter {
@@ -35,6 +36,11 @@ class AppRouter {
           path: AppRoutes.home,
           name: AppRoutes.home,
           builder: (context, state) => const MainPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.photoUpload,
+          name: AppRoutes.photoUpload,
+          builder: (context, state) => const PhotoUploadPage(),
         ),
       ],
       errorBuilder: (context, state) => ErrorPage(error: state.error),
@@ -88,6 +94,7 @@ class AppRoutes {
   static const String home = '/home';
   static const String profile = '/profile';
   static const String settings = '/settings';
+  static const String photoUpload = '/photo-upload';
   
   // Prevent instantiation
   const AppRoutes._();

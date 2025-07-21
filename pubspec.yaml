@@ -74,6 +74,14 @@ dependencies:
   # Localization
   easy_localization: ^3.0.7
   cached_network_image: ^3.4.1
+  
+    # Image picker
+  image_picker: ^1.0.7
+  flutter_image_compress: ^2.3.0
+  path_provider: ^2.1.4
+
+  # Permissions
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

@@ -13,16 +13,20 @@ This will create:
 lib/
   features/
     payment/
+      constants/
+        payment_constants.dart
       data/
         datasources/
+          payment_remote_datasource.dart
         models/
+          payment_model.dart
         repositories/
           payment_repository_impl.dart
       domain/
-        entities/
         repositories/
           payment_repository.dart
         usecases/
+          example_payment_usecase.dart
       presentation/
         blocs/
           payment/
@@ -33,6 +37,14 @@ lib/
           payment_page.dart
         widgets/
 ```
+
+## After Creation
+
+1. Run `flutter pub run build_runner build --delete-conflicting-outputs` to generate freezed files
+2. Update dependency injection in `lib/core/di/injection_container.dart`
+3. Add routing in `lib/core/router/app_router.dart`
+4. Implement your business logic
+5. Remove TODO comments and example code
 
 ## Variables
 

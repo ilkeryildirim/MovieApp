@@ -45,5 +45,7 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Bu uygulama profil resmi yüklemek için fotoğraf galerisine erişmesi gerekiyor.</string>
 </dict>
 </plist>

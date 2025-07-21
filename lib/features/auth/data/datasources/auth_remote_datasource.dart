@@ -21,8 +21,8 @@ abstract class AuthRemoteDataSource {
   @POST('/auth/logout')
   Future<void> logout();
   
-  @GET('/auth/me')
-  Future<UserModel> getCurrentUser();
+  @GET('/user/profile')
+  Future<dynamic> getCurrentUserRaw();
   
   @PUT('/auth/profile')
   Future<UserModel> updateProfile(@Body() Map<String, dynamic> body);

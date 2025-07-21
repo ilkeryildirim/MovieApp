@@ -13,6 +13,7 @@ class AppAssets {
   static const String mailIcon = '$_iconsPath/mail.svg';
   static const String lockUnlockedIcon = '$_iconsPath/lock_unlocked.svg';
   static const String addUserIcon = '$_iconsPath/add_user.svg';
+  static const String plusIcon = '$_iconsPath/plus.svg';
   
   // Navigation Icons
   static const String homeIcon = '$_iconsPath/home.svg';

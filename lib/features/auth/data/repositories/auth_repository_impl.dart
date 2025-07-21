@@ -148,19 +148,44 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, User>> getCurrentUser() async {
     try {
-      // Try to get from cache first
-      final cachedUser = await localDataSource.getUser();
-      if (cachedUser != null) {
-        return Right(cachedUser.toEntity());
-      }
+      AppLogger.info('Fetching fresh user profile from API');
       
-      // If not in cache, fetch from remote
-      final userModel = await remoteDataSource.getCurrentUser();
+      // Call API and handle wrapped response manually
+      final response = await remoteDataSource.getCurrentUserRaw();
+      
+      // Extract user data from wrapped response
+      final responseMap = response as Map<String, dynamic>;
+      final userData = responseMap['data'] as Map<String, dynamic>;
+      final userModel = UserModel.fromJson(userData);
+      
       await localDataSource.saveUser(userModel);
       
+      AppLogger.info('User profile updated successfully: ${userModel.name}');
       return Right(userModel.toEntity());
+    } on DioException catch (e) {
+      AppLogger.error('Network error getting current user', error: e);
+      
+      try {
+        final cachedUser = await localDataSource.getUser();
+        if (cachedUser != null) {
+          AppLogger.info('Using cached user profile as fallback');
+          return Right(cachedUser.toEntity());
+        }
+      } catch (_) {}
+      
+      return Left(NetworkFailure(e.message ?? 'Network error'));
     } on ServerException catch (e) {
-      AppLogger.error('Failed to get current user', error: e);
+      AppLogger.error('Server error getting current user', error: e);
+      
+   
+      try {
+        final cachedUser = await localDataSource.getUser();
+        if (cachedUser != null) {
+          AppLogger.info('Using cached user profile as fallback');
+          return Right(cachedUser.toEntity());
+        }
+      } catch (_) {}
+      
       return Left(ServerFailure(e.message));
     } on CacheException catch (e) {
       AppLogger.error('Cache error', error: e);

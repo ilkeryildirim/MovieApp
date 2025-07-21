@@ -42,8 +42,26 @@ import 'package:flutter_base_app/features/movie/presentation/blocs/favorite/favo
     as _i798;
 import 'package:flutter_base_app/features/movie/presentation/blocs/movie/movie_bloc.dart'
     as _i58;
-import 'package:flutter_base_app/features/profile/presentation/view_models/profile_view_model.dart'
-    as _i356;
+import 'package:flutter_base_app/features/photo_upload/data/datasources/photo_upload_remote_datasource.dart'
+    as _i253;
+import 'package:flutter_base_app/features/photo_upload/data/repositories/photo_upload_repository_impl.dart'
+    as _i3;
+import 'package:flutter_base_app/features/photo_upload/domain/repositories/photo_upload_repository.dart'
+    as _i508;
+import 'package:flutter_base_app/features/photo_upload/domain/usecases/upload_photo_usecase.dart'
+    as _i50;
+import 'package:flutter_base_app/features/photo_upload/presentation/blocs/photo_upload/photo_upload_bloc.dart'
+    as _i780;
+import 'package:flutter_base_app/features/profile/data/repositories/profile_repository_impl.dart'
+    as _i872;
+import 'package:flutter_base_app/features/profile/domain/repositories/profile_repository.dart'
+    as _i416;
+import 'package:flutter_base_app/features/profile/domain/usecases/get_profile_usecase.dart'
+    as _i646;
+import 'package:flutter_base_app/features/profile/domain/usecases/refresh_profile_usecase.dart'
+    as _i140;
+import 'package:flutter_base_app/features/profile/presentation/blocs/profile/profile_bloc.dart'
+    as _i1040;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -73,10 +91,15 @@ extension GetItInjectableX on _i174.GetIt {
             sharedPreferences: gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i361.Dio>(
         () => injectionModule.dio(gh<_i985.DioClient>()));
+    gh.lazySingleton<_i253.PhotoUploadRemoteDataSource>(
+        () => _i253.PhotoUploadRemoteDataSourceImpl(gh<_i985.DioClient>()));
     gh.factory<_i898.AuthRemoteDataSource>(
         () => _i898.AuthRemoteDataSource(gh<_i361.Dio>()));
     gh.lazySingleton<_i140.MovieService>(
         () => _i140.MovieService(gh<_i361.Dio>()));
+    gh.lazySingleton<_i508.PhotoUploadRepository>(() =>
+        _i3.PhotoUploadRepositoryImpl(
+            remoteDataSource: gh<_i253.PhotoUploadRemoteDataSource>()));
     gh.factory<_i746.AuthRepository>(() => _i109.AuthRepositoryImpl(
           remoteDataSource: gh<_i898.AuthRemoteDataSource>(),
           localDataSource: gh<_i463.AuthLocalDataSource>(),
@@ -93,10 +116,16 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i1050.GetMoviesUseCase(gh<_i574.MovieRepository>()));
     gh.factory<_i221.ToggleFavoriteUseCase>(
         () => _i221.ToggleFavoriteUseCase(gh<_i574.MovieRepository>()));
+    gh.factory<_i50.UploadPhotoUseCase>(
+        () => _i50.UploadPhotoUseCase(gh<_i508.PhotoUploadRepository>()));
     gh.factory<_i501.AuthBloc>(() => _i501.AuthBloc(
           loginUseCase: gh<_i995.LoginUseCase>(),
           registerUseCase: gh<_i513.RegisterUseCase>(),
           authRepository: gh<_i746.AuthRepository>(),
+        ));
+    gh.factory<_i416.ProfileRepository>(() => _i872.ProfileRepositoryImpl(
+          authRepository: gh<_i746.AuthRepository>(),
+          favoriteLocalDataSource: gh<_i79.FavoriteLocalDataSource>(),
         ));
     gh.factory<_i58.MovieBloc>(() => _i58.MovieBloc(
           gh<_i574.MovieRepository>(),
@@ -106,9 +135,15 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i574.MovieRepository>(),
           gh<_i79.FavoriteLocalDataSource>(),
         ));
-    gh.factory<_i356.ProfileViewModel>(() => _i356.ProfileViewModel(
-          authRepository: gh<_i746.AuthRepository>(),
-          favoriteBloc: gh<_i798.FavoriteBloc>(),
+    gh.factory<_i780.PhotoUploadBloc>(() => _i780.PhotoUploadBloc(
+        uploadPhotoUseCase: gh<_i50.UploadPhotoUseCase>()));
+    gh.factory<_i646.GetProfileUseCase>(
+        () => _i646.GetProfileUseCase(gh<_i416.ProfileRepository>()));
+    gh.factory<_i140.RefreshProfileUseCase>(
+        () => _i140.RefreshProfileUseCase(gh<_i416.ProfileRepository>()));
+    gh.factory<_i1040.ProfileBloc>(() => _i1040.ProfileBloc(
+          getProfileUseCase: gh<_i646.GetProfileUseCase>(),
+          refreshProfileUseCase: gh<_i140.RefreshProfileUseCase>(),
         ));
     return this;
   }
