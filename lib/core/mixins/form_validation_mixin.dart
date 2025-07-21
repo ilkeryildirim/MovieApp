@@ -127,7 +127,6 @@ class ValidationRules {
   static MinLengthRule minLength(int length, String message) => MinLengthRule(length, message);
   static MatchRule match(String otherValue, String message) => MatchRule(otherValue, message);
   
-  // Common validation rules
   static List<ValidationRule> get nameRules => [
     required(AppStrings.pleaseEnterYourName),
     minLength(2, AppStrings.nameMustBeAtLeast2Characters),

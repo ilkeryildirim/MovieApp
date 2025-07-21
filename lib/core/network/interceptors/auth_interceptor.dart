@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import '../../di/injection.dart';
 import '../../error/exceptions.dart';
 import '../../constants/app_strings.dart';
-import '../../../data/datasources/local/auth_local_datasource.dart';
+import '../../../features/auth/data/datasources/auth_local_datasource.dart';
 
 class AuthInterceptor extends Interceptor {
   AuthLocalDataSource? _authLocalDataSource;

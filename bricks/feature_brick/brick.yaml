@@ -1,0 +1,9 @@
+name: feature_brick
+description: A brick to create a new feature following clean architecture and feature by package structure
+version: 0.1.0+1
+
+vars:
+  feature_name:
+    type: string
+    description: The name of the feature
+    prompt: What is the feature name? 

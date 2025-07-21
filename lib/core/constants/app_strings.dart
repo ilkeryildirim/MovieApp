@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 
 class AppStrings {
-  // Private constructor to prevent instantiation
   const AppStrings._();
 
   // Translated strings - ready to use

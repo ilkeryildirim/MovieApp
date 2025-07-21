@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppTheme {
-  // Figma Design Colors
-  static const _primaryColor = Color(0xFFE53E3E); // Kırmızı button
+  static const _primaryColor = Color(0xFFE53E3E);
   static const _secondaryColor = Color(0xFF03DAC6);
   static const _errorColor = Color(0xFFE53E3E);
   static const _surfaceColor = Color(0xFF1A1A1A); // Dark background
