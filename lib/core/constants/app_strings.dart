@@ -126,6 +126,12 @@ class AppStrings {
   static String get movieTitle => _translates.movieTitle;
   static String get defaultDirector => _translates.defaultDirector;
   
+  // Photo Upload
+  static String get profileDetails => _translates.profileDetails;
+  static String get uploadYourPhotos => _translates.uploadYourPhotos;
+  static String get uploadPhotosSubtitle => _translates.uploadPhotosSubtitle;
+  static String get continueButton => _translates.continueButton;
+  
   // Parameterized strings
   static String welcomeUser(String name) => _translates.welcomeUser(name);
 }
@@ -253,6 +259,12 @@ class _Keys {
   static const String noFavoriteMoviesYet = 'no_favorite_movies_yet';
   static const String movieTitle = 'movie_title';
   static const String defaultDirector = 'default_director';
+  
+  // Photo Upload
+  static const String profileDetails = 'profile_details';
+  static const String uploadYourPhotos = 'upload_your_photos';
+  static const String uploadPhotosSubtitle = 'upload_photos_subtitle';
+  static const String continueButton = 'continue_button';
 }
 
 class _Translates {
@@ -377,6 +389,12 @@ class _Translates {
   String get noFavoriteMoviesYet => _Keys.noFavoriteMoviesYet.tr();
   String get movieTitle => _Keys.movieTitle.tr();
   String get defaultDirector => _Keys.defaultDirector.tr();
+  
+  // Photo Upload
+  String get profileDetails => _Keys.profileDetails.tr();
+  String get uploadYourPhotos => _Keys.uploadYourPhotos.tr();
+  String get uploadPhotosSubtitle => _Keys.uploadPhotosSubtitle.tr();
+  String get continueButton => _Keys.continueButton.tr();
   
   // Parameterized strings
   String welcomeUser(String name) => _Keys.welcomeUser.tr(namedArgs: {'name': name});

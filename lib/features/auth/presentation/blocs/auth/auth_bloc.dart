@@ -28,6 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         register: (email, password, name) => _onRegister(emit, email, password, name),
         logout: () => _onLogout(emit),
         updateUser: (user) => _onUpdateUser(emit, user),
+        updateProfilePhoto: (photoUrl) => _onUpdateProfilePhoto(emit, photoUrl),
       );
     });
   }
@@ -64,9 +65,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       LoginParams(email: email, password: password),
     );
     
-    result.fold(
-      (failure) => emit(AuthState.error(failure.message)),
-      (user) => emit(AuthState.authenticated(user)),
+    await result.fold(
+      (failure) async => emit(AuthState.error(failure.message)),
+      (user) async {
+        final freshProfileResult = await authRepository.getCurrentUser();
+        freshProfileResult.fold(
+          (failure) {
+            emit(AuthState.authenticated(user));
+          },
+          (freshUser) {
+            emit(AuthState.authenticated(freshUser));
+          },
+        );
+      },
     );
   }
   
@@ -82,9 +93,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       RegisterParams(email: email, password: password, name: name),
     );
     
-    result.fold(
-      (failure) => emit(AuthState.error(failure.message)),
-      (user) => emit(AuthState.authenticated(user)),
+    await result.fold(
+      (failure) async => emit(AuthState.error(failure.message)),
+      (user) async {
+        final freshProfileResult = await authRepository.getCurrentUser();
+        freshProfileResult.fold(
+          (failure) {
+            emit(AuthState.authenticated(user));
+          },
+          (freshUser) {
+            emit(AuthState.authenticated(freshUser));
+          },
+        );
+      },
     );
   }
   
@@ -105,6 +126,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     if (state is _Authenticated) {
       emit(AuthState.authenticated(user));
+    }
+  }
+  
+  Future<void> _onUpdateProfilePhoto(
+    Emitter<AuthState> emit,
+    String photoUrl,
+  ) async {
+    final currentState = state;
+    if (currentState is _Authenticated) {
+      final updatedUser = currentState.user.copyWith(avatarUrl: photoUrl);
+      emit(AuthState.authenticated(updatedUser));
     }
   }
 } 

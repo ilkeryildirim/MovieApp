@@ -24,6 +24,7 @@ mixin _$AuthEvent {
         register,
     required TResult Function() logout,
     required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -33,6 +34,7 @@ mixin _$AuthEvent {
     TResult? Function(String email, String password, String name)? register,
     TResult? Function()? logout,
     TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -42,6 +44,7 @@ mixin _$AuthEvent {
     TResult Function(String email, String password, String name)? register,
     TResult Function()? logout,
     TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -52,6 +55,7 @@ mixin _$AuthEvent {
     required TResult Function(_Register value) register,
     required TResult Function(_Logout value) logout,
     required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -61,6 +65,7 @@ mixin _$AuthEvent {
     TResult? Function(_Register value)? register,
     TResult? Function(_Logout value)? logout,
     TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -70,6 +75,7 @@ mixin _$AuthEvent {
     TResult Function(_Register value)? register,
     TResult Function(_Logout value)? logout,
     TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -142,6 +148,7 @@ class _$CheckAuthStatusImpl implements _CheckAuthStatus {
         register,
     required TResult Function() logout,
     required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
   }) {
     return checkAuthStatus();
   }
@@ -154,6 +161,7 @@ class _$CheckAuthStatusImpl implements _CheckAuthStatus {
     TResult? Function(String email, String password, String name)? register,
     TResult? Function()? logout,
     TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
   }) {
     return checkAuthStatus?.call();
   }
@@ -166,6 +174,7 @@ class _$CheckAuthStatusImpl implements _CheckAuthStatus {
     TResult Function(String email, String password, String name)? register,
     TResult Function()? logout,
     TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (checkAuthStatus != null) {
@@ -182,6 +191,7 @@ class _$CheckAuthStatusImpl implements _CheckAuthStatus {
     required TResult Function(_Register value) register,
     required TResult Function(_Logout value) logout,
     required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
   }) {
     return checkAuthStatus(this);
   }
@@ -194,6 +204,7 @@ class _$CheckAuthStatusImpl implements _CheckAuthStatus {
     TResult? Function(_Register value)? register,
     TResult? Function(_Logout value)? logout,
     TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
   }) {
     return checkAuthStatus?.call(this);
   }
@@ -206,6 +217,7 @@ class _$CheckAuthStatusImpl implements _CheckAuthStatus {
     TResult Function(_Register value)? register,
     TResult Function(_Logout value)? logout,
     TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (checkAuthStatus != null) {
@@ -302,6 +314,7 @@ class _$LoginImpl implements _Login {
         register,
     required TResult Function() logout,
     required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
   }) {
     return login(email, password);
   }
@@ -314,6 +327,7 @@ class _$LoginImpl implements _Login {
     TResult? Function(String email, String password, String name)? register,
     TResult? Function()? logout,
     TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
   }) {
     return login?.call(email, password);
   }
@@ -326,6 +340,7 @@ class _$LoginImpl implements _Login {
     TResult Function(String email, String password, String name)? register,
     TResult Function()? logout,
     TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -342,6 +357,7 @@ class _$LoginImpl implements _Login {
     required TResult Function(_Register value) register,
     required TResult Function(_Logout value) logout,
     required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
   }) {
     return login(this);
   }
@@ -354,6 +370,7 @@ class _$LoginImpl implements _Login {
     TResult? Function(_Register value)? register,
     TResult? Function(_Logout value)? logout,
     TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
   }) {
     return login?.call(this);
   }
@@ -366,6 +383,7 @@ class _$LoginImpl implements _Login {
     TResult Function(_Register value)? register,
     TResult Function(_Logout value)? logout,
     TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -482,6 +500,7 @@ class _$RegisterImpl implements _Register {
         register,
     required TResult Function() logout,
     required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
   }) {
     return register(email, password, name);
   }
@@ -494,6 +513,7 @@ class _$RegisterImpl implements _Register {
     TResult? Function(String email, String password, String name)? register,
     TResult? Function()? logout,
     TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
   }) {
     return register?.call(email, password, name);
   }
@@ -506,6 +526,7 @@ class _$RegisterImpl implements _Register {
     TResult Function(String email, String password, String name)? register,
     TResult Function()? logout,
     TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -522,6 +543,7 @@ class _$RegisterImpl implements _Register {
     required TResult Function(_Register value) register,
     required TResult Function(_Logout value) logout,
     required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
   }) {
     return register(this);
   }
@@ -534,6 +556,7 @@ class _$RegisterImpl implements _Register {
     TResult? Function(_Register value)? register,
     TResult? Function(_Logout value)? logout,
     TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
   }) {
     return register?.call(this);
   }
@@ -546,6 +569,7 @@ class _$RegisterImpl implements _Register {
     TResult Function(_Register value)? register,
     TResult Function(_Logout value)? logout,
     TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -619,6 +643,7 @@ class _$LogoutImpl implements _Logout {
         register,
     required TResult Function() logout,
     required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
   }) {
     return logout();
   }
@@ -631,6 +656,7 @@ class _$LogoutImpl implements _Logout {
     TResult? Function(String email, String password, String name)? register,
     TResult? Function()? logout,
     TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
   }) {
     return logout?.call();
   }
@@ -643,6 +669,7 @@ class _$LogoutImpl implements _Logout {
     TResult Function(String email, String password, String name)? register,
     TResult Function()? logout,
     TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (logout != null) {
@@ -659,6 +686,7 @@ class _$LogoutImpl implements _Logout {
     required TResult Function(_Register value) register,
     required TResult Function(_Logout value) logout,
     required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
   }) {
     return logout(this);
   }
@@ -671,6 +699,7 @@ class _$LogoutImpl implements _Logout {
     TResult? Function(_Register value)? register,
     TResult? Function(_Logout value)? logout,
     TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
   }) {
     return logout?.call(this);
   }
@@ -683,6 +712,7 @@ class _$LogoutImpl implements _Logout {
     TResult Function(_Register value)? register,
     TResult Function(_Logout value)? logout,
     TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (logout != null) {
@@ -770,6 +800,7 @@ class _$UpdateUserImpl implements _UpdateUser {
         register,
     required TResult Function() logout,
     required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
   }) {
     return updateUser(user);
   }
@@ -782,6 +813,7 @@ class _$UpdateUserImpl implements _UpdateUser {
     TResult? Function(String email, String password, String name)? register,
     TResult? Function()? logout,
     TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
   }) {
     return updateUser?.call(user);
   }
@@ -794,6 +826,7 @@ class _$UpdateUserImpl implements _UpdateUser {
     TResult Function(String email, String password, String name)? register,
     TResult Function()? logout,
     TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (updateUser != null) {
@@ -810,6 +843,7 @@ class _$UpdateUserImpl implements _UpdateUser {
     required TResult Function(_Register value) register,
     required TResult Function(_Logout value) logout,
     required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
   }) {
     return updateUser(this);
   }
@@ -822,6 +856,7 @@ class _$UpdateUserImpl implements _UpdateUser {
     TResult? Function(_Register value)? register,
     TResult? Function(_Logout value)? logout,
     TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
   }) {
     return updateUser?.call(this);
   }
@@ -834,6 +869,7 @@ class _$UpdateUserImpl implements _UpdateUser {
     TResult Function(_Register value)? register,
     TResult Function(_Logout value)? logout,
     TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
     required TResult orElse(),
   }) {
     if (updateUser != null) {
@@ -852,6 +888,174 @@ abstract class _UpdateUser implements AuthEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UpdateUserImplCopyWith<_$UpdateUserImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$UpdateProfilePhotoImplCopyWith<$Res> {
+  factory _$$UpdateProfilePhotoImplCopyWith(_$UpdateProfilePhotoImpl value,
+          $Res Function(_$UpdateProfilePhotoImpl) then) =
+      __$$UpdateProfilePhotoImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String photoUrl});
+}
+
+/// @nodoc
+class __$$UpdateProfilePhotoImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$UpdateProfilePhotoImpl>
+    implements _$$UpdateProfilePhotoImplCopyWith<$Res> {
+  __$$UpdateProfilePhotoImplCopyWithImpl(_$UpdateProfilePhotoImpl _value,
+      $Res Function(_$UpdateProfilePhotoImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? photoUrl = null,
+  }) {
+    return _then(_$UpdateProfilePhotoImpl(
+      null == photoUrl
+          ? _value.photoUrl
+          : photoUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UpdateProfilePhotoImpl implements _UpdateProfilePhoto {
+  const _$UpdateProfilePhotoImpl(this.photoUrl);
+
+  @override
+  final String photoUrl;
+
+  @override
+  String toString() {
+    return 'AuthEvent.updateProfilePhoto(photoUrl: $photoUrl)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UpdateProfilePhotoImpl &&
+            (identical(other.photoUrl, photoUrl) ||
+                other.photoUrl == photoUrl));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, photoUrl);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UpdateProfilePhotoImplCopyWith<_$UpdateProfilePhotoImpl> get copyWith =>
+      __$$UpdateProfilePhotoImplCopyWithImpl<_$UpdateProfilePhotoImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() checkAuthStatus,
+    required TResult Function(String email, String password) login,
+    required TResult Function(String email, String password, String name)
+        register,
+    required TResult Function() logout,
+    required TResult Function(User user) updateUser,
+    required TResult Function(String photoUrl) updateProfilePhoto,
+  }) {
+    return updateProfilePhoto(photoUrl);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? checkAuthStatus,
+    TResult? Function(String email, String password)? login,
+    TResult? Function(String email, String password, String name)? register,
+    TResult? Function()? logout,
+    TResult? Function(User user)? updateUser,
+    TResult? Function(String photoUrl)? updateProfilePhoto,
+  }) {
+    return updateProfilePhoto?.call(photoUrl);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? checkAuthStatus,
+    TResult Function(String email, String password)? login,
+    TResult Function(String email, String password, String name)? register,
+    TResult Function()? logout,
+    TResult Function(User user)? updateUser,
+    TResult Function(String photoUrl)? updateProfilePhoto,
+    required TResult orElse(),
+  }) {
+    if (updateProfilePhoto != null) {
+      return updateProfilePhoto(photoUrl);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_CheckAuthStatus value) checkAuthStatus,
+    required TResult Function(_Login value) login,
+    required TResult Function(_Register value) register,
+    required TResult Function(_Logout value) logout,
+    required TResult Function(_UpdateUser value) updateUser,
+    required TResult Function(_UpdateProfilePhoto value) updateProfilePhoto,
+  }) {
+    return updateProfilePhoto(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_CheckAuthStatus value)? checkAuthStatus,
+    TResult? Function(_Login value)? login,
+    TResult? Function(_Register value)? register,
+    TResult? Function(_Logout value)? logout,
+    TResult? Function(_UpdateUser value)? updateUser,
+    TResult? Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+  }) {
+    return updateProfilePhoto?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_CheckAuthStatus value)? checkAuthStatus,
+    TResult Function(_Login value)? login,
+    TResult Function(_Register value)? register,
+    TResult Function(_Logout value)? logout,
+    TResult Function(_UpdateUser value)? updateUser,
+    TResult Function(_UpdateProfilePhoto value)? updateProfilePhoto,
+    required TResult orElse(),
+  }) {
+    if (updateProfilePhoto != null) {
+      return updateProfilePhoto(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _UpdateProfilePhoto implements AuthEvent {
+  const factory _UpdateProfilePhoto(final String photoUrl) =
+      _$UpdateProfilePhotoImpl;
+
+  String get photoUrl;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UpdateProfilePhotoImplCopyWith<_$UpdateProfilePhotoImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

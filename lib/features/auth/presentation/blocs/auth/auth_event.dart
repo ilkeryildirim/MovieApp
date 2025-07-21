@@ -14,4 +14,5 @@ class AuthEvent with _$AuthEvent {
   }) = _Register;
   const factory AuthEvent.logout() = _Logout;
   const factory AuthEvent.updateUser(User user) = _UpdateUser;
+  const factory AuthEvent.updateProfilePhoto(String photoUrl) = _UpdateProfilePhoto;
 } 

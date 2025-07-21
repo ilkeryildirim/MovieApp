@@ -8,6 +8,7 @@ import '../../../../../../core/constants/app_strings.dart';
 import '../../constants/profile_constants.dart';
 import '../../../../../../core/di/injection_container.dart';
 import '../../../auth/presentation/blocs/auth/auth_bloc.dart';
+import '../blocs/profile/profile_bloc.dart';
 import '../../../movie/presentation/blocs/favorite/favorite_bloc.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_user_section.dart';
@@ -30,8 +31,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FavoriteBloc>(
-      create: (context) => getIt<FavoriteBloc>()..add(const FavoriteEvent.loadFavorites()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProfileBloc>(
+          create: (context) => getIt<ProfileBloc>()..add(const ProfileEvent.loadProfile()),
+        ),
+        BlocProvider<FavoriteBloc>(
+          create: (context) => getIt<FavoriteBloc>()..add(const FavoriteEvent.loadFavorites()),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
         body: BlocListener<AuthBloc, AuthState>(
@@ -41,10 +49,36 @@ class _ProfilePageState extends State<ProfilePage> {
               orElse: () {},
             );
           },
-          child: BlocBuilder<AuthBloc, AuthState>(
+          child: BlocBuilder<ProfileBloc, ProfileState>(
             builder: (context, state) {
               return state.maybeWhen(
-                authenticated: (user) => _buildProfileContent(context, user),
+                loaded: (profile) => _buildProfileContent(context, profile.user),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primaryRed,
+                  ),
+                ),
+                error: (message) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppStrings.errorOccurred,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      ElevatedButton(
+                        onPressed: () => context.read<ProfileBloc>().add(
+                          const ProfileEvent.loadProfile(),
+                        ),
+                        child: Text(AppStrings.retry),
+                      ),
+                    ],
+                  ),
+                ),
                 orElse: () => const Center(
                   child: CircularProgressIndicator(
                     color: AppColors.primaryRed,
@@ -100,7 +134,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   userName: user.name,
                   userId: user.id,
                   photoUrl: user.avatarUrl,
-                  onPhotoUpload: () {},
+                  onPhotoUpload: () async {
+                    final photoUrl = await context.push<String>(AppRoutes.photoUpload);
+                    if (photoUrl != null && mounted) {
+                      // Update user photo in both auth and profile blocs
+                      context.read<AuthBloc>().add(
+                        AuthEvent.updateProfilePhoto(photoUrl),
+                      );
+                      context.read<ProfileBloc>().add(
+                        ProfileEvent.updateProfilePhoto(photoUrl),
+                      );
+                    }
+                  },
                 ),
                 SizedBox(height: ProfileConstants.moviesSectionTopPadding.h),
                 _buildMoviesSection(context),
@@ -159,6 +204,8 @@ class _ProfilePageState extends State<ProfilePage> {
       _overscrollAmount = 0.0;
     });
 
+    // Refresh both profile and favorite movies
+    context.read<ProfileBloc>().add(const ProfileEvent.refreshProfile());
     context.read<FavoriteBloc>().add(const FavoriteEvent.refreshFavorites());
 
     await Future.delayed(const Duration(milliseconds: ProfileConstants.refreshMinDuration));
