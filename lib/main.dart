@@ -6,19 +6,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'core/constants/app_strings.dart';
 import 'core/di/injection_container.dart';
 import 'core/theme/app_theme.dart';
-import 'presentation/blocs/auth/auth_bloc.dart';
-import 'presentation/router/app_router.dart';
+import 'features/auth/presentation/blocs/auth/auth_bloc.dart';
+import 'core/router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize EasyLocalization
   await EasyLocalization.ensureInitialized();
   
-  // Initialize Hive
   await Hive.initFlutter();
   
-  // Configure dependencies (includes SharedPreferences)
   await configureDependencies();
   
   runApp(
@@ -49,7 +46,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: ScreenUtilInit(
-        designSize: const Size(402, 844), // Figma Design Size
+        designSize: const Size(402, 844),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
@@ -58,7 +55,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: ThemeMode.dark, // Figma design is dark themed
+            themeMode: ThemeMode.dark,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: context.locale,

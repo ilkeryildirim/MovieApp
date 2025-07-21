@@ -11,32 +11,39 @@
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_base_app/core/di/injection_module.dart' as _i851;
 import 'package:flutter_base_app/core/network/dio_client.dart' as _i985;
-import 'package:flutter_base_app/data/datasources/local/auth_local_datasource.dart'
-    as _i671;
-import 'package:flutter_base_app/data/datasources/local/favorite_local_datasource.dart'
-    as _i530;
-import 'package:flutter_base_app/data/datasources/remote/auth_remote_datasource.dart'
-    as _i575;
-import 'package:flutter_base_app/data/repositories/auth_repository_impl.dart'
-    as _i325;
-import 'package:flutter_base_app/data/repositories/movie_repository_impl.dart'
-    as _i267;
-import 'package:flutter_base_app/data/services/movie_service.dart' as _i271;
-import 'package:flutter_base_app/domain/repositories/auth_repository.dart'
-    as _i28;
-import 'package:flutter_base_app/domain/repositories/movie_repository.dart'
-    as _i541;
-import 'package:flutter_base_app/domain/usecases/auth/login_usecase.dart'
-    as _i50;
-import 'package:flutter_base_app/domain/usecases/auth/register_usecase.dart'
-    as _i290;
-import 'package:flutter_base_app/presentation/blocs/auth/auth_bloc.dart'
-    as _i102;
-import 'package:flutter_base_app/presentation/blocs/favorite/favorite_bloc.dart'
-    as _i317;
-import 'package:flutter_base_app/presentation/blocs/movie/movie_bloc.dart'
-    as _i863;
-import 'package:flutter_base_app/presentation/router/app_router.dart' as _i351;
+import 'package:flutter_base_app/core/router/app_router.dart' as _i489;
+import 'package:flutter_base_app/features/auth/data/datasources/auth_local_datasource.dart'
+    as _i463;
+import 'package:flutter_base_app/features/auth/data/datasources/auth_remote_datasource.dart'
+    as _i898;
+import 'package:flutter_base_app/features/auth/data/repositories/auth_repository_impl.dart'
+    as _i109;
+import 'package:flutter_base_app/features/auth/domain/repositories/auth_repository.dart'
+    as _i746;
+import 'package:flutter_base_app/features/auth/domain/usecases/login_usecase.dart'
+    as _i995;
+import 'package:flutter_base_app/features/auth/domain/usecases/register_usecase.dart'
+    as _i513;
+import 'package:flutter_base_app/features/auth/presentation/blocs/auth/auth_bloc.dart'
+    as _i501;
+import 'package:flutter_base_app/features/movie/data/datasources/favorite_local_datasource.dart'
+    as _i79;
+import 'package:flutter_base_app/features/movie/data/repositories/movie_repository_impl.dart'
+    as _i440;
+import 'package:flutter_base_app/features/movie/data/services/movie_service.dart'
+    as _i140;
+import 'package:flutter_base_app/features/movie/domain/repositories/movie_repository.dart'
+    as _i574;
+import 'package:flutter_base_app/features/movie/domain/usecases/get_movies_usecase.dart'
+    as _i1050;
+import 'package:flutter_base_app/features/movie/domain/usecases/toggle_favorite_usecase.dart'
+    as _i221;
+import 'package:flutter_base_app/features/movie/presentation/blocs/favorite/favorite_bloc.dart'
+    as _i798;
+import 'package:flutter_base_app/features/movie/presentation/blocs/movie/movie_bloc.dart'
+    as _i58;
+import 'package:flutter_base_app/features/profile/presentation/view_models/profile_view_model.dart'
+    as _i356;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -58,42 +65,50 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.lazySingleton<_i985.DioClient>(() => _i985.DioClient());
-    gh.lazySingleton<_i351.AppRouter>(() => _i351.AppRouter());
-    gh.factory<_i671.AuthLocalDataSource>(() => _i671.AuthLocalDataSourceImpl(
+    gh.lazySingleton<_i489.AppRouter>(() => _i489.AppRouter());
+    gh.factory<_i463.AuthLocalDataSource>(() => _i463.AuthLocalDataSourceImpl(
         sharedPreferences: gh<_i460.SharedPreferences>()));
-    gh.factory<_i530.FavoriteLocalDataSource>(() =>
-        _i530.FavoriteLocalDataSourceImpl(
+    gh.factory<_i79.FavoriteLocalDataSource>(() =>
+        _i79.FavoriteLocalDataSourceImpl(
             sharedPreferences: gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i361.Dio>(
         () => injectionModule.dio(gh<_i985.DioClient>()));
-    gh.factory<_i575.AuthRemoteDataSource>(
-        () => _i575.AuthRemoteDataSource(gh<_i361.Dio>()));
-    gh.lazySingleton<_i271.MovieService>(
-        () => _i271.MovieService(gh<_i361.Dio>()));
-    gh.lazySingleton<_i541.MovieRepository>(() => _i267.MovieRepositoryImpl(
-          gh<_i271.MovieService>(),
-          gh<_i530.FavoriteLocalDataSource>(),
+    gh.factory<_i898.AuthRemoteDataSource>(
+        () => _i898.AuthRemoteDataSource(gh<_i361.Dio>()));
+    gh.lazySingleton<_i140.MovieService>(
+        () => _i140.MovieService(gh<_i361.Dio>()));
+    gh.factory<_i746.AuthRepository>(() => _i109.AuthRepositoryImpl(
+          remoteDataSource: gh<_i898.AuthRemoteDataSource>(),
+          localDataSource: gh<_i463.AuthLocalDataSource>(),
         ));
-    gh.lazySingleton<_i317.FavoriteBloc>(() => _i317.FavoriteBloc(
-          gh<_i541.MovieRepository>(),
-          gh<_i530.FavoriteLocalDataSource>(),
+    gh.lazySingleton<_i574.MovieRepository>(() => _i440.MovieRepositoryImpl(
+          gh<_i140.MovieService>(),
+          gh<_i79.FavoriteLocalDataSource>(),
         ));
-    gh.factory<_i863.MovieBloc>(() => _i863.MovieBloc(
-          gh<_i541.MovieRepository>(),
-          gh<_i530.FavoriteLocalDataSource>(),
+    gh.factory<_i995.LoginUseCase>(
+        () => _i995.LoginUseCase(gh<_i746.AuthRepository>()));
+    gh.factory<_i513.RegisterUseCase>(
+        () => _i513.RegisterUseCase(gh<_i746.AuthRepository>()));
+    gh.factory<_i1050.GetMoviesUseCase>(
+        () => _i1050.GetMoviesUseCase(gh<_i574.MovieRepository>()));
+    gh.factory<_i221.ToggleFavoriteUseCase>(
+        () => _i221.ToggleFavoriteUseCase(gh<_i574.MovieRepository>()));
+    gh.factory<_i501.AuthBloc>(() => _i501.AuthBloc(
+          loginUseCase: gh<_i995.LoginUseCase>(),
+          registerUseCase: gh<_i513.RegisterUseCase>(),
+          authRepository: gh<_i746.AuthRepository>(),
         ));
-    gh.factory<_i28.AuthRepository>(() => _i325.AuthRepositoryImpl(
-          remoteDataSource: gh<_i575.AuthRemoteDataSource>(),
-          localDataSource: gh<_i671.AuthLocalDataSource>(),
+    gh.factory<_i58.MovieBloc>(() => _i58.MovieBloc(
+          gh<_i574.MovieRepository>(),
+          gh<_i79.FavoriteLocalDataSource>(),
         ));
-    gh.factory<_i50.LoginUseCase>(
-        () => _i50.LoginUseCase(gh<_i28.AuthRepository>()));
-    gh.factory<_i290.RegisterUseCase>(
-        () => _i290.RegisterUseCase(gh<_i28.AuthRepository>()));
-    gh.factory<_i102.AuthBloc>(() => _i102.AuthBloc(
-          loginUseCase: gh<_i50.LoginUseCase>(),
-          registerUseCase: gh<_i290.RegisterUseCase>(),
-          authRepository: gh<_i28.AuthRepository>(),
+    gh.lazySingleton<_i798.FavoriteBloc>(() => _i798.FavoriteBloc(
+          gh<_i574.MovieRepository>(),
+          gh<_i79.FavoriteLocalDataSource>(),
+        ));
+    gh.factory<_i356.ProfileViewModel>(() => _i356.ProfileViewModel(
+          authRepository: gh<_i746.AuthRepository>(),
+          favoriteBloc: gh<_i798.FavoriteBloc>(),
         ));
     return this;
   }
