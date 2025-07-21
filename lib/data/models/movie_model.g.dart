@@ -12,6 +12,7 @@ _$MovieModelImpl _$$MovieModelImplFromJson(Map<String, dynamic> json) =>
       title: json['Title'] as String,
       description: json['Plot'] as String,
       poster: json['Poster'] as String?,
+      director: json['Director'] as String?,
       isFavorite: json['is_favorite'] as bool? ?? false,
     );
 
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$MovieModelImplToJson(_$MovieModelImpl instance) =>
       'Title': instance.title,
       'Plot': instance.description,
       if (instance.poster case final value?) 'Poster': value,
+      if (instance.director case final value?) 'Director': value,
       'is_favorite': instance.isFavorite,
     };
 

@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base_app/core/constants/app_assets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
-import '../../../core/widgets/safe_click_widget.dart';
+import '../../../core/constants/profile_constants.dart';
+import '../../../core/di/injection_container.dart';
 import '../../blocs/auth/auth_bloc.dart';
+import '../../blocs/favorite/favorite_bloc.dart';
+import '../../widgets/profile/profile_header.dart';
+import '../../widgets/profile/profile_user_section.dart';
+import '../../widgets/profile/profile_movies_grid.dart';
+import '../../widgets/movie/pull_to_refresh_indicator.dart';
 import '../../router/app_router.dart';
 
-class ProfilePage extends StatelessWidget {
+
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
   @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  bool _showPullToRefresh = false;
+  double _overscrollAmount = 0.0;
+  bool _isRefreshing = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      body: SafeArea(
-        child: BlocListener<AuthBloc, AuthState>(
+    return BlocProvider<FavoriteBloc>(
+      create: (context) => getIt<FavoriteBloc>()..add(const FavoriteEvent.loadFavorites()),
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) {
             state.maybeWhen(
               unauthenticated: () => context.go(AppRoutes.login),
@@ -26,7 +44,7 @@ class ProfilePage extends StatelessWidget {
           child: BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
               return state.maybeWhen(
-                authenticated: (user) => _buildContent(context, user),
+                authenticated: (user) => _buildProfileContent(context, user),
                 orElse: () => const Center(
                   child: CircularProgressIndicator(
                     color: AppColors.primaryRed,
@@ -40,220 +58,115 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, user) {
-    return Column(
+  Widget _buildProfileContent(BuildContext context, user) {
+    return Stack(
       children: [
-        _buildHeader(context, user.name),
-        Expanded(
+        NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification is ScrollUpdateNotification) {
+              final metrics = notification.metrics;
+              if (metrics.pixels < 0) {
+                final overscroll = metrics.pixels.abs();
+                if (overscroll > ProfileConstants.pullToRefreshMinOffset && !_isRefreshing) {
+                  setState(() {
+                    _overscrollAmount = overscroll;
+                    _showPullToRefresh = true;
+                  });
+                }
+              } else if (_showPullToRefresh && !_isRefreshing) {
+                setState(() {
+                  _showPullToRefresh = false;
+                  _overscrollAmount = 0.0;
+                });
+              }
+            } else if (notification is ScrollEndNotification) {
+              if (_overscrollAmount > ProfileConstants.pullToRefreshTriggerOffset && !_isRefreshing) {
+                _triggerRefresh();
+              }
+            }
+            return false;
+          },
           child: SingleChildScrollView(
-            padding: EdgeInsets.all(20.w),
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             child: Column(
               children: [
-                _buildProfileCard(context, user),
-                SizedBox(height: 24.h),
-                _buildMenuItems(context),
+                ProfileHeader(
+                  onBackPressed: () => Navigator.of(context).pop(),
+                  onLimitedOfferPressed: () {},
+                ),
+                ProfileUserSection(
+                  userName: user.name,
+                  userId: user.id,
+                  photoUrl: user.avatarUrl,
+                  onPhotoUpload: () {},
+                ),
+                SizedBox(height: ProfileConstants.moviesSectionTopPadding.h),
+                _buildMoviesSection(context),
               ],
             ),
           ),
         ),
+        if (_showPullToRefresh)
+          PullToRefreshIndicator(
+            overscrollAmount: _overscrollAmount,
+          ),
       ],
     );
   }
 
-  Widget _buildHeader(BuildContext context, String userName) {
+  Widget _buildMoviesSection(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-      child: Row(
+      padding: EdgeInsets.symmetric(horizontal: ProfileConstants.horizontalPadding.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Profil',
+            AppStrings.favoriteMovies,
             style: TextStyle(
-              color: AppColors.whiteText,
-              fontSize: 24.sp,
-              fontWeight: FontWeight.w600,
+              fontFamily: AppAssets.euclidFontFamily,
+              color: Colors.white,
+              fontSize: ProfileConstants.moviesTitleFontSize.sp,
+              fontWeight: ProfileConstants.moviesTitleFontWeight,
             ),
           ),
-          const Spacer(),
-          SafeClickWidget(
-            onTap: () => _showLogoutDialog(context),
-            child: Icon(
-              Icons.logout,
-              color: AppColors.primaryRed,
-              size: 24.sp,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileCard(BuildContext context, user) {
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        color: AppColors.inputBackground,
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-          width: 1,
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60.w,
-            height: 60.w,
-            decoration: BoxDecoration(
-              color: AppColors.primaryRed,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.sp,
-                  fontWeight: FontWeight.w600,
+          SizedBox(height: ProfileConstants.moviesTitleToGridSpacing.h),
+          BlocBuilder<FavoriteBloc, FavoriteState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                loading: () => ProfileMoviesGrid(isLoading: true),
+                loaded: (favorites, isSynced) => ProfileMoviesGrid(
+                  favoriteMovies: favorites,
+                  isLoading: _isRefreshing,
                 ),
-              ),
-            ),
-          ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.name,
-                  style: TextStyle(
-                    color: AppColors.whiteText,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  user.email,
-                  style: TextStyle(
-                    color: AppColors.grayText,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildMenuItems(BuildContext context) {
-    final menuItems = [
-      {'icon': Icons.settings, 'title': 'Ayarlar'},
-      {'icon': Icons.notifications, 'title': 'Bildirimler'},
-      {'icon': Icons.help, 'title': 'Yardım'},
-      {'icon': Icons.info, 'title': 'Hakkında'},
-    ];
-
-    return Column(
-      children: menuItems.map((item) {
-        return Container(
-          margin: EdgeInsets.only(bottom: 12.h),
-          child: SafeClickWidget(
-            onTap: () {
-              // Handle menu item tap
+                orElse: () => ProfileMoviesGrid(isLoading: true),
+              );
             },
-            child: Container(
-              padding: EdgeInsets.all(16.w),
-              decoration: BoxDecoration(
-                color: AppColors.inputBackground,
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.1),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    item['icon'] as IconData,
-                    color: AppColors.grayText,
-                    size: 20.sp,
-                  ),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: Text(
-                      item['title'] as String,
-                      style: TextStyle(
-                        color: AppColors.whiteText,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  Icon(
-                    Icons.chevron_right,
-                    color: AppColors.grayText,
-                    size: 20.sp,
-                  ),
-                ],
-              ),
-            ),
           ),
-        );
-      }).toList(),
+          SizedBox(height: ProfileConstants.bottomNavPadding.h),
+        ],
+      ),
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: AppColors.inputBackground,
-          title: Text(
-            'Çıkış Yap',
-            style: TextStyle(
-              color: AppColors.whiteText,
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          content: Text(
-            'Çıkış yapmak istediğinizden emin misiniz?',
-            style: TextStyle(
-              color: AppColors.grayText,
-              fontSize: 14.sp,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(
-                'İptal',
-                style: TextStyle(
-                  color: AppColors.grayText,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-                context.read<AuthBloc>().add(const AuthEvent.logout());
-              },
-              child: Text(
-                'Çıkış Yap',
-                style: TextStyle(
-                  color: AppColors.primaryRed,
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+  void _triggerRefresh() async {
+    if (_isRefreshing) return;
+    
+    setState(() {
+      _isRefreshing = true;
+      _showPullToRefresh = false;
+      _overscrollAmount = 0.0;
+    });
+
+    context.read<FavoriteBloc>().add(const FavoriteEvent.refreshFavorites());
+
+    await Future.delayed(const Duration(milliseconds: ProfileConstants.refreshMinDuration));
+
+    if (mounted) {
+      setState(() {
+        _isRefreshing = false;
+      });
+    }
   }
 } 

@@ -27,6 +27,8 @@ mixin _$MovieModel {
   String get description => throw _privateConstructorUsedError;
   @JsonKey(name: 'Poster')
   String? get poster => throw _privateConstructorUsedError;
+  @JsonKey(name: 'Director')
+  String? get director => throw _privateConstructorUsedError;
   bool get isFavorite => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
@@ -35,6 +37,7 @@ mixin _$MovieModel {
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
             @JsonKey(name: 'Poster') String? poster,
+            @JsonKey(name: 'Director') String? director,
             bool isFavorite)
         $default,
   ) =>
@@ -46,6 +49,7 @@ mixin _$MovieModel {
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
             @JsonKey(name: 'Poster') String? poster,
+            @JsonKey(name: 'Director') String? director,
             bool isFavorite)?
         $default,
   ) =>
@@ -57,6 +61,7 @@ mixin _$MovieModel {
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
             @JsonKey(name: 'Poster') String? poster,
+            @JsonKey(name: 'Director') String? director,
             bool isFavorite)?
         $default, {
     required TResult orElse(),
@@ -100,6 +105,7 @@ abstract class $MovieModelCopyWith<$Res> {
       @JsonKey(name: 'Title') String title,
       @JsonKey(name: 'Plot') String description,
       @JsonKey(name: 'Poster') String? poster,
+      @JsonKey(name: 'Director') String? director,
       bool isFavorite});
 }
 
@@ -122,6 +128,7 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
     Object? title = null,
     Object? description = null,
     Object? poster = freezed,
+    Object? director = freezed,
     Object? isFavorite = null,
   }) {
     return _then(_value.copyWith(
@@ -140,6 +147,10 @@ class _$MovieModelCopyWithImpl<$Res, $Val extends MovieModel>
       poster: freezed == poster
           ? _value.poster
           : poster // ignore: cast_nullable_to_non_nullable
+              as String?,
+      director: freezed == director
+          ? _value.director
+          : director // ignore: cast_nullable_to_non_nullable
               as String?,
       isFavorite: null == isFavorite
           ? _value.isFavorite
@@ -162,6 +173,7 @@ abstract class _$$MovieModelImplCopyWith<$Res>
       @JsonKey(name: 'Title') String title,
       @JsonKey(name: 'Plot') String description,
       @JsonKey(name: 'Poster') String? poster,
+      @JsonKey(name: 'Director') String? director,
       bool isFavorite});
 }
 
@@ -182,6 +194,7 @@ class __$$MovieModelImplCopyWithImpl<$Res>
     Object? title = null,
     Object? description = null,
     Object? poster = freezed,
+    Object? director = freezed,
     Object? isFavorite = null,
   }) {
     return _then(_$MovieModelImpl(
@@ -201,6 +214,10 @@ class __$$MovieModelImplCopyWithImpl<$Res>
           ? _value.poster
           : poster // ignore: cast_nullable_to_non_nullable
               as String?,
+      director: freezed == director
+          ? _value.director
+          : director // ignore: cast_nullable_to_non_nullable
+              as String?,
       isFavorite: null == isFavorite
           ? _value.isFavorite
           : isFavorite // ignore: cast_nullable_to_non_nullable
@@ -217,6 +234,7 @@ class _$MovieModelImpl implements _MovieModel {
       @JsonKey(name: 'Title') required this.title,
       @JsonKey(name: 'Plot') required this.description,
       @JsonKey(name: 'Poster') this.poster,
+      @JsonKey(name: 'Director') this.director,
       this.isFavorite = false});
 
   factory _$MovieModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -234,12 +252,15 @@ class _$MovieModelImpl implements _MovieModel {
   @JsonKey(name: 'Poster')
   final String? poster;
   @override
+  @JsonKey(name: 'Director')
+  final String? director;
+  @override
   @JsonKey()
   final bool isFavorite;
 
   @override
   String toString() {
-    return 'MovieModel(id: $id, title: $title, description: $description, poster: $poster, isFavorite: $isFavorite)';
+    return 'MovieModel(id: $id, title: $title, description: $description, poster: $poster, director: $director, isFavorite: $isFavorite)';
   }
 
   @override
@@ -252,14 +273,16 @@ class _$MovieModelImpl implements _MovieModel {
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.poster, poster) || other.poster == poster) &&
+            (identical(other.director, director) ||
+                other.director == director) &&
             (identical(other.isFavorite, isFavorite) ||
                 other.isFavorite == isFavorite));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, description, poster, isFavorite);
+  int get hashCode => Object.hash(
+      runtimeType, id, title, description, poster, director, isFavorite);
 
   /// Create a copy of MovieModel
   /// with the given fields replaced by the non-null parameter values.
@@ -277,10 +300,11 @@ class _$MovieModelImpl implements _MovieModel {
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
             @JsonKey(name: 'Poster') String? poster,
+            @JsonKey(name: 'Director') String? director,
             bool isFavorite)
         $default,
   ) {
-    return $default(id, title, description, poster, isFavorite);
+    return $default(id, title, description, poster, director, isFavorite);
   }
 
   @override
@@ -291,10 +315,11 @@ class _$MovieModelImpl implements _MovieModel {
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
             @JsonKey(name: 'Poster') String? poster,
+            @JsonKey(name: 'Director') String? director,
             bool isFavorite)?
         $default,
   ) {
-    return $default?.call(id, title, description, poster, isFavorite);
+    return $default?.call(id, title, description, poster, director, isFavorite);
   }
 
   @override
@@ -305,12 +330,13 @@ class _$MovieModelImpl implements _MovieModel {
             @JsonKey(name: 'Title') String title,
             @JsonKey(name: 'Plot') String description,
             @JsonKey(name: 'Poster') String? poster,
+            @JsonKey(name: 'Director') String? director,
             bool isFavorite)?
         $default, {
     required TResult orElse(),
   }) {
     if ($default != null) {
-      return $default(id, title, description, poster, isFavorite);
+      return $default(id, title, description, poster, director, isFavorite);
     }
     return orElse();
   }
@@ -357,6 +383,7 @@ abstract class _MovieModel implements MovieModel {
       @JsonKey(name: 'Title') required final String title,
       @JsonKey(name: 'Plot') required final String description,
       @JsonKey(name: 'Poster') final String? poster,
+      @JsonKey(name: 'Director') final String? director,
       final bool isFavorite}) = _$MovieModelImpl;
 
   factory _MovieModel.fromJson(Map<String, dynamic> json) =
@@ -373,6 +400,9 @@ abstract class _MovieModel implements MovieModel {
   @override
   @JsonKey(name: 'Poster')
   String? get poster;
+  @override
+  @JsonKey(name: 'Director')
+  String? get director;
   @override
   bool get isFavorite;
 
@@ -910,4 +940,482 @@ abstract class _MovieListParams implements MovieListParams {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MovieListParamsImplCopyWith<_$MovieListParamsImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$FavoriteResponse {
+  MovieModel get movie => throw _privateConstructorUsedError;
+  String get action => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(MovieModel movie, String action) $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(MovieModel movie, String action)? $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(MovieModel movie, String action)? $default, {
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_FavoriteResponse value) $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_FavoriteResponse value)? $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_FavoriteResponse value)? $default, {
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of FavoriteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FavoriteResponseCopyWith<FavoriteResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FavoriteResponseCopyWith<$Res> {
+  factory $FavoriteResponseCopyWith(
+          FavoriteResponse value, $Res Function(FavoriteResponse) then) =
+      _$FavoriteResponseCopyWithImpl<$Res, FavoriteResponse>;
+  @useResult
+  $Res call({MovieModel movie, String action});
+
+  $MovieModelCopyWith<$Res> get movie;
+}
+
+/// @nodoc
+class _$FavoriteResponseCopyWithImpl<$Res, $Val extends FavoriteResponse>
+    implements $FavoriteResponseCopyWith<$Res> {
+  _$FavoriteResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of FavoriteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? movie = null,
+    Object? action = null,
+  }) {
+    return _then(_value.copyWith(
+      movie: null == movie
+          ? _value.movie
+          : movie // ignore: cast_nullable_to_non_nullable
+              as MovieModel,
+      action: null == action
+          ? _value.action
+          : action // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+
+  /// Create a copy of FavoriteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MovieModelCopyWith<$Res> get movie {
+    return $MovieModelCopyWith<$Res>(_value.movie, (value) {
+      return _then(_value.copyWith(movie: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$FavoriteResponseImplCopyWith<$Res>
+    implements $FavoriteResponseCopyWith<$Res> {
+  factory _$$FavoriteResponseImplCopyWith(_$FavoriteResponseImpl value,
+          $Res Function(_$FavoriteResponseImpl) then) =
+      __$$FavoriteResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({MovieModel movie, String action});
+
+  @override
+  $MovieModelCopyWith<$Res> get movie;
+}
+
+/// @nodoc
+class __$$FavoriteResponseImplCopyWithImpl<$Res>
+    extends _$FavoriteResponseCopyWithImpl<$Res, _$FavoriteResponseImpl>
+    implements _$$FavoriteResponseImplCopyWith<$Res> {
+  __$$FavoriteResponseImplCopyWithImpl(_$FavoriteResponseImpl _value,
+      $Res Function(_$FavoriteResponseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of FavoriteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? movie = null,
+    Object? action = null,
+  }) {
+    return _then(_$FavoriteResponseImpl(
+      movie: null == movie
+          ? _value.movie
+          : movie // ignore: cast_nullable_to_non_nullable
+              as MovieModel,
+      action: null == action
+          ? _value.action
+          : action // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FavoriteResponseImpl implements _FavoriteResponse {
+  const _$FavoriteResponseImpl({required this.movie, required this.action});
+
+  @override
+  final MovieModel movie;
+  @override
+  final String action;
+
+  @override
+  String toString() {
+    return 'FavoriteResponse(movie: $movie, action: $action)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FavoriteResponseImpl &&
+            (identical(other.movie, movie) || other.movie == movie) &&
+            (identical(other.action, action) || other.action == action));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, movie, action);
+
+  /// Create a copy of FavoriteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FavoriteResponseImplCopyWith<_$FavoriteResponseImpl> get copyWith =>
+      __$$FavoriteResponseImplCopyWithImpl<_$FavoriteResponseImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(MovieModel movie, String action) $default,
+  ) {
+    return $default(movie, action);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(MovieModel movie, String action)? $default,
+  ) {
+    return $default?.call(movie, action);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(MovieModel movie, String action)? $default, {
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(movie, action);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_FavoriteResponse value) $default,
+  ) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_FavoriteResponse value)? $default,
+  ) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_FavoriteResponse value)? $default, {
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FavoriteResponse implements FavoriteResponse {
+  const factory _FavoriteResponse(
+      {required final MovieModel movie,
+      required final String action}) = _$FavoriteResponseImpl;
+
+  @override
+  MovieModel get movie;
+  @override
+  String get action;
+
+  /// Create a copy of FavoriteResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FavoriteResponseImplCopyWith<_$FavoriteResponseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$FavoritesListResponse {
+  List<MovieModel> get movies => throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(List<MovieModel> movies) $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(List<MovieModel> movies)? $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(List<MovieModel> movies)? $default, {
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_FavoritesListResponse value) $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_FavoritesListResponse value)? $default,
+  ) =>
+      throw _privateConstructorUsedError;
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_FavoritesListResponse value)? $default, {
+    required TResult orElse(),
+  }) =>
+      throw _privateConstructorUsedError;
+
+  /// Create a copy of FavoritesListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FavoritesListResponseCopyWith<FavoritesListResponse> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FavoritesListResponseCopyWith<$Res> {
+  factory $FavoritesListResponseCopyWith(FavoritesListResponse value,
+          $Res Function(FavoritesListResponse) then) =
+      _$FavoritesListResponseCopyWithImpl<$Res, FavoritesListResponse>;
+  @useResult
+  $Res call({List<MovieModel> movies});
+}
+
+/// @nodoc
+class _$FavoritesListResponseCopyWithImpl<$Res,
+        $Val extends FavoritesListResponse>
+    implements $FavoritesListResponseCopyWith<$Res> {
+  _$FavoritesListResponseCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of FavoritesListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? movies = null,
+  }) {
+    return _then(_value.copyWith(
+      movies: null == movies
+          ? _value.movies
+          : movies // ignore: cast_nullable_to_non_nullable
+              as List<MovieModel>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$FavoritesListResponseImplCopyWith<$Res>
+    implements $FavoritesListResponseCopyWith<$Res> {
+  factory _$$FavoritesListResponseImplCopyWith(
+          _$FavoritesListResponseImpl value,
+          $Res Function(_$FavoritesListResponseImpl) then) =
+      __$$FavoritesListResponseImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({List<MovieModel> movies});
+}
+
+/// @nodoc
+class __$$FavoritesListResponseImplCopyWithImpl<$Res>
+    extends _$FavoritesListResponseCopyWithImpl<$Res,
+        _$FavoritesListResponseImpl>
+    implements _$$FavoritesListResponseImplCopyWith<$Res> {
+  __$$FavoritesListResponseImplCopyWithImpl(_$FavoritesListResponseImpl _value,
+      $Res Function(_$FavoritesListResponseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of FavoritesListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? movies = null,
+  }) {
+    return _then(_$FavoritesListResponseImpl(
+      movies: null == movies
+          ? _value._movies
+          : movies // ignore: cast_nullable_to_non_nullable
+              as List<MovieModel>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$FavoritesListResponseImpl implements _FavoritesListResponse {
+  const _$FavoritesListResponseImpl({required final List<MovieModel> movies})
+      : _movies = movies;
+
+  final List<MovieModel> _movies;
+  @override
+  List<MovieModel> get movies {
+    if (_movies is EqualUnmodifiableListView) return _movies;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_movies);
+  }
+
+  @override
+  String toString() {
+    return 'FavoritesListResponse(movies: $movies)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FavoritesListResponseImpl &&
+            const DeepCollectionEquality().equals(other._movies, _movies));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_movies));
+
+  /// Create a copy of FavoritesListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FavoritesListResponseImplCopyWith<_$FavoritesListResponseImpl>
+      get copyWith => __$$FavoritesListResponseImplCopyWithImpl<
+          _$FavoritesListResponseImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>(
+    TResult Function(List<MovieModel> movies) $default,
+  ) {
+    return $default(movies);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>(
+    TResult? Function(List<MovieModel> movies)? $default,
+  ) {
+    return $default?.call(movies);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>(
+    TResult Function(List<MovieModel> movies)? $default, {
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(movies);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>(
+    TResult Function(_FavoritesListResponse value) $default,
+  ) {
+    return $default(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>(
+    TResult? Function(_FavoritesListResponse value)? $default,
+  ) {
+    return $default?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>(
+    TResult Function(_FavoritesListResponse value)? $default, {
+    required TResult orElse(),
+  }) {
+    if ($default != null) {
+      return $default(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _FavoritesListResponse implements FavoritesListResponse {
+  const factory _FavoritesListResponse(
+      {required final List<MovieModel> movies}) = _$FavoritesListResponseImpl;
+
+  @override
+  List<MovieModel> get movies;
+
+  /// Create a copy of FavoritesListResponse
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FavoritesListResponseImplCopyWith<_$FavoritesListResponseImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

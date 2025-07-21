@@ -16,12 +16,12 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MovieEvent {
-  int get limit => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(int limit) loadMovies,
     required TResult Function(int limit) loadMoreMovies,
     required TResult Function(int limit) refreshMovies,
+    required TResult Function(String movieId) toggleFavorite,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -29,6 +29,7 @@ mixin _$MovieEvent {
     TResult? Function(int limit)? loadMovies,
     TResult? Function(int limit)? loadMoreMovies,
     TResult? Function(int limit)? refreshMovies,
+    TResult? Function(String movieId)? toggleFavorite,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -36,6 +37,7 @@ mixin _$MovieEvent {
     TResult Function(int limit)? loadMovies,
     TResult Function(int limit)? loadMoreMovies,
     TResult Function(int limit)? refreshMovies,
+    TResult Function(String movieId)? toggleFavorite,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +46,7 @@ mixin _$MovieEvent {
     required TResult Function(_LoadMovies value) loadMovies,
     required TResult Function(_LoadMoreMovies value) loadMoreMovies,
     required TResult Function(_RefreshMovies value) refreshMovies,
+    required TResult Function(_ToggleFavorite value) toggleFavorite,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -51,6 +54,7 @@ mixin _$MovieEvent {
     TResult? Function(_LoadMovies value)? loadMovies,
     TResult? Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult? Function(_RefreshMovies value)? refreshMovies,
+    TResult? Function(_ToggleFavorite value)? toggleFavorite,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,14 +62,9 @@ mixin _$MovieEvent {
     TResult Function(_LoadMovies value)? loadMovies,
     TResult Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult Function(_RefreshMovies value)? refreshMovies,
+    TResult Function(_ToggleFavorite value)? toggleFavorite,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  /// Create a copy of MovieEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $MovieEventCopyWith<MovieEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -74,8 +73,6 @@ abstract class $MovieEventCopyWith<$Res> {
   factory $MovieEventCopyWith(
           MovieEvent value, $Res Function(MovieEvent) then) =
       _$MovieEventCopyWithImpl<$Res, MovieEvent>;
-  @useResult
-  $Res call({int limit});
 }
 
 /// @nodoc
@@ -90,27 +87,13 @@ class _$MovieEventCopyWithImpl<$Res, $Val extends MovieEvent>
 
   /// Create a copy of MovieEvent
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? limit = null,
-  }) {
-    return _then(_value.copyWith(
-      limit: null == limit
-          ? _value.limit
-          : limit // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$LoadMoviesImplCopyWith<$Res>
-    implements $MovieEventCopyWith<$Res> {
+abstract class _$$LoadMoviesImplCopyWith<$Res> {
   factory _$$LoadMoviesImplCopyWith(
           _$LoadMoviesImpl value, $Res Function(_$LoadMoviesImpl) then) =
       __$$LoadMoviesImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({int limit});
 }
@@ -178,6 +161,7 @@ class _$LoadMoviesImpl implements _LoadMovies {
     required TResult Function(int limit) loadMovies,
     required TResult Function(int limit) loadMoreMovies,
     required TResult Function(int limit) refreshMovies,
+    required TResult Function(String movieId) toggleFavorite,
   }) {
     return loadMovies(limit);
   }
@@ -188,6 +172,7 @@ class _$LoadMoviesImpl implements _LoadMovies {
     TResult? Function(int limit)? loadMovies,
     TResult? Function(int limit)? loadMoreMovies,
     TResult? Function(int limit)? refreshMovies,
+    TResult? Function(String movieId)? toggleFavorite,
   }) {
     return loadMovies?.call(limit);
   }
@@ -198,6 +183,7 @@ class _$LoadMoviesImpl implements _LoadMovies {
     TResult Function(int limit)? loadMovies,
     TResult Function(int limit)? loadMoreMovies,
     TResult Function(int limit)? refreshMovies,
+    TResult Function(String movieId)? toggleFavorite,
     required TResult orElse(),
   }) {
     if (loadMovies != null) {
@@ -212,6 +198,7 @@ class _$LoadMoviesImpl implements _LoadMovies {
     required TResult Function(_LoadMovies value) loadMovies,
     required TResult Function(_LoadMoreMovies value) loadMoreMovies,
     required TResult Function(_RefreshMovies value) refreshMovies,
+    required TResult Function(_ToggleFavorite value) toggleFavorite,
   }) {
     return loadMovies(this);
   }
@@ -222,6 +209,7 @@ class _$LoadMoviesImpl implements _LoadMovies {
     TResult? Function(_LoadMovies value)? loadMovies,
     TResult? Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult? Function(_RefreshMovies value)? refreshMovies,
+    TResult? Function(_ToggleFavorite value)? toggleFavorite,
   }) {
     return loadMovies?.call(this);
   }
@@ -232,6 +220,7 @@ class _$LoadMoviesImpl implements _LoadMovies {
     TResult Function(_LoadMovies value)? loadMovies,
     TResult Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult Function(_RefreshMovies value)? refreshMovies,
+    TResult Function(_ToggleFavorite value)? toggleFavorite,
     required TResult orElse(),
   }) {
     if (loadMovies != null) {
@@ -244,24 +233,20 @@ class _$LoadMoviesImpl implements _LoadMovies {
 abstract class _LoadMovies implements MovieEvent {
   const factory _LoadMovies({final int limit}) = _$LoadMoviesImpl;
 
-  @override
   int get limit;
 
   /// Create a copy of MovieEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadMoviesImplCopyWith<_$LoadMoviesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LoadMoreMoviesImplCopyWith<$Res>
-    implements $MovieEventCopyWith<$Res> {
+abstract class _$$LoadMoreMoviesImplCopyWith<$Res> {
   factory _$$LoadMoreMoviesImplCopyWith(_$LoadMoreMoviesImpl value,
           $Res Function(_$LoadMoreMoviesImpl) then) =
       __$$LoadMoreMoviesImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({int limit});
 }
@@ -330,6 +315,7 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
     required TResult Function(int limit) loadMovies,
     required TResult Function(int limit) loadMoreMovies,
     required TResult Function(int limit) refreshMovies,
+    required TResult Function(String movieId) toggleFavorite,
   }) {
     return loadMoreMovies(limit);
   }
@@ -340,6 +326,7 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
     TResult? Function(int limit)? loadMovies,
     TResult? Function(int limit)? loadMoreMovies,
     TResult? Function(int limit)? refreshMovies,
+    TResult? Function(String movieId)? toggleFavorite,
   }) {
     return loadMoreMovies?.call(limit);
   }
@@ -350,6 +337,7 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
     TResult Function(int limit)? loadMovies,
     TResult Function(int limit)? loadMoreMovies,
     TResult Function(int limit)? refreshMovies,
+    TResult Function(String movieId)? toggleFavorite,
     required TResult orElse(),
   }) {
     if (loadMoreMovies != null) {
@@ -364,6 +352,7 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
     required TResult Function(_LoadMovies value) loadMovies,
     required TResult Function(_LoadMoreMovies value) loadMoreMovies,
     required TResult Function(_RefreshMovies value) refreshMovies,
+    required TResult Function(_ToggleFavorite value) toggleFavorite,
   }) {
     return loadMoreMovies(this);
   }
@@ -374,6 +363,7 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
     TResult? Function(_LoadMovies value)? loadMovies,
     TResult? Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult? Function(_RefreshMovies value)? refreshMovies,
+    TResult? Function(_ToggleFavorite value)? toggleFavorite,
   }) {
     return loadMoreMovies?.call(this);
   }
@@ -384,6 +374,7 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
     TResult Function(_LoadMovies value)? loadMovies,
     TResult Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult Function(_RefreshMovies value)? refreshMovies,
+    TResult Function(_ToggleFavorite value)? toggleFavorite,
     required TResult orElse(),
   }) {
     if (loadMoreMovies != null) {
@@ -396,24 +387,20 @@ class _$LoadMoreMoviesImpl implements _LoadMoreMovies {
 abstract class _LoadMoreMovies implements MovieEvent {
   const factory _LoadMoreMovies({final int limit}) = _$LoadMoreMoviesImpl;
 
-  @override
   int get limit;
 
   /// Create a copy of MovieEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadMoreMoviesImplCopyWith<_$LoadMoreMoviesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$RefreshMoviesImplCopyWith<$Res>
-    implements $MovieEventCopyWith<$Res> {
+abstract class _$$RefreshMoviesImplCopyWith<$Res> {
   factory _$$RefreshMoviesImplCopyWith(
           _$RefreshMoviesImpl value, $Res Function(_$RefreshMoviesImpl) then) =
       __$$RefreshMoviesImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({int limit});
 }
@@ -481,6 +468,7 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
     required TResult Function(int limit) loadMovies,
     required TResult Function(int limit) loadMoreMovies,
     required TResult Function(int limit) refreshMovies,
+    required TResult Function(String movieId) toggleFavorite,
   }) {
     return refreshMovies(limit);
   }
@@ -491,6 +479,7 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
     TResult? Function(int limit)? loadMovies,
     TResult? Function(int limit)? loadMoreMovies,
     TResult? Function(int limit)? refreshMovies,
+    TResult? Function(String movieId)? toggleFavorite,
   }) {
     return refreshMovies?.call(limit);
   }
@@ -501,6 +490,7 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
     TResult Function(int limit)? loadMovies,
     TResult Function(int limit)? loadMoreMovies,
     TResult Function(int limit)? refreshMovies,
+    TResult Function(String movieId)? toggleFavorite,
     required TResult orElse(),
   }) {
     if (refreshMovies != null) {
@@ -515,6 +505,7 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
     required TResult Function(_LoadMovies value) loadMovies,
     required TResult Function(_LoadMoreMovies value) loadMoreMovies,
     required TResult Function(_RefreshMovies value) refreshMovies,
+    required TResult Function(_ToggleFavorite value) toggleFavorite,
   }) {
     return refreshMovies(this);
   }
@@ -525,6 +516,7 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
     TResult? Function(_LoadMovies value)? loadMovies,
     TResult? Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult? Function(_RefreshMovies value)? refreshMovies,
+    TResult? Function(_ToggleFavorite value)? toggleFavorite,
   }) {
     return refreshMovies?.call(this);
   }
@@ -535,6 +527,7 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
     TResult Function(_LoadMovies value)? loadMovies,
     TResult Function(_LoadMoreMovies value)? loadMoreMovies,
     TResult Function(_RefreshMovies value)? refreshMovies,
+    TResult Function(_ToggleFavorite value)? toggleFavorite,
     required TResult orElse(),
   }) {
     if (refreshMovies != null) {
@@ -547,14 +540,166 @@ class _$RefreshMoviesImpl implements _RefreshMovies {
 abstract class _RefreshMovies implements MovieEvent {
   const factory _RefreshMovies({final int limit}) = _$RefreshMoviesImpl;
 
-  @override
   int get limit;
 
   /// Create a copy of MovieEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RefreshMoviesImplCopyWith<_$RefreshMoviesImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ToggleFavoriteImplCopyWith<$Res> {
+  factory _$$ToggleFavoriteImplCopyWith(_$ToggleFavoriteImpl value,
+          $Res Function(_$ToggleFavoriteImpl) then) =
+      __$$ToggleFavoriteImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String movieId});
+}
+
+/// @nodoc
+class __$$ToggleFavoriteImplCopyWithImpl<$Res>
+    extends _$MovieEventCopyWithImpl<$Res, _$ToggleFavoriteImpl>
+    implements _$$ToggleFavoriteImplCopyWith<$Res> {
+  __$$ToggleFavoriteImplCopyWithImpl(
+      _$ToggleFavoriteImpl _value, $Res Function(_$ToggleFavoriteImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of MovieEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? movieId = null,
+  }) {
+    return _then(_$ToggleFavoriteImpl(
+      movieId: null == movieId
+          ? _value.movieId
+          : movieId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ToggleFavoriteImpl implements _ToggleFavorite {
+  const _$ToggleFavoriteImpl({required this.movieId});
+
+  @override
+  final String movieId;
+
+  @override
+  String toString() {
+    return 'MovieEvent.toggleFavorite(movieId: $movieId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ToggleFavoriteImpl &&
+            (identical(other.movieId, movieId) || other.movieId == movieId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, movieId);
+
+  /// Create a copy of MovieEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ToggleFavoriteImplCopyWith<_$ToggleFavoriteImpl> get copyWith =>
+      __$$ToggleFavoriteImplCopyWithImpl<_$ToggleFavoriteImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int limit) loadMovies,
+    required TResult Function(int limit) loadMoreMovies,
+    required TResult Function(int limit) refreshMovies,
+    required TResult Function(String movieId) toggleFavorite,
+  }) {
+    return toggleFavorite(movieId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int limit)? loadMovies,
+    TResult? Function(int limit)? loadMoreMovies,
+    TResult? Function(int limit)? refreshMovies,
+    TResult? Function(String movieId)? toggleFavorite,
+  }) {
+    return toggleFavorite?.call(movieId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int limit)? loadMovies,
+    TResult Function(int limit)? loadMoreMovies,
+    TResult Function(int limit)? refreshMovies,
+    TResult Function(String movieId)? toggleFavorite,
+    required TResult orElse(),
+  }) {
+    if (toggleFavorite != null) {
+      return toggleFavorite(movieId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_LoadMovies value) loadMovies,
+    required TResult Function(_LoadMoreMovies value) loadMoreMovies,
+    required TResult Function(_RefreshMovies value) refreshMovies,
+    required TResult Function(_ToggleFavorite value) toggleFavorite,
+  }) {
+    return toggleFavorite(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_LoadMovies value)? loadMovies,
+    TResult? Function(_LoadMoreMovies value)? loadMoreMovies,
+    TResult? Function(_RefreshMovies value)? refreshMovies,
+    TResult? Function(_ToggleFavorite value)? toggleFavorite,
+  }) {
+    return toggleFavorite?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_LoadMovies value)? loadMovies,
+    TResult Function(_LoadMoreMovies value)? loadMoreMovies,
+    TResult Function(_RefreshMovies value)? refreshMovies,
+    TResult Function(_ToggleFavorite value)? toggleFavorite,
+    required TResult orElse(),
+  }) {
+    if (toggleFavorite != null) {
+      return toggleFavorite(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _ToggleFavorite implements MovieEvent {
+  const factory _ToggleFavorite({required final String movieId}) =
+      _$ToggleFavoriteImpl;
+
+  String get movieId;
+
+  /// Create a copy of MovieEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ToggleFavoriteImplCopyWith<_$ToggleFavoriteImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 

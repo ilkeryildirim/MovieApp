@@ -97,5 +97,13 @@
   "release_to_refresh": "Bırak ve yenile",
   "release_to_go_first": "Bırak ve başa dön",
   "error_occurred": "Bir hata oluştu",
-  "retry": "Tekrar Dene"
+  "retry": "Tekrar Dene",
+  "profile_detail": "Profil Detayı",
+  "limited_offer": "Sınırlı Teklif",
+  "default_user": "Kullanıcı",
+  "add_photo": "Fotoğraf Ekle",
+  "favorite_movies": "Beğendiğim Filmler",
+  "no_favorite_movies_yet": "Henüz favori film yok",
+  "movie_title": "Film Adı",
+  "default_director": "James Cameron"
 } 

@@ -26,22 +26,23 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: AppColors.backgroundColor,
       body: Stack(
         children: [
-          _pages[_currentIndex],
-          // Custom Bottom Navigation Bar
+          IndexedStack(
+            index: _currentIndex,
+            children: _pages,
+          ),
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              color: const Color(0xFF090909), // #090909 arka plan
+              color: const Color(0xFF080808),
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(20.w, 13.h, 20.w, 16.h), // Yukarıda 13, aşağıda 16
+                  padding: EdgeInsets.fromLTRB(20.w, 13.h, 20.w, 16.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Home button
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -52,16 +53,16 @@ class _MainPageState extends State<MainPage> {
                           width: 125.w,
                           height: 40.h,
                           decoration: BoxDecoration(
-                            color: Colors.transparent, // Arka plan yok
+                            color: Colors.transparent,
                             borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
                               color: _currentIndex == 0 
-                                  ? Colors.white // Seçili: full beyaz border
-                                  : Colors.white.withOpacity(0.2), // Seçili değil: %20 opak
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.2),
                               width: 1,
                             ),
                           ),
-                          padding: EdgeInsets.all(8.w), // İkon ile border arası boşluk
+                          padding: EdgeInsets.all(8.w),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -75,7 +76,7 @@ class _MainPageState extends State<MainPage> {
                                 'Anasayfa',
                                 style: TextStyle(
                                   fontFamily: AppAssets.euclidFontFamily,
-                                  color: Colors.white, // Her zaman beyaz
+                                  color: Colors.white,
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -85,7 +86,6 @@ class _MainPageState extends State<MainPage> {
                         ),
                       ),
                       SizedBox(width: 16.w),
-                      // Profile button
                       GestureDetector(
                         onTap: () {
                           setState(() {
@@ -96,16 +96,16 @@ class _MainPageState extends State<MainPage> {
                           width: 125.w,
                           height: 40.h,
                           decoration: BoxDecoration(
-                            color: Colors.transparent, // Arka plan yok
+                            color: Colors.transparent,
                             borderRadius: BorderRadius.circular(20.r),
                             border: Border.all(
                               color: _currentIndex == 1 
-                                  ? Colors.white // Seçili: full beyaz border
-                                  : Colors.white.withOpacity(0.2), // Seçili değil: %20 opak
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.2),
                               width: 1,
                             ),
                           ),
-                          padding: EdgeInsets.all(8.w), // İkon ile border arası boşluk
+                          padding: EdgeInsets.all(8.w),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -119,7 +119,7 @@ class _MainPageState extends State<MainPage> {
                                 'Profil',
                                 style: TextStyle(
                                   fontFamily: AppAssets.euclidFontFamily,
-                                  color: Colors.white, // Her zaman beyaz
+                                  color: Colors.white,
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.w500,
                                 ),

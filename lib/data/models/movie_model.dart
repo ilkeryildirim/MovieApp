@@ -10,6 +10,7 @@ class MovieModel with _$MovieModel {
     @JsonKey(name: 'Title') required String title,
     @JsonKey(name: 'Plot') required String description,
     @JsonKey(name: 'Poster') String? poster,
+    @JsonKey(name: 'Director') String? director,
     @Default(false) bool isFavorite,
   }) = _MovieModel;
 
@@ -44,4 +45,36 @@ class MovieListParams with _$MovieListParams {
   }) = _MovieListParams;
 
   factory MovieListParams.fromJson(Map<String, dynamic> json) => _$MovieListParamsFromJson(json);
+}
+
+@freezed
+class FavoriteResponse with _$FavoriteResponse {
+  const factory FavoriteResponse({
+    required MovieModel movie,
+    required String action,
+  }) = _FavoriteResponse;
+
+  factory FavoriteResponse.fromJson(Map<String, dynamic> json) {
+    final data = json['data'] as Map<String, dynamic>;
+    return FavoriteResponse(
+      movie: MovieModel.fromJson(data['movie'] as Map<String, dynamic>),
+      action: data['action'] as String,
+    );
+  }
+}
+
+@freezed
+class FavoritesListResponse with _$FavoritesListResponse {
+  const factory FavoritesListResponse({
+    required List<MovieModel> movies,
+  }) = _FavoritesListResponse;
+
+  factory FavoritesListResponse.fromJson(Map<String, dynamic> json) {
+    final data = json['data'];
+    return FavoritesListResponse(
+      movies: (data as List<dynamic>)
+          .map((movie) => MovieModel.fromJson(movie as Map<String, dynamic>))
+          .toList(),
+    );
+  }
 } 
