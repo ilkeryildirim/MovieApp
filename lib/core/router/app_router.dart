@@ -20,7 +20,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.splash,
           name: AppRoutes.splash,
-          builder: (context, state) => const SplashPage(),
+          pageBuilder: (context, state) => _buildSplashPage(context, state),
         ),
         GoRoute(
           path: AppRoutes.login,
@@ -35,7 +35,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.home,
           name: AppRoutes.home,
-          builder: (context, state) => const MainPage(),
+          pageBuilder: (context, state) => _buildHomePage(context, state),
         ),
         GoRoute(
           path: AppRoutes.photoUpload,
@@ -50,6 +50,40 @@ class AppRouter {
     );
   }
 
+  Page<void> _buildSplashPage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: const SplashPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  }
+
+  Page<void> _buildHomePage(BuildContext context, GoRouterState state) {
+    return CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: const MainPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return SlideTransition(
+          position: animation.drive(
+            Tween(
+              begin: const Offset(0.0, 1.0),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeInOut)),
+          ),
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
   Page<void> _buildLoginPage(BuildContext context, GoRouterState state) {
     return CustomTransitionPage<void>(
       key: state.pageKey,
@@ -58,11 +92,14 @@ class AppRouter {
         return SlideTransition(
           position: animation.drive(
             Tween(
-              begin: const Offset(-1.0, 0.0),
+              begin: const Offset(0.0, 1.0),
               end: Offset.zero,
             ).chain(CurveTween(curve: Curves.easeInOut)),
           ),
-          child: child,
+          child: FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
         );
       },
     );

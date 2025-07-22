@@ -82,6 +82,16 @@ dependencies:
 
   # Permissions
   permission_handler: ^11.3.1
+<<<<<<< Updated upstream
+=======
+  
+  # Analytics
+  firebase_analytics: ^11.3.3
+  mixpanel_flutter: ^2.3.1
+  
+  # Splash Screen
+  flutter_native_splash: ^2.4.1
+>>>>>>> Stashed changes
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +108,7 @@ dev_dependencies:
   retrofit_generator: ^8.0.6
   freezed: ^2.4.5
   json_serializable: ^6.7.1
+  flutter_launcher_icons: ^0.14.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -116,7 +127,11 @@ flutter:
     - assets/lottie/
     - assets/icons/
     - assets/fonts/
+<<<<<<< Updated upstream
     - assets/backgrounds/
+=======
+    - assets/logo/
+>>>>>>> Stashed changes
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -136,3 +151,32 @@ flutter:
           weight: 600
         - asset: assets/fonts/Euclid Circular A Bold.ttf
           weight: 700
+
+# Flutter Native Splash Configuration
+flutter_native_splash:
+  # Background color for the splash screen
+  color: "#000000"
+  
+  # Use background_image instead of image for full screen coverage
+  background_image: assets/logo/splash.png
+  
+  # Full screen mode
+  fullscreen: true
+  
+  # Disable Android 12+ to use traditional full-screen splash
+  android_12:
+    color: "#000000"
+    # Don't specify any image to avoid circular icon
+    
+  # Platform specific settings
+  android: true
+  ios: true
+  web: true
+
+# Flutter Launcher Icons Configuration
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/logo.png"
+  adaptive_icon_background: "#000000"
+  adaptive_icon_foreground: "assets/logo/logo.png"
