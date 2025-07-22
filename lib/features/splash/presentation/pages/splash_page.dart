@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../../../core/constants/app_strings.dart';
-import '../../../../../../core/widgets/lottie_widget.dart';
 import '../../../auth/presentation/blocs/auth/auth_bloc.dart';
 import '../../../../core/router/app_router.dart';
 
@@ -13,41 +11,87 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+class _SplashPageState extends State<SplashPage>
+    with TickerProviderStateMixin {
+  late AnimationController _fadeController;
+  late AnimationController _scaleController;
+  late AnimationController _progressController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  late Animation<double> _progressAnimation;
 
   @override
   void initState() {
     super.initState();
     _initAnimations();
+    _startAnimations();
     _checkAuthStatus();
   }
 
   void _initAnimations() {
-    _animationController = AnimationController(
-      duration: const Duration(seconds: 2),
+    // Fade animation controller
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
 
+    // Scale animation controller
+    _scaleController = AnimationController(
+      duration: const Duration(milliseconds: 1200),
+      vsync: this,
+    );
+
+    // Progress animation controller
+    _progressController = AnimationController(
+      duration: const Duration(milliseconds: 1800),
+      vsync: this,
+    );
+
+    // Fade animation
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+      parent: _fadeController,
+      curve: Curves.easeInOut,
     ));
 
+    // Scale animation with bounce effect
     _scaleAnimation = Tween<double>(
       begin: 0.5,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.5, curve: Curves.elasticOut),
+      parent: _scaleController,
+      curve: Curves.elasticOut,
     ));
 
-    _animationController.forward();
+    // Progress animation
+    _progressAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _progressController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  void _startAnimations() {
+    // Start fade animation immediately
+    _fadeController.forward();
+    
+    // Start scale animation with slight delay
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) {
+        _scaleController.forward();
+      }
+    });
+
+    // Start progress animation after scale
+    Future.delayed(const Duration(milliseconds: 600), () {
+      if (mounted) {
+        _progressController.forward();
+      }
+    });
   }
 
   void _checkAuthStatus() {
@@ -60,7 +104,9 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _fadeController.dispose();
+    _scaleController.dispose();
+    _progressController.dispose();
     super.dispose();
   }
 
@@ -69,74 +115,86 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         state.when(
-          initial: () {},
-          loading: () {},
-          authenticated: (_) => context.go(AppRoutes.home),
-          unauthenticated: () => context.go(AppRoutes.login),
-          error: (_) => context.go(AppRoutes.login),
+          initial: () => print('Auth state: initial'),
+          loading: () => print('Auth state: loading'),
+          authenticated: (_) {
+            context.go(AppRoutes.home);
+          },
+          unauthenticated: () {
+            context.go(AppRoutes.login);
+          },
+          error: (_) {
+            context.go(AppRoutes.login);
+          },
         );
       },
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-            ),
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(
+            color: Colors.black,
           ),
-          child: Center(
-            child: AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                return FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Lottie Loading Animation
-                        const LoadingLottie(size: 150),
-                        const SizedBox(height: 32),
-                        Text(
-                          AppStrings.appTitle,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                          textAlign: TextAlign.center,
+          child: Stack(
+            children: [
+              // Full screen background image
+              Center(
+                child: AnimatedBuilder(
+                  animation: Listenable.merge([_fadeController, _scaleController]),
+                  builder: (context, child) {
+                    return FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: Image.asset(
+                          'assets/logo/splash.png',
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
                         ),
-                        const SizedBox(height: 8),
-                                  Text(
-            'Professional Flutter Template',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
-              letterSpacing: 0.5,
-            ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 64),
-                        // Additional loading indicator
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
-                          child: LinearProgressIndicator(
-                            backgroundColor: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.3),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // Linear progress indicator at the bottom
+              Positioned(
+                bottom: 80,
+                left: 40,
+                right: 40,
+                child: AnimatedBuilder(
+                  animation: Listenable.merge([_fadeController, _progressController]),
+                  builder: (context, child) {
+                    return FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Column(
+                        children: [
+                          LinearProgressIndicator(
+                            value: _progressAnimation.value,
+                            backgroundColor: Colors.white.withOpacity(0.2),
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              Theme.of(context).colorScheme.onPrimary,
+                              Colors.white.withOpacity(0.8),
+                            ),
+                            minHeight: 3,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Loading...',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w300,
+                              letterSpacing: 1.5,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

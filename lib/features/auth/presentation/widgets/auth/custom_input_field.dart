@@ -86,8 +86,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
         onTap: _togglePasswordVisibility,
         child: Icon(
           _isObscured
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
           color: AppColors.grayText,
           size: 20.sp,
         ),
