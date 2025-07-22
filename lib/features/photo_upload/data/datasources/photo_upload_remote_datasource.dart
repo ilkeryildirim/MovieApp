@@ -1,23 +1,35 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
-import '../../../../core/network/dio_client.dart';
+import 'package:retrofit/retrofit.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/utils/logger.dart';
+import '../../../../core/constants/api_constants.dart';
 import '../../constants/photo_upload_constants.dart';
-import '../models/photo_upload_response_model.dart';
+
+part 'photo_upload_remote_datasource.g.dart';
 
 abstract class PhotoUploadRemoteDataSource {
   Future<String> uploadPhoto(File file);
 }
 
+@RestApi()
+abstract class PhotoUploadApi {
+  @factoryMethod
+  factory PhotoUploadApi(Dio dio) = _PhotoUploadApi;
+  
+  @POST(ApiConstants.photoUploadEndpoint)
+  Future<dynamic> uploadPhotoRaw(@Body() FormData formData);
+}
+
 @LazySingleton(as: PhotoUploadRemoteDataSource)
 class PhotoUploadRemoteDataSourceImpl implements PhotoUploadRemoteDataSource {
-  final DioClient _dioClient;
+  final PhotoUploadApi _api;
 
-  PhotoUploadRemoteDataSourceImpl(this._dioClient);
+  PhotoUploadRemoteDataSourceImpl(Dio dio) : _api = PhotoUploadApi(dio);
 
   @override
+
   Future<String> uploadPhoto(File file) async {
     try {
       AppLogger.info('Uploading photo: ${file.path}');
@@ -30,53 +42,36 @@ class PhotoUploadRemoteDataSourceImpl implements PhotoUploadRemoteDataSource {
         ),
       });
 
-      final response = await _dioClient.dio.post(
-        PhotoUploadConstants.uploadEndpoint,
-        data: formData,
-        options: Options(
-          contentType: 'multipart/form-data',
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        AppLogger.info('Photo upload response: ${response.data}');
+      final response = await _api.uploadPhotoRaw(formData);
+      final responseData = response as Map<String, dynamic>;
+      
+      AppLogger.info('Photo upload response: $responseData');
+      
+      try {
+        String photoUrl;
         
-        try {
-          final responseData = response.data;
-          String photoUrl;
-          
-          if (responseData is Map<String, dynamic>) {
-            if (responseData.containsKey('photoUrl')) {
-              photoUrl = responseData['photoUrl'] as String;
-            } 
-            else if (responseData.containsKey('data') && 
-                     responseData['data'] is Map<String, dynamic>) {
-              final data = responseData['data'] as Map<String, dynamic>;
-              photoUrl = data['photoUrl'] as String;
-            }
-            else if (responseData.containsKey('url')) {
-              photoUrl = responseData['url'] as String;
-            }
-            else {
-              photoUrl = responseData.toString();
-            }
-          } else {
-            photoUrl = responseData.toString();
-          }
-          
-          AppLogger.info('Photo uploaded successfully: $photoUrl');
-          return photoUrl;
-        } catch (e) {
-          AppLogger.error('Error parsing photo upload response', error: e);
-          throw ServerException(
-            'Invalid response format',
-            response.statusCode.toString(),
-          );
+        if (responseData.containsKey('photoUrl')) {
+          photoUrl = responseData['photoUrl'] as String;
+        } 
+        else if (responseData.containsKey('data') && 
+                 responseData['data'] is Map<String, dynamic>) {
+          final data = responseData['data'] as Map<String, dynamic>;
+          photoUrl = data['photoUrl'] as String;
         }
-      } else {
+        else if (responseData.containsKey('url')) {
+          photoUrl = responseData['url'] as String;
+        }
+        else {
+          photoUrl = responseData.toString();
+        }
+        
+        AppLogger.info('Photo uploaded successfully: $photoUrl');
+        return photoUrl;
+      } catch (e) {
+        AppLogger.error('Error parsing photo upload response', error: e);
         throw ServerException(
-          'Failed to upload photo',
-          response.statusCode.toString(),
+          'Invalid response format',
+          'PARSING_ERROR',
         );
       }
     } on DioException catch (e) {

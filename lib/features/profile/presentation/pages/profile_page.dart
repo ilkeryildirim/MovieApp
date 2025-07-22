@@ -13,12 +13,15 @@ import '../../../movie/presentation/blocs/favorite/favorite_bloc.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_user_section.dart';
 import '../widgets/profile_movies_grid.dart';
+import '../widgets/limited_offer_bottom_sheet.dart';
 import '../../../movie/presentation/widgets/pull_to_refresh_indicator.dart';
 import '../../../../core/router/app_router.dart';
 
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final VoidCallback? onBackPressed;
+  
+  const ProfilePage({super.key, this.onBackPressed});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -28,6 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _showPullToRefresh = false;
   double _overscrollAmount = 0.0;
   bool _isRefreshing = false;
+  GlobalKey _photoKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -127,17 +131,21 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 ProfileHeader(
-                  onBackPressed: () => Navigator.of(context).pop(),
-                  onLimitedOfferPressed: () {},
+                  onBackPressed: widget.onBackPressed,
+                  onLimitedOfferPressed: () => LimitedOfferBottomSheet.show(context),
                 ),
                 ProfileUserSection(
                   userName: user.name,
                   userId: user.id,
                   photoUrl: user.avatarUrl,
+                  photoKey: _photoKey,
                   onPhotoUpload: () async {
                     final photoUrl = await context.push<String>(AppRoutes.photoUpload);
                     if (photoUrl != null && mounted) {
-                      // Update user photo in both auth and profile blocs
+                      setState(() {
+                        _photoKey = GlobalKey();
+                      });
+                      
                       context.read<AuthBloc>().add(
                         AuthEvent.updateProfilePhoto(photoUrl),
                       );
@@ -176,7 +184,6 @@ class _ProfilePageState extends State<ProfilePage> {
               fontWeight: ProfileConstants.moviesTitleFontWeight,
             ),
           ),
-          SizedBox(height: ProfileConstants.moviesTitleToGridSpacing.h),
           BlocBuilder<FavoriteBloc, FavoriteState>(
             builder: (context, state) {
               return state.maybeWhen(

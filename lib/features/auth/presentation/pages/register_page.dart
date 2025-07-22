@@ -38,52 +38,27 @@ class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
   }
 
   void _setupValidation() {
-    final validationConfigs = {
-      'name': ValidationConfig(
-        controller: _nameController,
-        rules: ValidationRules.nameRules,
-      ),
-      'email': ValidationConfig(
-        controller: _emailController,
-        rules: ValidationRules.emailRules,
-      ),
-      'password': ValidationConfig(
-        controller: _passwordController,
-        rules: ValidationRules.passwordRules,
-      ),
-      'confirmPassword': ValidationConfig(
-        controller: _confirmPasswordController,
-        rules: [], // Will be validated dynamically
-      ),
-    };
-
     _nameController.addListener(() {
       if (isFieldTouched('name')) {
-        validateField('name', _nameController.text, ValidationRules.nameRules);
+        validateFieldWithTimer('name', _nameController.text, ValidationRules.nameRules);
       }
     });
 
     _emailController.addListener(() {
       if (isFieldTouched('email')) {
-        validateField('email', _emailController.text, ValidationRules.emailRules);
+        validateFieldWithTimer('email', _emailController.text, ValidationRules.emailRules);
       }
     });
 
     _passwordController.addListener(() {
       if (isFieldTouched('password')) {
-        validateField('password', _passwordController.text, ValidationRules.passwordRules);
-      }
-      // Also validate confirm password when password changes
-      if (isFieldTouched('confirmPassword')) {
-        validateField('confirmPassword', _confirmPasswordController.text, 
-            ValidationRules.confirmPasswordRules(_passwordController.text));
+        validateFieldWithTimer('password', _passwordController.text, ValidationRules.passwordRules);
       }
     });
 
     _confirmPasswordController.addListener(() {
       if (isFieldTouched('confirmPassword')) {
-        validateField('confirmPassword', _confirmPasswordController.text, 
-            ValidationRules.confirmPasswordRules(_passwordController.text));
+        validateFieldWithTimer('confirmPassword', _confirmPasswordController.text, ValidationRules.confirmPasswordRules(_passwordController.text));
       }
     });
   }
@@ -243,7 +218,7 @@ class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
       errorText: getError('name'),
       onChanged: (value) {
         touchField('name');
-        validateField('name', value, ValidationRules.nameRules);
+        validateFieldWithTimer('name', value, ValidationRules.nameRules);
       },
     );
   }
@@ -260,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
       errorText: getError('email'),
       onChanged: (value) {
         touchField('email');
-        validateField('email', value, ValidationRules.emailRules);
+        validateFieldWithTimer('email', value, ValidationRules.emailRules);
       },
     );
   }
@@ -278,7 +253,7 @@ class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
       errorText: getError('password'),
       onChanged: (value) {
         touchField('password');
-        validateField('password', value, ValidationRules.passwordRules);
+        validateFieldWithTimer('password', value, ValidationRules.passwordRules);
       },
     );
   }
@@ -296,7 +271,7 @@ class _RegisterPageState extends State<RegisterPage> with FormValidationMixin {
       errorText: getError('confirmPassword'),
       onChanged: (value) {
         touchField('confirmPassword');
-        validateField('confirmPassword', value, ValidationRules.confirmPasswordRules(_passwordController.text));
+        validateFieldWithTimer('confirmPassword', value, ValidationRules.confirmPasswordRules(_passwordController.text));
       },
     );
   }

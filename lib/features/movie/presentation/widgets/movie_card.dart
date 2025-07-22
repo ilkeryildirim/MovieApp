@@ -7,6 +7,7 @@ import '../../data/models/movie_model.dart';
 import 'movie_info_widget.dart';
 import 'action_button.dart';
 import '../../../../../../core/widgets/error_widget.dart';
+import '../../../../../../core/constants/app_colors.dart';
 
 class MovieCard extends StatelessWidget {
   final MovieModel movie;
@@ -26,8 +27,7 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Bottom navigation bar height + padding
-    final bottomPadding = 56.h + MediaQuery.of(context).padding.bottom;
+    final bottomPadding = 56.h + MediaQuery.of(context).padding.bottom + 26.h;
     
     return SizedBox(
       height: MediaQuery.of(context).size.height,
@@ -56,19 +56,20 @@ class MovieCard extends StatelessWidget {
       bottom: bottomPadding,
       child: CachedNetworkImage(
         imageUrl: posterUrl ?? '',
+        key: ValueKey('movie_poster_${movie.id}_${posterUrl.hashCode}'),
         fit: BoxFit.cover,
         httpHeaders: const {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
         },
         placeholder: (context, url) => _buildMoviePosterShimmer(),
         errorWidget: (context, url, error) => AppErrorWidget(
           message: AppStrings.posterLoadError,
           showRetryButton: false,
         ),
+        fadeInDuration: const Duration(milliseconds: 300),
+        fadeOutDuration: const Duration(milliseconds: 200),
       ),
     );
   }
@@ -79,13 +80,14 @@ class MovieCard extends StatelessWidget {
       height: double.infinity,
       color: Colors.black,
       child: Shimmer.fromColors(
-        baseColor: Colors.grey.withOpacity(0.2),
-        highlightColor: Colors.grey.withOpacity(0.4),
-        period: const Duration(milliseconds: 1500),
+        baseColor: Colors.grey[900]!.withOpacity(0.3),
+        highlightColor: Colors.grey[700]!.withOpacity(0.5),
+        period: const Duration(milliseconds: 2000),
+        direction: ShimmerDirection.ltr,
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          color: Colors.grey.withOpacity(0.3),
+          color: AppColors.inputBackground.withOpacity(0.5),
         ),
       ),
     );
@@ -148,12 +150,15 @@ class MovieCard extends StatelessWidget {
        duration: const Duration(milliseconds: 300),
        curve: Curves.easeInOut,
        right: 20.w,
-       bottom: bottomPadding + (isDescriptionExpanded ? 150.h : 100.h),
-       child: ActionButton(
-         icon: movie.isFavorite ? Icons.favorite : Icons.favorite_border,
-         onPressed: onFavoritePressed ?? () {},
-         backgroundColor: Colors.transparent,
-         iconColor: movie.isFavorite ? Colors.red : Colors.white,
+       bottom: bottomPadding + (isDescriptionExpanded ? 150.h : 100.h) + 19.h,
+       child: GestureDetector(
+         onTap: onFavoritePressed ?? () {},
+         child: ActionButton(
+           icon: movie.isFavorite ? Icons.favorite : Icons.favorite_border,
+           onPressed: onFavoritePressed ?? () {},
+           backgroundColor: Colors.transparent,
+           iconColor: movie.isFavorite ? Colors.white : Colors.white,
+         ),
        ),
      );
    }

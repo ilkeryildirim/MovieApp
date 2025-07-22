@@ -23,9 +23,22 @@ class PhotoUploadPage extends StatefulWidget {
   State<PhotoUploadPage> createState() => _PhotoUploadPageState();
 }
 
-class _PhotoUploadPageState extends State<PhotoUploadPage> {
+class _PhotoUploadPageState extends State<PhotoUploadPage> with AutomaticKeepAliveClientMixin {
   final ImagePicker _picker = ImagePicker();
   File? _selectedFile;
+  
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<PhotoUploadBloc>().add(const PhotoUploadEvent.reset());
+      }
+    });
+  }
 
   Future<void> _pickImage() async {
     try {
@@ -64,17 +77,6 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
         if (image != null) {
           final originalFile = File(image.path);
           
-          // Show loading while compressing
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Fotoğraf işleniyor...'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-          
-          // Compress image
           final compressedFile = await ImageCompressHelper.compressImage(originalFile);
           
           setState(() {
@@ -140,6 +142,8 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    
     return BlocProvider(
       create: (context) => getIt<PhotoUploadBloc>(),
       child: Builder(
@@ -150,7 +154,9 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
             listener: (context, state) {
               state.maybeWhen(
                 success: (photoUrl) {
-                  // Navigate back or to profile with photoUrl
+                  setState(() {
+                    _selectedFile = null;
+                  });
                   context.pop(photoUrl);
                 },
                 error: (message) {
@@ -199,10 +205,15 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
         SafeClickWidget(
           onTap: () => context.pop(),
           child: Container(
-            padding: EdgeInsets.all(12.w),
+            width: 44.w,
+            height: 44.w,
             decoration: BoxDecoration(
-              color: AppColors.inputBackground.withValues(alpha: 0.6),
+              color: AppColors.socialButtonBackground,
               shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
             ),
             child: Icon(
               Icons.arrow_back,
@@ -222,7 +233,7 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
           ),
         ),
         const Spacer(),
-        SizedBox(width: 44.w), // Balance for back button
+        SizedBox(width: 44.w),
       ],
     );
   }

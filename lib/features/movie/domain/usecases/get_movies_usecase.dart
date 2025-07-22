@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../../../core/error/failures.dart';
-import '../../../../core/usecase.dart';
+import '../../../../domain/usecases/base/usecase.dart';
 import '../../data/models/movie_model.dart';
 import '../repositories/movie_repository.dart';
 

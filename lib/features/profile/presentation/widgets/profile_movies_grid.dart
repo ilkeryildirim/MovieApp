@@ -67,9 +67,14 @@ class ProfileMoviesGrid extends StatelessWidget {
                           imageUrl: movie.poster!.startsWith('http://') 
                               ? movie.poster!.replaceFirst('http://', 'https://') 
                               : movie.poster!,
+                          key: ValueKey('favorite_movie_${movie.id}_${movie.poster.hashCode}'),
                           fit: BoxFit.cover,
+                          memCacheWidth: 150,
+                          memCacheHeight: 200,
                           placeholder: (context, url) => _buildMovieShimmer(),
                           errorWidget: (context, url, error) => _buildMoviePlaceholder(movie.title),
+                          fadeInDuration: const Duration(milliseconds: 300),
+                          fadeOutDuration: const Duration(milliseconds: 200),
                         )
                       : _buildMoviePlaceholder(movie.title),
                 ),
@@ -154,6 +159,7 @@ class ProfileMoviesGrid extends StatelessWidget {
         baseColor: ProfileConstants.shimmerBaseColor,
         highlightColor: ProfileConstants.shimmerHighlightColor,
         period: ProfileConstants.shimmerPeriod,
+        direction: ShimmerDirection.ltr,
         child: Container(
           width: double.infinity,
           height: double.infinity,
@@ -272,6 +278,7 @@ class ProfileMoviesGrid extends StatelessWidget {
               baseColor: ProfileConstants.shimmerBaseColor,
               highlightColor: ProfileConstants.shimmerHighlightColor,
               period: ProfileConstants.shimmerPeriod,
+              direction: ShimmerDirection.ltr,
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -294,10 +301,11 @@ class ProfileMoviesGrid extends StatelessWidget {
             baseColor: ProfileConstants.shimmerBaseColor,
             highlightColor: ProfileConstants.shimmerHighlightColor,
             period: ProfileConstants.shimmerPeriod,
+            direction: ShimmerDirection.ltr,
             child: Container(
               decoration: BoxDecoration(
-                color: ProfileConstants.shimmerContainerColor,
                 borderRadius: BorderRadius.circular(ProfileConstants.shimmerTextBorderRadius.r),
+                color: ProfileConstants.shimmerContainerColor,
               ),
             ),
           ),
@@ -314,10 +322,11 @@ class ProfileMoviesGrid extends StatelessWidget {
             baseColor: ProfileConstants.shimmerBaseColor,
             highlightColor: ProfileConstants.shimmerHighlightColor,
             period: ProfileConstants.shimmerPeriod,
+            direction: ShimmerDirection.ltr,
             child: Container(
               decoration: BoxDecoration(
-                color: ProfileConstants.shimmerContainerColor,
                 borderRadius: BorderRadius.circular(ProfileConstants.shimmerTextBorderRadius.r),
+                color: ProfileConstants.shimmerContainerColor,
               ),
             ),
           ),

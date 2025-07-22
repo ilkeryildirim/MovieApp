@@ -33,7 +33,6 @@ void main() async {
       ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      startLocale: const Locale('en'),
       child: const MyApp(),
     ),
   );
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => getIt<AuthBloc>()..add(const AuthEvent.checkAuthStatus()),
+          create: (_) => getIt<AuthBloc>(),
         ),
       ],
       child: ScreenUtilInit(

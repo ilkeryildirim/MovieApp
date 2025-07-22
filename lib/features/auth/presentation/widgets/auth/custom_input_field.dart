@@ -86,8 +86,8 @@ class _CustomInputFieldState extends State<CustomInputField> {
         onTap: _togglePasswordVisibility,
         child: Icon(
           _isObscured
-              ? Icons.visibility_outlined
-              : Icons.visibility_off_outlined,
+              ? Icons.visibility_off_outlined
+              : Icons.visibility_outlined,
           color: AppColors.grayText,
           size: 20.sp,
         ),
@@ -159,14 +159,18 @@ class _CustomInputFieldState extends State<CustomInputField> {
         ),
         if (widget.errorText != null) ...[
           SizedBox(height: 6.h),
-          Padding(
-            padding: EdgeInsets.only(left: 16.w),
-            child: Text(
-              widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w400,
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.w),
+              child: Text(
+                widget.errorText!,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../constants/app_strings.dart';
 import '../extensions/string_extensions.dart';
@@ -5,6 +6,7 @@ import '../extensions/string_extensions.dart';
 mixin FormValidationMixin<T extends StatefulWidget> on State<T> {
   final Map<String, String?> _errors = {};
   final Map<String, bool> _touched = {};
+  final Map<String, Timer?> _validationTimers = {};
   
   bool get isFormValid => _errors.values.every((error) => error == null);
   
@@ -14,6 +16,16 @@ mixin FormValidationMixin<T extends StatefulWidget> on State<T> {
   
   void touchField(String fieldName) {
     _touched[fieldName] = true;
+  }
+  
+  void validateFieldWithTimer(String fieldName, String? value, List<ValidationRule> rules) {
+    _validationTimers[fieldName]?.cancel();
+    
+    _validationTimers[fieldName] = Timer(const Duration(milliseconds: 500), () {
+      if (_touched[fieldName] == true) {
+        validateField(fieldName, value, rules);
+      }
+    });
   }
   
   void validateField(String fieldName, String? value, List<ValidationRule> rules) {
@@ -41,10 +53,23 @@ mixin FormValidationMixin<T extends StatefulWidget> on State<T> {
   }
   
   void clearErrors() {
+    for (final timer in _validationTimers.values) {
+      timer?.cancel();
+    }
+    _validationTimers.clear();
+    
     setState(() {
       _errors.clear();
       _touched.clear();
     });
+  }
+  
+  @override
+  void dispose() {
+    for (final timer in _validationTimers.values) {
+      timer?.cancel();
+    }
+    super.dispose();
   }
 }
 

@@ -17,9 +17,15 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
+  List<Widget> get _pages => [
     const HomePage(),
-    const ProfilePage(),
+    ProfilePage(
+      onBackPressed: () {
+        setState(() {
+          _currentIndex = 0;
+        });
+      },
+    ),
   ];
 
   @override

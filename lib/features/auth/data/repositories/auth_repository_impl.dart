@@ -229,6 +229,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Left(UnknownFailure());
     }
   }
+  /*
   
   @override
   Future<Either<Failure, void>> changePassword({
@@ -269,4 +270,5 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Left(UnknownFailure());
     }
   }
+   */
 } 

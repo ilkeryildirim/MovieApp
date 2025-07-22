@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import '../../di/injection.dart';
 import '../../error/exceptions.dart';
 import '../../constants/app_strings.dart';
+import '../../constants/api_constants.dart';
 import '../../../features/auth/data/datasources/auth_local_datasource.dart';
 
 class AuthInterceptor extends Interceptor {
@@ -77,8 +78,8 @@ class AuthInterceptor extends Interceptor {
 
   bool _shouldSkipAuth(String path) {
     final authSkipPaths = [
-      '/user/login',
-      '/user/register',
+      ApiConstants.loginEndpoint,
+      ApiConstants.registerEndpoint,
     ];
     
     return authSkipPaths.any((skipPath) => path.contains(skipPath));

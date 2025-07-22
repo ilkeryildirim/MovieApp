@@ -35,26 +35,15 @@ class _LoginPageState extends State<LoginPage> with FormValidationMixin {
   }
 
   void _setupValidation() {
-    final validationConfigs = {
-      'email': ValidationConfig(
-        controller: _emailController,
-        rules: ValidationRules.emailRules,
-      ),
-      'password': ValidationConfig(
-        controller: _passwordController,
-        rules: ValidationRules.passwordRules,
-      ),
-    };
-
     _emailController.addListener(() {
       if (isFieldTouched('email')) {
-        validateField('email', _emailController.text, ValidationRules.emailRules);
+        validateFieldWithTimer('email', _emailController.text, ValidationRules.emailRules);
       }
     });
 
     _passwordController.addListener(() {
       if (isFieldTouched('password')) {
-        validateField('password', _passwordController.text, ValidationRules.passwordRules);
+        validateFieldWithTimer('password', _passwordController.text, ValidationRules.passwordRules);
       }
     });
   }
@@ -174,7 +163,7 @@ class _LoginPageState extends State<LoginPage> with FormValidationMixin {
       errorText: getError('email'),
       onChanged: (value) {
         touchField('email');
-        validateField('email', value, ValidationRules.emailRules);
+        validateFieldWithTimer('email', value, ValidationRules.emailRules);
       },
     );
   }
@@ -192,14 +181,14 @@ class _LoginPageState extends State<LoginPage> with FormValidationMixin {
       errorText: getError('password'),
       onChanged: (value) {
         touchField('password');
-        validateField('password', value, ValidationRules.passwordRules);
+        validateFieldWithTimer('password', value, ValidationRules.passwordRules);
       },
     );
   }
 
   Widget _buildForgotPasswordLink() {
     return Align(
-      alignment: Alignment.centerRight,
+      alignment: Alignment.centerLeft,
       child: TextButton(
         onPressed: () {},
         style: TextButton.styleFrom(
@@ -210,9 +199,12 @@ class _LoginPageState extends State<LoginPage> with FormValidationMixin {
         child: Text(
           AppStrings.forgotPasswordLink,
           style: TextStyle(
+            fontFamily: AppAssets.euclidFontFamily,
             color: AppColors.whiteText,
-            fontSize: 14.sp,
+            fontSize: 12.sp,
             fontWeight: FontWeight.w400,
+            decoration: TextDecoration.underline,
+            decorationColor: AppColors.whiteText,
           ),
         ),
       ),

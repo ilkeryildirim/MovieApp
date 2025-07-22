@@ -9,67 +9,50 @@ class MovieShimmerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
+    final bottomPadding = 56.h + MediaQuery.of(context).padding.bottom + 26.h;
+    
+    return SizedBox(
       height: MediaQuery.of(context).size.height,
-      color: Colors.black,
+      width: MediaQuery.of(context).size.width,
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          // Full screen shimmer poster
-          Shimmer.fromColors(
-            baseColor: AppColors.inputBackground.withOpacity(0.3),
-            highlightColor: AppColors.inputBackground.withOpacity(0.6),
-            period: const Duration(milliseconds: 1200),
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: AppColors.inputBackground,
-            ),
-          ),
-          
-          // Movie info overlay shimmer with favorite button
-                      Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                _buildShimmerMovieInfo(),
-                // Favorite button shimmer - 19px above movie info
-                Positioned(
-                  top: -19.h - 70.h, // 19px gap + button height (70.h)
-                  right: 20.w,
-                  child: _buildShimmerActionButton(),
-                ),
-              ],
-            ),
-          ),
-          
-          // Bottom area background
-          
+          _buildMoviePosterShimmer(bottomPadding),
+          _buildGradientOverlay(bottomPadding),
+          _buildMovieInfoShimmer(bottomPadding),
+          _buildFavoriteButtonShimmer(bottomPadding),
         ],
       ),
     );
   }
 
-  Widget _buildShimmerActionButton() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(24.5.r),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+  Widget _buildMoviePosterShimmer(double bottomPadding) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: bottomPadding,
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black,
         child: Shimmer.fromColors(
-          baseColor: Colors.grey[800]!.withOpacity(0.3),
-          highlightColor: Colors.grey[600]!.withOpacity(0.5),
+          baseColor: Colors.grey[900]!.withOpacity(0.3),
+          highlightColor: Colors.grey[700]!.withOpacity(0.5),
+          period: const Duration(milliseconds: 2000),
+          direction: ShimmerDirection.ltr,
           child: Container(
-            width: 49.w,
-            height: 70.h,
+            width: double.infinity,
+            height: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.grey[700]!.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(24.5.r),
-              border: Border.all(
-                color: Colors.white.withOpacity(0.1),
-                width: 1,
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  AppColors.inputBackground.withOpacity(0.4),
+                  AppColors.inputBackground.withOpacity(0.2),
+                  AppColors.inputBackground.withOpacity(0.5),
+                ],
               ),
             ),
           ),
@@ -78,77 +61,156 @@ class MovieShimmerLoading extends StatelessWidget {
     );
   }
 
-    Widget _buildShimmerMovieInfo() {
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            Colors.black.withOpacity(0.6),
-            Colors.black.withOpacity(0.8),
-          ],
-          stops: const [0.0, 0.3, 1.0],
+  Widget _buildGradientOverlay(double bottomPadding) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: bottomPadding,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Colors.black.withValues(alpha: 0.3),
+              Colors.black.withValues(alpha: 0.5),
+              Colors.black.withValues(alpha: 0.7),
+            ],
+            stops: const [0.0, 0.5, 0.8, 1.0],
+          ),
         ),
       ),
-      child: Column(
-        children: [
-          // Profile section shimmer
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-            child: Row(
-              children: [
-                Shimmer.fromColors(
-                  baseColor: Colors.grey[700]!,
-                  highlightColor: Colors.grey[500]!,
-                  child: Container(
-                    width: 50.w,
-                    height: 50.w,
-                    decoration: BoxDecoration(
-                      color: AppColors.inputBackground,
-                      shape: BoxShape.circle,
+    );
+  }
+
+  Widget _buildMovieInfoShimmer(double bottomPadding) {
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: bottomPadding,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.transparent,
+              Colors.black.withOpacity(0.4),
+              Colors.black.withOpacity(0.8),
+            ],
+            stops: const [0.0, 0.3, 1.0],
+          ),
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Profile circle shimmer
+            Shimmer.fromColors(
+              baseColor: Colors.grey[800]!.withOpacity(0.4),
+              highlightColor: Colors.grey[600]!.withOpacity(0.6),
+              period: const Duration(milliseconds: 1800),
+              direction: ShimmerDirection.ltr,
+              child: Container(
+                width: 40.w,
+                height: 40.w,
+                decoration: BoxDecoration(
+                  color: AppColors.inputBackground.withOpacity(0.6),
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            SizedBox(width: 12.w),
+            // Movie info shimmer
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Movie title shimmer
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[800]!.withOpacity(0.4),
+                    highlightColor: Colors.grey[600]!.withOpacity(0.6),
+                    period: const Duration(milliseconds: 1800),
+                    direction: ShimmerDirection.ltr,
+                    child: Container(
+                      width: 200.w,
+                      height: 20.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.inputBackground.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Shimmer.fromColors(
-                        baseColor: Colors.grey[700]!,
-                        highlightColor: Colors.grey[500]!,
-                        child: Container(
-                          width: 150.w,
-                          height: 18.h,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 6.h),
-                      Shimmer.fromColors(
-                        baseColor: Colors.grey[700]!,
-                        highlightColor: Colors.grey[500]!,
-                        child: Container(
+                  SizedBox(height: 4.h),
+                  // Movie description shimmer - 2 lines
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[800]!.withOpacity(0.4),
+                    highlightColor: Colors.grey[600]!.withOpacity(0.6),
+                    period: const Duration(milliseconds: 1800),
+                    direction: ShimmerDirection.ltr,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
                           width: double.infinity,
                           height: 16.h,
                           decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(4),
+                            color: AppColors.inputBackground.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
                         ),
-                      ),
-                    ],
+                        SizedBox(height: 4.h),
+                        Container(
+                          width: 250.w,
+                          height: 16.h,
+                          decoration: BoxDecoration(
+                            color: AppColors.inputBackground.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFavoriteButtonShimmer(double bottomPadding) {
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      right: 20.w,
+      bottom: bottomPadding + 100.h + 19.h,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24.5.r),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+          child: Shimmer.fromColors(
+            baseColor: Colors.grey[800]!.withOpacity(0.4),
+            highlightColor: Colors.grey[600]!.withOpacity(0.6),
+            period: const Duration(milliseconds: 1800),
+            direction: ShimmerDirection.ltr,
+            child: Container(
+              width: 49.w,
+              height: 70.h,
+              decoration: BoxDecoration(
+                color: AppColors.inputBackground.withOpacity(0.6),
+                borderRadius: BorderRadius.circular(24.5.r),
+                border: Border.all(
+                  color: Colors.white.withOpacity(0.1),
+                  width: 1,
                 ),
-              ],
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
