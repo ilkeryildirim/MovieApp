@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../core/constants/app_assets.dart';
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/app_colors.dart';
+import '../../constants/auth_constants.dart';
 import '../../../../../../core/extensions/context_extensions.dart';
 import '../../../../../../core/utils/svg_helper.dart';
 import '../../../../../../core/widgets/safe_click_widget.dart';
@@ -136,25 +137,13 @@ class _LoginPageState extends State<LoginPage> with FormValidationMixin {
         children: [
           Text(
             AppStrings.hello,
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.whiteText,
-              height: 1.0,
-              letterSpacing: 0,
-            ),
+            style: AuthConstants.headerTitleStyle.copyWith(fontSize: AuthConstants.headerTitleFontSize.sp),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: AuthConstants.headerSpacing.h),
           Text(
             AppStrings.welcomeSubtitle,
-            style: TextStyle(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w400,
-              color: AppColors.grayText,
-              height: 1.0,
-              letterSpacing: 0,
-            ),
+            style: AuthConstants.headerSubtitleStyle.copyWith(fontSize: AuthConstants.headerSubtitleFontSize.sp),
             textAlign: TextAlign.center,
           ),
         ],

@@ -90,6 +90,7 @@ dependencies:
   # Splash Screen
   flutter_native_splash: ^2.4.1
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
