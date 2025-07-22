@@ -388,11 +388,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Developer
 
-**Flutter Development Team**
-- 📧 Email: development@company.com
-- 🌐 Website: https://company.com
-- 📱 Support: support@company.com
-
+**Me, it's me**
+- 📧 Email: ilkeryildirimdev@gmail.com
 ---
 
 ## 📚 Additional Resources
