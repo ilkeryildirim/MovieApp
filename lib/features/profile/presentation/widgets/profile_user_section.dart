@@ -63,9 +63,14 @@ class ProfileUserSection extends StatelessWidget {
             child: photoUrl != null && photoUrl!.isNotEmpty
                 ? CachedNetworkImage(
                     imageUrl: photoUrl!,
+                    key: ValueKey('profile_photo_$userId${photoUrl.hashCode}'),
                     fit: BoxFit.cover,
+                    memCacheWidth: 200,
+                    memCacheHeight: 200,
                     placeholder: (context, url) => _buildUserInitial(),
                     errorWidget: (context, url, error) => _buildUserInitial(),
+                    fadeInDuration: const Duration(milliseconds: 200),
+                    fadeOutDuration: const Duration(milliseconds: 200),
                   )
                 : _buildUserInitial(),
           ),
@@ -202,6 +207,7 @@ class _PhotoViewer extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.r),
                 child: CachedNetworkImage(
                   imageUrl: photoUrl,
+                  key: ValueKey('photo_viewer_${photoUrl.hashCode}'),
                   fit: BoxFit.contain,
                   placeholder: (context, url) => Container(
                     width: 200.w,

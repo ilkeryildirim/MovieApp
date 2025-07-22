@@ -23,9 +23,22 @@ class PhotoUploadPage extends StatefulWidget {
   State<PhotoUploadPage> createState() => _PhotoUploadPageState();
 }
 
-class _PhotoUploadPageState extends State<PhotoUploadPage> {
+class _PhotoUploadPageState extends State<PhotoUploadPage> with AutomaticKeepAliveClientMixin {
   final ImagePicker _picker = ImagePicker();
   File? _selectedFile;
+  
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<PhotoUploadBloc>().add(const PhotoUploadEvent.reset());
+      }
+    });
+  }
 
   Future<void> _pickImage() async {
     try {
@@ -129,6 +142,8 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    
     return BlocProvider(
       create: (context) => getIt<PhotoUploadBloc>(),
       child: Builder(
@@ -139,7 +154,9 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
             listener: (context, state) {
               state.maybeWhen(
                 success: (photoUrl) {
-                  // Navigate back or to profile with photoUrl
+                  setState(() {
+                    _selectedFile = null;
+                  });
                   context.pop(photoUrl);
                 },
                 error: (message) {

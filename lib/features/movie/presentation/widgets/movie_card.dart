@@ -56,19 +56,20 @@ class MovieCard extends StatelessWidget {
       bottom: bottomPadding,
       child: CachedNetworkImage(
         imageUrl: posterUrl ?? '',
+        key: ValueKey('movie_poster_${movie.id}_${posterUrl.hashCode}'),
         fit: BoxFit.cover,
         httpHeaders: const {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
           'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9',
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache',
         },
         placeholder: (context, url) => _buildMoviePosterShimmer(),
         errorWidget: (context, url, error) => AppErrorWidget(
           message: AppStrings.posterLoadError,
           showRetryButton: false,
         ),
+        fadeInDuration: const Duration(milliseconds: 300),
+        fadeOutDuration: const Duration(milliseconds: 200),
       ),
     );
   }

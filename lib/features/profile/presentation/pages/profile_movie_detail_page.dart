@@ -55,9 +55,12 @@ class ProfileMovieDetailPage extends StatelessWidget {
               height: double.infinity,
               child: CachedNetworkImage(
                 imageUrl: posterUrl ?? '',
+                key: ValueKey('profile_movie_detail_${movie.id}_${posterUrl.hashCode}'),
                 fit: BoxFit.cover,
                 placeholder: (context, url) => _buildMoviePosterShimmer(),
                 errorWidget: (context, url, error) => _buildMoviePlaceholder(),
+                fadeInDuration: const Duration(milliseconds: 300),
+                fadeOutDuration: const Duration(milliseconds: 200),
               ),
             ),
           ),

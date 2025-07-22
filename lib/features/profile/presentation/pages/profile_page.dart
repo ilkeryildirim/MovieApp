@@ -19,7 +19,9 @@ import '../../../../core/router/app_router.dart';
 
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final VoidCallback? onBackPressed;
+  
+  const ProfilePage({super.key, this.onBackPressed});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -29,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _showPullToRefresh = false;
   double _overscrollAmount = 0.0;
   bool _isRefreshing = false;
-  final GlobalKey _photoKey = GlobalKey();
+  GlobalKey _photoKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 ProfileHeader(
-                  onBackPressed: () => context.pop(),
+                  onBackPressed: widget.onBackPressed,
                   onLimitedOfferPressed: () => LimitedOfferBottomSheet.show(context),
                 ),
                 ProfileUserSection(
@@ -140,6 +142,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   onPhotoUpload: () async {
                     final photoUrl = await context.push<String>(AppRoutes.photoUpload);
                     if (photoUrl != null && mounted) {
+                      setState(() {
+                        _photoKey = GlobalKey();
+                      });
+                      
                       context.read<AuthBloc>().add(
                         AuthEvent.updateProfilePhoto(photoUrl),
                       );
@@ -178,7 +184,6 @@ class _ProfilePageState extends State<ProfilePage> {
               fontWeight: ProfileConstants.moviesTitleFontWeight,
             ),
           ),
-          SizedBox(height: ProfileConstants.moviesTitleToGridSpacing.h),
           BlocBuilder<FavoriteBloc, FavoriteState>(
             builder: (context, state) {
               return state.maybeWhen(
