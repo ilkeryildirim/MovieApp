@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import '../../../../../../../core/error/failures.dart';
+import '../../../../domain/usecases/base/usecase.dart';
 import '../entities/user.dart';
 import '../repositories/auth_repository.dart';
-import '../../../../core/usecase.dart';
 
 @injectable
 class RegisterUseCase implements UseCase<User, RegisterParams> {

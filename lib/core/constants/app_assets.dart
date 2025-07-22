@@ -22,6 +22,15 @@ class AppAssets {
   // Other Icons
   static const String moviePlaceholderIcon = '$_iconsPath/ic_movie_placeholder.svg';
   
+  // Bonus Icons (PNG)
+  static const String diamondIcon = '$_iconsPath/diamond.png';
+  static const String heartIcon = '$_iconsPath/heart.png';
+  static const String heartsIcon = '$_iconsPath/hearts.png';
+  static const String arrowUpIcon = '$_iconsPath/arrow_up.png';
+  static const String bgBonus = '$_iconsPath/bg_bonus.png';
+  static const String bgPackage0 = '$_iconsPath/bg_package0.png';
+  static const String bgPackage1 = '$_iconsPath/bg_package1.png';
+  
   // Fonts
   static const String euclidFontFamily = 'Euclid';
 } 

@@ -132,6 +132,19 @@ class AppStrings {
   static String get uploadPhotosSubtitle => _translates.uploadPhotosSubtitle;
   static String get continueButton => _translates.continueButton;
   
+  // Limited Offer
+  static String get limitedOfferTitle => _translates.limitedOfferTitle;
+  static String get limitedOfferSubtitle => _translates.limitedOfferSubtitle;
+  static String get receiveBonuses => _translates.receiveBonuses;
+  static String get premiumAccount => _translates.premiumAccount;
+  static String get moreMatches => _translates.moreMatches;
+  static String get boost => _translates.boost;
+  static String get moreLikes => _translates.moreLikes;
+  static String get selectTokenPackage => _translates.selectTokenPackage;
+  static String get viewAllTokens => _translates.viewAllTokens;
+  static String get tokens => _translates.tokens;
+  static String get perWeek => _translates.perWeek;
+  
   // Parameterized strings
   static String welcomeUser(String name) => _translates.welcomeUser(name);
 }
@@ -265,6 +278,19 @@ class _Keys {
   static const String uploadYourPhotos = 'upload_your_photos';
   static const String uploadPhotosSubtitle = 'upload_photos_subtitle';
   static const String continueButton = 'continue_button';
+  
+  // Limited Offer
+  static const String limitedOfferTitle = 'limited_offer_title';
+  static const String limitedOfferSubtitle = 'limited_offer_subtitle';
+  static const String receiveBonuses = 'receive_bonuses';
+  static const String premiumAccount = 'premium_account';
+  static const String moreMatches = 'more_matches';
+  static const String boost = 'boost';
+  static const String moreLikes = 'more_likes';
+  static const String selectTokenPackage = 'select_token_package';
+  static const String viewAllTokens = 'view_all_tokens';
+  static const String tokens = 'tokens';
+  static const String perWeek = 'per_week';
 }
 
 class _Translates {
@@ -395,6 +421,19 @@ class _Translates {
   String get uploadYourPhotos => _Keys.uploadYourPhotos.tr();
   String get uploadPhotosSubtitle => _Keys.uploadPhotosSubtitle.tr();
   String get continueButton => _Keys.continueButton.tr();
+  
+  // Limited Offer
+  String get limitedOfferTitle => _Keys.limitedOfferTitle.tr();
+  String get limitedOfferSubtitle => _Keys.limitedOfferSubtitle.tr();
+  String get receiveBonuses => _Keys.receiveBonuses.tr();
+  String get premiumAccount => _Keys.premiumAccount.tr();
+  String get moreMatches => _Keys.moreMatches.tr();
+  String get boost => _Keys.boost.tr();
+  String get moreLikes => _Keys.moreLikes.tr();
+  String get selectTokenPackage => _Keys.selectTokenPackage.tr();
+  String get viewAllTokens => _Keys.viewAllTokens.tr();
+  String get tokens => _Keys.tokens.tr();
+  String get perWeek => _Keys.perWeek.tr();
   
   // Parameterized strings
   String welcomeUser(String name) => _Keys.welcomeUser.tr(namedArgs: {'name': name});

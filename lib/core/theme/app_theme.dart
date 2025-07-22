@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_base_app/core/constants/app_assets.dart';
 
 class AppTheme {
   static const _primaryColor = Color(0xFFE53E3E);
@@ -21,7 +22,7 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: colorScheme,
       brightness: Brightness.light,
-      fontFamily: 'Euclid',
+      fontFamily: AppAssets.euclidFontFamily,
       
       // AppBar Theme
       appBarTheme: AppBarTheme(

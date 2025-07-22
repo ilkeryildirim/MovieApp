@@ -1,15 +1,36 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:retrofit/retrofit.dart';
 import '../models/movie_model.dart';
 import '../../domain/usecases/get_movies_usecase.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/utils/logger.dart';
 
+part 'movie_service.g.dart';
+
+@RestApi()
+abstract class MovieApi {
+  @factoryMethod
+  factory MovieApi(Dio dio) = _MovieApi;
+
+  @GET(ApiConstants.movieListEndpoint)
+  Future<dynamic> getMoviesRaw({
+    @Query('page') int page = 1,
+    @Query('limit') int limit = 20,
+  });
+
+  @POST('${ApiConstants.movieFavoriteEndpoint}/{movieId}')
+  Future<FavoriteResponse> toggleFavorite(@Path('movieId') String movieId);
+
+  @GET(ApiConstants.movieFavoritesEndpoint)
+  Future<FavoritesListResponse> getFavorites();
+}
+
 @lazySingleton
 class MovieService {
-  final Dio _dio;
+  final MovieApi _movieApi;
 
-  MovieService(this._dio);
+  MovieService(Dio dio) : _movieApi = MovieApi(dio);
 
   Future<MovieListResponse> getMovies({
     int page = 1,
@@ -18,17 +39,10 @@ class MovieService {
     try {
       AppLogger.info('Fetching movies - Page: $page, Limit: $limit');
       
-      final response = await _dio.get(
-        ApiConstants.movieList,
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = response.data['data'] ?? response.data;
-              final pagination = data['pagination'] as Map<String, dynamic>;
+      final responseData = await _movieApi.getMoviesRaw(page: page, limit: limit);
+      final data = responseData['data'] ?? responseData;
+      final pagination = data['pagination'] as Map<String, dynamic>;
+      
       final movieListResponse = MovieListResponse(
         movies: (data['movies'] as List<dynamic>)
             .map((movie) => MovieModel.fromJson(movie as Map<String, dynamic>))
@@ -39,50 +53,17 @@ class MovieService {
       
       AppLogger.info('Movies fetched successfully - Page: $page, Total movies: ${movieListResponse.movies.length}');
       return movieListResponse;
-      } else {
-        throw Exception('Failed to fetch movies: ${response.statusCode}');
-      }
     } catch (e) {
       AppLogger.error('Error fetching movies', error: e);
       rethrow;
     }
   }
 
-  Future<FavoriteResponse> toggleFavorite(String favoriteId) async {
-    try {
-      AppLogger.info('Toggling favorite for movie: $favoriteId');
-      
-      final response = await _dio.post('${ApiConstants.movieFavorite}/$favoriteId');
-
-      if (response.statusCode == 200) {
-        final favoriteResponse = FavoriteResponse.fromJson(response.data);
-        AppLogger.info('Favorite toggled successfully for movie: $favoriteId');
-        return favoriteResponse;
-      } else {
-        throw Exception('Failed to toggle favorite: ${response.statusCode}');
-      }
-    } catch (e) {
-      AppLogger.error('Error toggling favorite', error: e);
-      rethrow;
-    }
+  Future<FavoriteResponse> toggleFavorite(String movieId) async {
+    return await _movieApi.toggleFavorite(movieId);
   }
 
   Future<FavoritesListResponse> getFavorites() async {
-    try {
-      AppLogger.info('Fetching favorite movies');
-      
-      final response = await _dio.get(ApiConstants.movieFavorites);
-
-      if (response.statusCode == 200) {
-        final favoritesResponse = FavoritesListResponse.fromJson(response.data);
-        AppLogger.info('Favorites fetched successfully - Count: ${favoritesResponse.movies.length}');
-        return favoritesResponse;
-      } else {
-        throw Exception('Failed to fetch favorites: ${response.statusCode}');
-      }
-    } catch (e) {
-      AppLogger.error('Error fetching favorites', error: e);
-      rethrow;
-    }
+    return await _movieApi.getFavorites();
   }
 } 

@@ -92,11 +92,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i361.Dio>(
         () => injectionModule.dio(gh<_i985.DioClient>()));
     gh.lazySingleton<_i253.PhotoUploadRemoteDataSource>(
-        () => _i253.PhotoUploadRemoteDataSourceImpl(gh<_i985.DioClient>()));
-    gh.factory<_i898.AuthRemoteDataSource>(
-        () => _i898.AuthRemoteDataSource(gh<_i361.Dio>()));
+        () => _i253.PhotoUploadRemoteDataSourceImpl(gh<_i361.Dio>()));
     gh.lazySingleton<_i140.MovieService>(
         () => _i140.MovieService(gh<_i361.Dio>()));
+    gh.factory<_i898.AuthRemoteDataSource>(
+        () => _i898.AuthRemoteDataSource(gh<_i361.Dio>()));
     gh.lazySingleton<_i508.PhotoUploadRepository>(() =>
         _i3.PhotoUploadRepositoryImpl(
             remoteDataSource: gh<_i253.PhotoUploadRemoteDataSource>()));

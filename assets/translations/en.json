@@ -109,5 +109,16 @@
   "profile_details": "Profile Detail",
   "upload_your_photos": "Upload Your Photos",
   "upload_photos_subtitle": "Resources out incentivize\nrelaxation floor loss cc.",
-  "continue_button": "Continue"
+  "continue_button": "Continue",
+  "limited_offer_title": "Limited Offer",
+  "limited_offer_subtitle": "Select a token package to earn bonuses\nand unlock new chapters!",
+  "receive_bonuses": "Receive Bonuses",
+  "premium_account": "Premium\nAccount",
+  "more_matches": "More\nMatches",
+  "boost": "Boost",
+  "more_likes": "More\nLikes",
+  "select_token_package": "Select a token package to unlock",
+  "view_all_tokens": "View All Tokens",
+  "tokens": "Tokens",
+  "per_week": "per week"
 } 
