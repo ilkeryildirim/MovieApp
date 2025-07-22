@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../../core/constants/app_assets.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_strings.dart';
@@ -37,13 +38,17 @@ class ProfileHeader extends StatelessWidget {
                   left: 0,
                   top: 0,
                   child: SafeClickWidget(
-                    onTap: onBackPressed ?? () => Navigator.of(context).pop(),
+                    onTap: onBackPressed ?? () => context.pop(),
                     child: Container(
                       width: ProfileConstants.backButtonSize.w,
                       height: ProfileConstants.backButtonSize.w,
                       decoration: BoxDecoration(
                         color: ProfileConstants.backButtonBackground,
                         shape: BoxShape.circle,
+                        border: Border.all(
+                          color: ProfileConstants.backButtonBorder,
+                          width: 1,
+                        ),
                       ),
                       child: Icon(
                         Icons.arrow_back,

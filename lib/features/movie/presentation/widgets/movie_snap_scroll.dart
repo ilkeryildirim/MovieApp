@@ -95,8 +95,14 @@ class _MovieSnapScrollState extends State<MovieSnapScroll> {
 
   void _handlePageChanged(int index) {
     if (index >= widget.movies.length) {
-      Future.delayed(const Duration(milliseconds: 50), () {
-        _pageController.jumpToPage(0);
+      Future.delayed(const Duration(milliseconds: 100), () {
+        if (mounted) {
+          _pageController.jumpToPage(0);
+          setState(() {
+            _currentPage = 0;
+            _isDescriptionExpanded = false;
+          });
+        }
       });
       return;
     }

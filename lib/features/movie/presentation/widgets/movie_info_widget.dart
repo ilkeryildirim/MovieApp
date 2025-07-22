@@ -104,7 +104,7 @@ class MovieInfoWidget extends StatelessWidget {
                       text: TextSpan(
                         style: textStyle,
                         children: [
-                          TextSpan(text: movie.description.substring(0, movie.description.length > 60 ? 60 : movie.description.length)),
+                          TextSpan(text: movie.description.substring(0, movie.description.length > 80 ? 80 : movie.description.length)),
                           TextSpan(
                             text: ' ${AppStrings.showMore}',
                             style: TextStyle(

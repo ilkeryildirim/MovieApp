@@ -64,17 +64,6 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
         if (image != null) {
           final originalFile = File(image.path);
           
-          // Show loading while compressing
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Fotoğraf işleniyor...'),
-                duration: Duration(seconds: 2),
-              ),
-            );
-          }
-          
-          // Compress image
           final compressedFile = await ImageCompressHelper.compressImage(originalFile);
           
           setState(() {
@@ -199,10 +188,15 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
         SafeClickWidget(
           onTap: () => context.pop(),
           child: Container(
-            padding: EdgeInsets.all(12.w),
+            width: 44.w,
+            height: 44.w,
             decoration: BoxDecoration(
-              color: AppColors.inputBackground.withValues(alpha: 0.6),
+              color: AppColors.socialButtonBackground,
               shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withOpacity(0.2),
+                width: 1,
+              ),
             ),
             child: Icon(
               Icons.arrow_back,
@@ -222,7 +216,7 @@ class _PhotoUploadPageState extends State<PhotoUploadPage> {
           ),
         ),
         const Spacer(),
-        SizedBox(width: 44.w), // Balance for back button
+        SizedBox(width: 44.w),
       ],
     );
   }

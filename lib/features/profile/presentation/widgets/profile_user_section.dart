@@ -12,6 +12,7 @@ class ProfileUserSection extends StatelessWidget {
   final String userId;
   final String? photoUrl;
   final VoidCallback? onPhotoUpload;
+  final Key? photoKey;
 
   const ProfileUserSection({
     super.key,
@@ -19,6 +20,7 @@ class ProfileUserSection extends StatelessWidget {
     required this.userId,
     this.photoUrl,
     this.onPhotoUpload,
+    this.photoKey,
   });
 
   @override
@@ -47,31 +49,29 @@ class ProfileUserSection extends StatelessWidget {
       child: GestureDetector(
         onTap: () => _showPhotoViewer(context),
         child: Container(
-      width: ProfileConstants.profilePhotoSize.w,
-      height: ProfileConstants.profilePhotoSize.w,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: ProfileConstants.photoBorder,
-          width: ProfileConstants.photoBorderWidth,
+          key: photoKey,
+          width: ProfileConstants.profilePhotoSize.w,
+          height: ProfileConstants.profilePhotoSize.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: ProfileConstants.photoBorder,
+              width: ProfileConstants.photoBorderWidth,
+            ),
+          ),
+          child: ClipOval(
+            child: photoUrl != null && photoUrl!.isNotEmpty
+                ? CachedNetworkImage(
+                    imageUrl: photoUrl!,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => _buildUserInitial(),
+                    errorWidget: (context, url, error) => _buildUserInitial(),
+                  )
+                : _buildUserInitial(),
+          ),
         ),
       ),
-      child: ClipOval(
-        child: photoUrl != null && photoUrl!.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: photoUrl!,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => _buildUserInitial(),
-                errorWidget: (context, url, error) => _buildUserInitial(),
-              )
-            : GestureDetector(
-                onTap: () => _showPhotoViewer(context),
-                child: _buildUserInitial(),
-              ),
-      ),
-        ), // Container
-      ), // GestureDetector
-    ); // Hero
+    );
   }
 
   void _showPhotoViewer(BuildContext context) {

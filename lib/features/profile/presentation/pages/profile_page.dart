@@ -29,6 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _showPullToRefresh = false;
   double _overscrollAmount = 0.0;
   bool _isRefreshing = false;
+  final GlobalKey _photoKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -128,17 +129,17 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 ProfileHeader(
-                  onBackPressed: () => Navigator.of(context).pop(),
+                  onBackPressed: () => context.pop(),
                   onLimitedOfferPressed: () => LimitedOfferBottomSheet.show(context),
                 ),
                 ProfileUserSection(
                   userName: user.name,
                   userId: user.id,
                   photoUrl: user.avatarUrl,
+                  photoKey: _photoKey,
                   onPhotoUpload: () async {
                     final photoUrl = await context.push<String>(AppRoutes.photoUpload);
                     if (photoUrl != null && mounted) {
-                      // Update user photo in both auth and profile blocs
                       context.read<AuthBloc>().add(
                         AuthEvent.updateProfilePhoto(photoUrl),
                       );

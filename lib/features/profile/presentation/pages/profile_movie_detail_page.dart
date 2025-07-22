@@ -73,13 +73,14 @@ class ProfileMovieDetailPage extends StatelessWidget {
         height: double.infinity,
         color: Colors.black,
         child: Shimmer.fromColors(
-          baseColor: Colors.grey.withOpacity(0.2),
-          highlightColor: Colors.grey.withOpacity(0.4),
-          period: const Duration(milliseconds: 1500),
+          baseColor: Colors.grey[900]!.withOpacity(0.3),
+          highlightColor: Colors.grey[700]!.withOpacity(0.5),
+          period: const Duration(milliseconds: 1800),
+          direction: ShimmerDirection.ltr,
           child: Container(
             width: double.infinity,
             height: double.infinity,
-            color: Colors.grey.withOpacity(0.3),
+            color: AppColors.inputBackground.withOpacity(0.5),
           ),
         ),
       ),
@@ -241,8 +242,12 @@ class ProfileMovieDetailPage extends StatelessWidget {
           width: 44.w,
           height: 44.w,
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.5),
+            color: AppColors.socialButtonBackground,
             shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white.withOpacity(0.2),
+              width: 1,
+            ),
           ),
           child: Icon(
             Icons.arrow_back,

@@ -154,6 +154,7 @@ class ProfileMoviesGrid extends StatelessWidget {
         baseColor: ProfileConstants.shimmerBaseColor,
         highlightColor: ProfileConstants.shimmerHighlightColor,
         period: ProfileConstants.shimmerPeriod,
+        direction: ShimmerDirection.ltr,
         child: Container(
           width: double.infinity,
           height: double.infinity,
@@ -272,6 +273,7 @@ class ProfileMoviesGrid extends StatelessWidget {
               baseColor: ProfileConstants.shimmerBaseColor,
               highlightColor: ProfileConstants.shimmerHighlightColor,
               period: ProfileConstants.shimmerPeriod,
+              direction: ShimmerDirection.ltr,
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -294,10 +296,11 @@ class ProfileMoviesGrid extends StatelessWidget {
             baseColor: ProfileConstants.shimmerBaseColor,
             highlightColor: ProfileConstants.shimmerHighlightColor,
             period: ProfileConstants.shimmerPeriod,
+            direction: ShimmerDirection.ltr,
             child: Container(
               decoration: BoxDecoration(
-                color: ProfileConstants.shimmerContainerColor,
                 borderRadius: BorderRadius.circular(ProfileConstants.shimmerTextBorderRadius.r),
+                color: ProfileConstants.shimmerContainerColor,
               ),
             ),
           ),
@@ -314,10 +317,11 @@ class ProfileMoviesGrid extends StatelessWidget {
             baseColor: ProfileConstants.shimmerBaseColor,
             highlightColor: ProfileConstants.shimmerHighlightColor,
             period: ProfileConstants.shimmerPeriod,
+            direction: ShimmerDirection.ltr,
             child: Container(
               decoration: BoxDecoration(
-                color: ProfileConstants.shimmerContainerColor,
                 borderRadius: BorderRadius.circular(ProfileConstants.shimmerTextBorderRadius.r),
+                color: ProfileConstants.shimmerContainerColor,
               ),
             ),
           ),
