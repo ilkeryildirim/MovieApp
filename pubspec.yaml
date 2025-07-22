@@ -82,6 +82,10 @@ dependencies:
 
   # Permissions
   permission_handler: ^11.3.1
+  
+  # Analytics
+  firebase_analytics: ^11.3.3
+  mixpanel_flutter: ^2.3.1
 
 dev_dependencies:
   flutter_test:

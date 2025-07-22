@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'core/constants/app_strings.dart';
 import 'core/di/injection_container.dart';
 import 'core/theme/app_theme.dart';
+import 'core/analytics/analytics_helper.dart';
 import 'features/auth/presentation/blocs/auth/auth_bloc.dart';
 import 'core/router/app_router.dart';
 
@@ -17,6 +18,12 @@ void main() async {
   await Hive.initFlutter();
   
   await configureDependencies();
+  
+  // Initialize Analytics
+  await Analytics.initialize(
+    enableFirebase: true,
+    enableMixpanel: true,
+  );
   
   runApp(
     EasyLocalization(
