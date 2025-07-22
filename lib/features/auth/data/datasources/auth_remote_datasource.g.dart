@@ -102,7 +102,7 @@ class _AuthRemoteDataSource implements AuthRemoteDataSource {
     )
         .compose(
           _dio.options,
-          '/auth/logout',
+          'user/logout',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -127,7 +127,7 @@ class _AuthRemoteDataSource implements AuthRemoteDataSource {
     )
         .compose(
           _dio.options,
-          '/user/profile',
+          'user/profile',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -155,7 +155,7 @@ class _AuthRemoteDataSource implements AuthRemoteDataSource {
     )
         .compose(
           _dio.options,
-          '/auth/profile',
+          'user/profile',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -189,7 +189,7 @@ class _AuthRemoteDataSource implements AuthRemoteDataSource {
     )
         .compose(
           _dio.options,
-          '/auth/change-password',
+          'user/change-password',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -215,7 +215,7 @@ class _AuthRemoteDataSource implements AuthRemoteDataSource {
     )
         .compose(
           _dio.options,
-          '/auth/forgot-password',
+          'user/forgot-password',
           queryParameters: queryParameters,
           data: _data,
         )

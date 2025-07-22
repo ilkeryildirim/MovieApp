@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
 import '../models/user_model.dart';
 import '../models/auth_response_model.dart';
+import '../../../../core/constants/api_constants.dart';
 
 part 'auth_remote_datasource.g.dart';
 
@@ -12,24 +13,25 @@ abstract class AuthRemoteDataSource {
   @factoryMethod
   factory AuthRemoteDataSource(Dio dio) = _AuthRemoteDataSource;
   
-  @POST('user/login')
+  @POST(ApiConstants.loginEndpoint)
   Future<AuthResponseModel> login(@Body() Map<String, dynamic> body);
   
-  @POST('user/register')
+  @POST(ApiConstants.registerEndpoint)
   Future<AuthResponseModel> register(@Body() Map<String, dynamic> body);
   
-  @POST('/auth/logout')
+  @POST(ApiConstants.logoutEndpoint)
   Future<void> logout();
   
-  @GET('/user/profile')
+  @GET(ApiConstants.profileEndpoint)
   Future<dynamic> getCurrentUserRaw();
-  
-  @PUT('/auth/profile')
+
+  @PUT(ApiConstants.profileEndpoint)
   Future<UserModel> updateProfile(@Body() Map<String, dynamic> body);
-  
-  @POST('/auth/change-password')
+/*
+  @POST(ApiConstants.changePasswordEndpoint)
   Future<void> changePassword(@Body() Map<String, dynamic> body);
   
-  @POST('/auth/forgot-password')
+  @POST(ApiConstants.forgotPasswordEndpoint)
   Future<void> forgotPassword(@Body() Map<String, dynamic> body);
+   */
 } 

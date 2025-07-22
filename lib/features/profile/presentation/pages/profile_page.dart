@@ -13,6 +13,7 @@ import '../../../movie/presentation/blocs/favorite/favorite_bloc.dart';
 import '../widgets/profile_header.dart';
 import '../widgets/profile_user_section.dart';
 import '../widgets/profile_movies_grid.dart';
+import '../widgets/limited_offer_bottom_sheet.dart';
 import '../../../movie/presentation/widgets/pull_to_refresh_indicator.dart';
 import '../../../../core/router/app_router.dart';
 
@@ -128,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 ProfileHeader(
                   onBackPressed: () => Navigator.of(context).pop(),
-                  onLimitedOfferPressed: () {},
+                  onLimitedOfferPressed: () => LimitedOfferBottomSheet.show(context),
                 ),
                 ProfileUserSection(
                   userName: user.name,
